@@ -1,0 +1,4 @@
+name: GSBlockShuffle
+version: '${version}'
+main: me.stahu.gsblockshuffle.GSBlockShuffle
+api-version: '1.20'
