@@ -1,16 +1,17 @@
 wood:
+  difficulty: 0
   oak:
     difficulty: 0
     base:
       difficulty: 0
       elements:
         - OAK_PLANKS
-        - OAK_WOOD
+        - OAK_LOG
         - OAK_SAPLING
     variant:
       difficulty: 0
       elements:
-        - OAK_LOG
+        - OAK_WOOD
         - STRIPPED_OAK_LOG
         - STRIPPED_OAK_WOOD
         - OAK_SLAB
@@ -22,10 +23,9 @@ wood:
         - OAK_FENCE_GATE
         - OAK_STAIRS
         - OAK_LEAVES
-    sign:
-      difficulty: 0
-      elements:
         - [ OAK_SIGN, OAK_WALL_SIGN ]
+
+    other:
       hanging_sign:
         difficulty: 1
         elements:
@@ -55,10 +55,10 @@ wood:
         - BIRCH_FENCE_GATE
         - BIRCH_STAIRS
         - BIRCH_LEAVES
-    sign:
-      difficulty: 0
-      elements:
         - [ BIRCH_SIGN, BIRCH_WALL_SIGN ]
+
+    other:
+      difficulty: 0
       hanging_sign:
         difficulty: 1
         elements:
@@ -88,11 +88,10 @@ wood:
         - SPRUCE_FENCE_GATE
         - SPRUCE_STAIRS
         - SPRUCE_LEAVES
-
-    sign:
-      difficulty: 0
-      elements:
         - [ SPRUCE_SIGN, SPRUCE_WALL_SIGN ]
+
+    other:
+      difficulty: 0
       hanging_sign:
         difficulty: 1
         elements:
@@ -122,11 +121,10 @@ wood:
         - JUNGLE_FENCE_GATE
         - JUNGLE_STAIRS
         - JUNGLE_LEAVES
-
-    sign:
-      difficulty: 0
-      elements:
         - [ JUNGLE_SIGN, JUNGLE_WALL_SIGN ]
+
+    other:
+      difficulty: 0
       hanging_sign:
         difficulty: 1
         elements:
@@ -156,11 +154,10 @@ wood:
         - DARK_OAK_FENCE_GATE
         - DARK_OAK_STAIRS
         - DARK_OAK_LEAVES
-
-    sign:
-      difficulty: 0
-      elements:
         - [ DARK_OAK_SIGN, DARK_OAK_WALL_SIGN ]
+
+    other:
+      difficulty: 0
       hanging_sign:
         difficulty: 1
         elements:
@@ -190,11 +187,10 @@ wood:
         - ACACIA_FENCE_GATE
         - ACACIA_STAIRS
         - ACACIA_LEAVES
-
-    sign:
-      difficulty: 0
-      elements:
         - [ ACACIA_SIGN, ACACIA_WALL_SIGN ]
+
+    other:
+      difficulty: 0
       hanging_sign:
         difficulty: 1
         elements:
@@ -226,11 +222,9 @@ wood:
         - MANGROVE_FENCE_GATE
         - MANGROVE_STAIRS
         - MANGROVE_LEAVES
-
-    sign:
-      difficulty: 0
-      elements:
         - [ MANGROVE_SIGN, MANGROVE_WALL_SIGN ]
+    other:
+      difficulty: 1
       hanging_sign:
         difficulty: 1
         elements:
@@ -260,11 +254,10 @@ wood:
         - CHERRY_FENCE_GATE
         - CHERRY_STAIRS
         - CHERRY_LEAVES
-
-    sign:
-      difficulty: 0
-      elements:
         - [ CHERRY_SIGN, CHERRY_WALL_SIGN ]
+
+    other:
+      difficulty: 1
       hanging_sign:
         difficulty: 1
         elements:
@@ -296,11 +289,10 @@ wood:
         - BAMBOO_MOSAIC_STAIRS
         - STRIPPED_BAMBOO_BLOCK
         - SCAFFOLDING
-
-    sign:
-      difficulty: 0
-      elements:
         - [ BAMBOO_SIGN, BAMBOO_WALL_SIGN ]
+
+    other:
+      difficulty: 0
       hanging_sign:
         difficulty: 0
         elements:
@@ -317,6 +309,31 @@ wood:
       - BARREL
       - CAMPFIRE
       - CRAFTING_TABLE
+
+  bed:
+    difficulty: 0
+    base:
+      difficulty: 0
+      elements:
+        - WHITE_BED
+    variant:
+      difficulty: 0
+      elements:
+        - ORANGE_BED
+        - MAGENTA_BED
+        - LIGHT_BLUE_BED
+        - YELLOW_BED
+        - LIME_BED
+        - PINK_BED
+        - GRAY_BED
+        - LIGHT_GRAY_BED
+        - CYAN_BED
+        - PURPLE_BED
+        - BLUE_BED
+        - BROWN_BED
+        - GREEN_BED
+        - RED_BED
+        - BLACK_BED
 
 redstone:
   difficulty: 0
@@ -357,255 +374,227 @@ redstone:
         - PISTON_HEAD
         - TARGET
 
-pots:
-  - POTTED_OAK_SAPLING
-  - POTTED_SPRUCE_SAPLING
-  - POTTED_BIRCH_SAPLING
-  - POTTED_JUNGLE_SAPLING
-  - POTTED_ACACIA_SAPLING
-  - POTTED_CHERRY_SAPLING
-  - POTTED_DARK_OAK_SAPLING
-  - POTTED_MANGROVE_PROPAGULE
-  - POTTED_FERN
-  - POTTED_DANDELION
-  - POTTED_POPPY
-  - POTTED_BLUE_ORCHID
-  - POTTED_ALLIUM
-  - POTTED_AZURE_BLUET
-  - POTTED_RED_TULIP
-  - POTTED_ORANGE_TULIP
-  - POTTED_WHITE_TULIP
-  - POTTED_PINK_TULIP
-  - POTTED_OXEYE_DAISY
-  - POTTED_CORNFLOWER
-  - POTTED_LILY_OF_THE_VALLEY
-  - POTTED_WITHER_ROSE
-  - POTTED_RED_MUSHROOM
-  - POTTED_BROWN_MUSHROOM
-  - POTTED_DEAD_BUSH
-  - POTTED_CACTUS
-  - POTTED_BAMBOO
-  - POTTED_AZALEA_BUSH
-  - POTTED_FLOWERING_AZALEA_BUSH
-
 nether:
+  difficulty: 0
   froglight:
-    - OCHRE_FROGLIGHT
-    - VERDANT_FROGLIGHT
-    - PEARLESCENT_FROGLIGHT
+    difficulty: 0
+    elements:
+      - OCHRE_FROGLIGHT
+      - VERDANT_FROGLIGHT
+      - PEARLESCENT_FROGLIGHT
   nether_redstone:
-    - COMPARATOR
-    - DAYLIGHT_DETECTOR
-    - DETECTOR_RAIL
-    - REDSTONE_LAMP
-    - OBSERVER
+    difficulty: 0
+    elements:
+      - COMPARATOR
+      - DAYLIGHT_DETECTOR
+      - DETECTOR_RAIL
+      - REDSTONE_LAMP
+      - OBSERVER
   other:
-    - SHROOMLIGHT
-    - CRIMSON_PLANKS
-    - WARPED_PLANKS
-    - CRIMSON_NYLIUM
-    - WARPED_NYLIUM
-    - CRIMSON_HYPHAE
-    - WARPED_HYPHAE
-    - CRIMSON_STEM
-    - WARPED_STEM
-    - STRIPPED_CRIMSON_STEM
-    - STRIPPED_WARPED_STEM
-    - STRIPPED_CRIMSON_HYPHAE
-    - STRIPPED_WARPED_HYPHAE
-    - CRIMSON_FUNGUS
-    - WARPED_FUNGUS
-    - CRIMSON_ROOTS
-    - WARPED_ROOTS
-    - NETHER_SPROUTS
-    - WEEPING_VINES
-    - TWISTING_VINES
-    - CRIMSON_SLAB
-    - WARPED_SLAB
-    - CRIMSON_FENCE
-    - WARPED_FENCE
-    - CRIMSON_STAIRS
-    - WARPED_STAIRS
-    - CRIMSON_BUTTON
-    - WARPED_BUTTON
-    - CRIMSON_PRESSURE_PLATE
-    - WARPED_PRESSURE_PLATE
-    - CRIMSON_DOOR
-    - WARPED_DOOR
-    - CRIMSON_TRAPDOOR
-    - WARPED_TRAPDOOR
-    - CRIMSON_FENCE_GATE
-    - WARPED_FENCE_GATE
-    - CRIMSON_SIGN
-    - WARPED_SIGN
-    - CRIMSON_HANGING_SIGN
-    - WARPED_HANGING_SIGN
-    - CRIMSON_WALL_SIGN
-    - WARPED_WALL_SIGN
-    - POTTED_CRIMSON_FUNGUS
-    - POTTED_WARPED_FUNGUS
-    - POTTED_CRIMSON_ROOTS
-    - POTTED_WARPED_ROOTS
-    - CRIMSON_WALL_HANGING_SIGN
-    - WARPED_WALL_HANGING_SIGN
-    - NETHER_GOLD_ORE
-    - NETHER_QUARTZ_ORE
-    - ANCIENT_DEBRIS
-    - NETHERITE_BLOCK
-    - NETHERRACK
-    - SOUL_SAND
-    - SOUL_SOIL
-    - BASALT
-    - POLISHED_BASALT
-    - SMOOTH_BASALT
-    - SOUL_TORCH
-    - SOUL_WALL_TORCH
-    - GLOWSTONE
-    - MAGMA_BLOCK
-    - NETHER_WART_BLOCK
-    - WARPED_WART_BLOCK
-    - RED_NETHER_BRICKS
-    - NETHER_BRICK_SLAB
-    - NETHER_BRICKS
-    - CRACKED_NETHER_BRICKS
-    - CHISELED_NETHER_BRICKS
-    - NETHER_BRICK_FENCE
-    - NETHER_BRICK_STAIRS
-    - NETHER_BRICK_WALL
-    - RED_NETHER_BRICK_WALL
-    - RED_NETHER_BRICK_STAIRS
-    - RED_NETHER_BRICK_SLAB
-    - QUARTZ_SLAB
-    - SMOOTH_QUARTZ
-    - CHISELED_QUARTZ_BLOCK
-    - QUARTZ_BLOCK
-    - QUARTZ_BRICKS
-    - QUARTZ_PILLAR
-    - QUARTZ_STAIRS
-    - SMOOTH_QUARTZ_STAIRS
-    - SMOOTH_QUARTZ_SLAB
-    - NETHER_WART
-    - BREWING_STAND
-    - SOUL_LANTERN
-    - SOUL_CAMPFIRE
-    - SOUL_FIRE
-    - WEEPING_VINES_PLANT
-    - TWISTING_VINES_PLANT
+    difficulty: 0
+    elements:
+      - SHROOMLIGHT
+      - CRIMSON_PLANKS
+      - WARPED_PLANKS
+      - CRIMSON_NYLIUM
+      - WARPED_NYLIUM
+      - CRIMSON_HYPHAE
+      - WARPED_HYPHAE
+      - CRIMSON_STEM
+      - WARPED_STEM
+      - STRIPPED_CRIMSON_STEM
+      - STRIPPED_WARPED_STEM
+      - STRIPPED_CRIMSON_HYPHAE
+      - STRIPPED_WARPED_HYPHAE
+      - CRIMSON_FUNGUS
+      - WARPED_FUNGUS
+      - CRIMSON_ROOTS
+      - WARPED_ROOTS
+      - NETHER_PORTAL
+      - NETHER_SPROUTS
+      - WEEPING_VINES
+      - TWISTING_VINES
+      - CRIMSON_SLAB
+      - WARPED_SLAB
+      - CRIMSON_FENCE
+      - WARPED_FENCE
+      - CRIMSON_STAIRS
+      - WARPED_STAIRS
+      - CRIMSON_BUTTON
+      - WARPED_BUTTON
+      - CRIMSON_PRESSURE_PLATE
+      - WARPED_PRESSURE_PLATE
+      - CRIMSON_DOOR
+      - WARPED_DOOR
+      - CRIMSON_TRAPDOOR
+      - WARPED_TRAPDOOR
+      - CRIMSON_FENCE_GATE
+      - WARPED_FENCE_GATE
+      - CRIMSON_SIGN
+      - WARPED_SIGN
+      - CRIMSON_HANGING_SIGN
+      - WARPED_HANGING_SIGN
+      - CRIMSON_WALL_SIGN
+      - WARPED_WALL_SIGN
+      - POTTED_CRIMSON_FUNGUS
+      - POTTED_WARPED_FUNGUS
+      - POTTED_CRIMSON_ROOTS
+      - POTTED_WARPED_ROOTS
+      - CRIMSON_WALL_HANGING_SIGN
+      - WARPED_WALL_HANGING_SIGN
+      - NETHER_GOLD_ORE
+      - NETHER_QUARTZ_ORE
+      - ANCIENT_DEBRIS
+      - NETHERITE_BLOCK
+      - NETHERRACK
+      - SOUL_SAND
+      - SOUL_SOIL
+      - BASALT
+      - POLISHED_BASALT
+      - SMOOTH_BASALT
+      - SOUL_TORCH
+      - SOUL_WALL_TORCH
+      - GLOWSTONE
+      - MAGMA_BLOCK
+      - NETHER_WART_BLOCK
+      - WARPED_WART_BLOCK
+      - RED_NETHER_BRICKS
+      - NETHER_BRICK_SLAB
+      - NETHER_BRICKS
+      - CRACKED_NETHER_BRICKS
+      - CHISELED_NETHER_BRICKS
+      - NETHER_BRICK_FENCE
+      - NETHER_BRICK_STAIRS
+      - NETHER_BRICK_WALL
+      - RED_NETHER_BRICK_WALL
+      - RED_NETHER_BRICK_STAIRS
+      - RED_NETHER_BRICK_SLAB
+      - QUARTZ_SLAB
+      - SMOOTH_QUARTZ
+      - CHISELED_QUARTZ_BLOCK
+      - QUARTZ_BLOCK
+      - QUARTZ_BRICKS
+      - QUARTZ_PILLAR
+      - QUARTZ_STAIRS
+      - SMOOTH_QUARTZ_STAIRS
+      - SMOOTH_QUARTZ_SLAB
+      - NETHER_WART
+      - BREWING_STAND
+      - SOUL_LANTERN
+      - SOUL_CAMPFIRE
+      - SOUL_FIRE
+      - WEEPING_VINES_PLANT
+      - TWISTING_VINES_PLANT
 
 end:
+  difficulty: 0
   chorus:
-    - CHORUS_PLANT
-    - CHORUS_FLOWER
+    difficulty: 0
+    elements:
+      - CHORUS_PLANT
+      - CHORUS_FLOWER
+  end_portal:
+    difficulty: 0
+    elements:
+      - END_PORTAL_FRAME
   dragon_egg:
-    - DRAGON_EGG
+    difficulty: 0
+    elements:
+      - DRAGON_EGG
+  dragon_head:
+    difficulty: 0
+    elements:
+      - [ DRAGON_HEAD, DRAGON_WALL_HEAD ]
   end_rod:
-    - END_ROD
+    difficulty: 0
+    elements:
+      - END_ROD
   end_stone:
+    difficulty: 0
     base:
-      - END_STONE
+      difficulty: 0
+      elements:
+        - END_STONE
     variant:
-      - END_STONE_BRICKS
-      - END_STONE_BRICK_WALL
-      - END_STONE_BRICK_STAIRS
-      - END_STONE_BRICK_SLAB
+      difficulty: 0
+      elements:
+        - END_STONE_BRICKS
+        - END_STONE_BRICK_WALL
+        - END_STONE_BRICK_STAIRS
+        - END_STONE_BRICK_SLAB
   purpur:
     base:
-      - PURPUR_BLOCK
+      difficulty: 0
+      elements:
+        - PURPUR_BLOCK
     variant:
-      - PURPUR_SLAB
-      - PURPUR_PILLAR
-      - PURPUR_STAIRS
+      difficulty: 0
+      elements:
+        - PURPUR_SLAB
+        - PURPUR_PILLAR
+        - PURPUR_STAIRS
   shulker_box:
     base:
-      - SHULKER_BOX
+      difficulty: 0
+      elements:
+        - SHULKER_BOX
     variant:
-      - WHITE_SHULKER_BOX
-      - ORANGE_SHULKER_BOX
-      - MAGENTA_SHULKER_BOX
-      - LIGHT_BLUE_SHULKER_BOX
-      - YELLOW_SHULKER_BOX
-      - LIME_SHULKER_BOX
-      - PINK_SHULKER_BOX
-      - GRAY_SHULKER_BOX
-      - LIGHT_GRAY_SHULKER_BOX
-      - CYAN_SHULKER_BOX
-      - PURPLE_SHULKER_BOX
-      - BLUE_SHULKER_BOX
-      - BROWN_SHULKER_BOX
-      - GREEN_SHULKER_BOX
-      - RED_SHULKER_BOX
-      - BLACK_SHULKER_BOX
+      difficulty: 0
+      elements:
+        - WHITE_SHULKER_BOX
+        - ORANGE_SHULKER_BOX
+        - MAGENTA_SHULKER_BOX
+        - LIGHT_BLUE_SHULKER_BOX
+        - YELLOW_SHULKER_BOX
+        - LIME_SHULKER_BOX
+        - PINK_SHULKER_BOX
+        - GRAY_SHULKER_BOX
+        - LIGHT_GRAY_SHULKER_BOX
+        - CYAN_SHULKER_BOX
+        - PURPLE_SHULKER_BOX
+        - BLUE_SHULKER_BOX
+        - BROWN_SHULKER_BOX
+        - GREEN_SHULKER_BOX
+        - RED_SHULKER_BOX
+        - BLACK_SHULKER_BOX
 
 concrete:
-  - WHITE_CONCRETE
-  - ORANGE_CONCRETE
-  - MAGENTA_CONCRETE
-  - LIGHT_BLUE_CONCRETE
-  - YELLOW_CONCRETE
-  - LIME_CONCRETE
-  - PINK_CONCRETE
-  - GRAY_CONCRETE
-  - LIGHT_GRAY_CONCRETE
-  - CYAN_CONCRETE
-  - PURPLE_CONCRETE
-  - BLUE_CONCRETE
-  - BROWN_CONCRETE
-  - GREEN_CONCRETE
-  - RED_CONCRETE
-  - BLACK_CONCRETE
-  - WHITE_CONCRETE_POWDER
-  - ORANGE_CONCRETE_POWDER
-  - MAGENTA_CONCRETE_POWDER
-  - LIGHT_BLUE_CONCRETE_POWDER
-  - YELLOW_CONCRETE_POWDER
-  - LIME_CONCRETE_POWDER
-  - PINK_CONCRETE_POWDER
-  - GRAY_CONCRETE_POWDER
-  - LIGHT_GRAY_CONCRETE_POWDER
-  - CYAN_CONCRETE_POWDER
-  - PURPLE_CONCRETE_POWDER
-  - BLUE_CONCRETE_POWDER
-  - BROWN_CONCRETE_POWDER
-  - GREEN_CONCRETE_POWDER
-  - RED_CONCRETE_POWDER
-  - BLACK_CONCRETE_POWDER
-
-coral:
   difficulty: 0
-  elements:
-    - TUBE_CORAL_BLOCK
-    - BRAIN_CORAL_BLOCK
-    - BUBBLE_CORAL_BLOCK
-    - FIRE_CORAL_BLOCK
-    - HORN_CORAL_BLOCK
-    - TUBE_CORAL
-    - BRAIN_CORAL
-    - BUBBLE_CORAL
-    - FIRE_CORAL
-    - HORN_CORAL
-    - [ TUBE_CORAL_FAN, TUBE_CORAL_WALL_FAN ]
-    - [ BRAIN_CORAL_FAN, BRAIN_CORAL_WALL_FAN ]
-    - [ BUBBLE_CORAL_FAN, BUBBLE_CORAL_WALL_FAN ]
-    - [ FIRE_CORAL_FAN, FIRE_CORAL_WALL_FAN ]
-    - [ HORN_CORAL_FAN, HORN_CORAL_WALL_FAN ]
-  dead:
-    difficulty: 0 # +1
+  variant:
+    difficulty: 0
     elements:
-      - DEAD_BRAIN_CORAL
-      - DEAD_BUBBLE_CORAL
-      - DEAD_FIRE_CORAL
-      - DEAD_HORN_CORAL
-      - DEAD_TUBE_CORAL
-      - DEAD_TUBE_CORAL_BLOCK
-      - DEAD_BRAIN_CORAL_BLOCK
-      - DEAD_BUBBLE_CORAL_BLOCK
-      - DEAD_FIRE_CORAL_BLOCK
-      - DEAD_HORN_CORAL_BLOCK
-      - [ DEAD_TUBE_CORAL_FAN, DEAD_TUBE_CORAL_WALL_FAN ]
-      - [ DEAD_BRAIN_CORAL_FAN, DEAD_BRAIN_CORAL_WALL_FAN ]
-      - [ DEAD_BUBBLE_CORAL_FAN, DEAD_BUBBLE_CORAL_WALL_FAN ]
-      - [ DEAD_FIRE_CORAL_FAN, DEAD_FIRE_CORAL_WALL_FAN ]
-      - [ DEAD_HORN_CORAL_FAN, DEAD_HORN_CORAL_WALL_FAN ]
+      - WHITE_CONCRETE
+      - ORANGE_CONCRETE
+      - MAGENTA_CONCRETE
+      - LIGHT_BLUE_CONCRETE
+      - YELLOW_CONCRETE
+      - LIME_CONCRETE
+      - PINK_CONCRETE
+      - GRAY_CONCRETE
+      - LIGHT_GRAY_CONCRETE
+      - CYAN_CONCRETE
+      - PURPLE_CONCRETE
+      - BLUE_CONCRETE
+      - BROWN_CONCRETE
+      - GREEN_CONCRETE
+      - RED_CONCRETE
+      - BLACK_CONCRETE
+      - WHITE_CONCRETE_POWDER
+      - ORANGE_CONCRETE_POWDER
+      - MAGENTA_CONCRETE_POWDER
+      - LIGHT_BLUE_CONCRETE_POWDER
+      - YELLOW_CONCRETE_POWDER
+      - LIME_CONCRETE_POWDER
+      - PINK_CONCRETE_POWDER
+      - GRAY_CONCRETE_POWDER
+      - LIGHT_GRAY_CONCRETE_POWDER
+      - CYAN_CONCRETE_POWDER
+      - PURPLE_CONCRETE_POWDER
+      - BLUE_CONCRETE_POWDER
+      - BROWN_CONCRETE_POWDER
+      - GREEN_CONCRETE_POWDER
+      - RED_CONCRETE_POWDER
+      - BLACK_CONCRETE_POWDER
 
 glass:
   difficulty: 0
@@ -692,32 +681,6 @@ terracotta:
       - RED_GLAZED_TERRACOTTA
       - BLACK_GLAZED_TERRACOTTA
 
-banners:
-  difficulty: 0
-  base:
-    difficulty: 0
-    elements:
-      - [ WHITE_BANNER, WHITE_WALL_BANNER ]
-  variant:
-    difficulty: 0
-    elements:
-      - [ ORANGE_BANNER, ORANGE_WALL_BANNER ]
-      - [ MAGENTA_BANNER, MAGENTA_WALL_BANNER ]
-      - [ LIGHT_BLUE_BANNER, LIGHT_BLUE_WALL_BANNER ]
-      - [ YELLOW_BANNER, YELLOW_WALL_BANNER ]
-      - [ LIME_BANNER, LIME_WALL_BANNER ]
-      - [ PINK_BANNER, PINK_WALL_BANNER ]
-      - [ GRAY_BANNER, GRAY_WALL_BANNER ]
-      - [ LIGHT_GRAY_BANNER, LIGHT_GRAY_WALL_BANNER ]
-      - [ CYAN_BANNER, CYAN_WALL_BANNER ]
-      - [ PURPLE_BANNER, PURPLE_WALL_BANNER ]
-      - [ BLUE_BANNER, BLUE_WALL_BANNER ]
-      - [ BROWN_BANNER, BROWN_WALL_BANNER ]
-      - [ GREEN_BANNER, GREEN_WALL_BANNER ]
-      - [ RED_BANNER, RED_WALL_BANNER ]
-      - [ BLACK_BANNER, BLACK_WALL_BANNER ]
-
-
 wool:
   difficulty: 0
   base:
@@ -758,110 +721,104 @@ wool:
       - GREEN_CARPET
       - RED_CARPET
       - BLACK_CARPET
+  other:
+    difficulty: 0
+    banners:
+      difficulty: 0
+      base:
+        difficulty: 0
+        elements:
+          - [ WHITE_BANNER, WHITE_WALL_BANNER ]
+      variant:
+        difficulty: 0
+        elements:
+          - [ ORANGE_BANNER, ORANGE_WALL_BANNER ]
+          - [ MAGENTA_BANNER, MAGENTA_WALL_BANNER ]
+          - [ LIGHT_BLUE_BANNER, LIGHT_BLUE_WALL_BANNER ]
+          - [ YELLOW_BANNER, YELLOW_WALL_BANNER ]
+          - [ LIME_BANNER, LIME_WALL_BANNER ]
+          - [ PINK_BANNER, PINK_WALL_BANNER ]
+          - [ GRAY_BANNER, GRAY_WALL_BANNER ]
+          - [ LIGHT_GRAY_BANNER, LIGHT_GRAY_WALL_BANNER ]
+          - [ CYAN_BANNER, CYAN_WALL_BANNER ]
+          - [ PURPLE_BANNER, PURPLE_WALL_BANNER ]
+          - [ BLUE_BANNER, BLUE_WALL_BANNER ]
+          - [ BROWN_BANNER, BROWN_WALL_BANNER ]
+          - [ GREEN_BANNER, GREEN_WALL_BANNER ]
+          - [ RED_BANNER, RED_WALL_BANNER ]
+          - [ BLACK_BANNER, BLACK_WALL_BANNER ]
 
-bed:
+excluded_blocks:
   difficulty: 0
-  base:
-    difficulty: 0
-    elements:
-      - WHITE_BED
-  variant:
-    difficulty: 0
-    elements:
-      - ORANGE_BED
-      - MAGENTA_BED
-      - LIGHT_BLUE_BED
-      - YELLOW_BED
-      - LIME_BED
-      - PINK_BED
-      - GRAY_BED
-      - LIGHT_GRAY_BED
-      - CYAN_BED
-      - PURPLE_BED
-      - BLUE_BED
-      - BROWN_BED
-      - GREEN_BED
-      - RED_BED
-      - BLACK_BED
-
-candle:
-  base:
-    difficulty: 0
-    elements:
-      - CANDLE
-  variant:
-    difficulty: 0
-    elements:
-      - WHITE_CANDLE
-      - ORANGE_CANDLE
-      - MAGENTA_CANDLE
-      - LIGHT_BLUE_CANDLE
-      - YELLOW_CANDLE
-      - LIME_CANDLE
-      - PINK_CANDLE
-      - GRAY_CANDLE
-      - LIGHT_GRAY_CANDLE
-      - CYAN_CANDLE
-      - PURPLE_CANDLE
-      - BLUE_CANDLE
-      - BROWN_CANDLE
-      - GREEN_CANDLE
-      - RED_CANDLE
-      - BLACK_CANDLE
-
-excluded:
   v1.21:
     difficulty: 2147483647
-    elements:
-      - CRAFTER
-      - COPPER_DOOR
-      - EXPOSED_COPPER_DOOR
-      - WEATHERED_COPPER_DOOR
-      - OXIDIZED_COPPER_DOOR
-      - WAXED_COPPER_DOOR
-      - WAXED_EXPOSED_COPPER_DOOR
-      - WAXED_WEATHERED_COPPER_DOOR
-      - WAXED_OXIDIZED_COPPER_DOOR
-      - COPPER_TRAPDOOR
-      - EXPOSED_COPPER_TRAPDOOR
-      - WEATHERED_COPPER_TRAPDOOR
-      - OXIDIZED_COPPER_TRAPDOOR
-      - WAXED_COPPER_TRAPDOOR
-      - WAXED_EXPOSED_COPPER_TRAPDOOR
-      - WAXED_WEATHERED_COPPER_TRAPDOOR
-      - WAXED_OXIDIZED_COPPER_TRAPDOOR
-      - COPPER_GRATE
-      - EXPOSED_COPPER_GRATE
-      - WEATHERED_COPPER_GRATE
-      - OXIDIZED_COPPER_GRATE
-      - WAXED_COPPER_GRATE
-      - WAXED_EXPOSED_COPPER_GRATE
-      - WAXED_WEATHERED_COPPER_GRATE
-      - WAXED_OXIDIZED_COPPER_GRATE
-      - COPPER_BULB
-      - EXPOSED_COPPER_BULB
-      - WEATHERED_COPPER_BULB
-      - OXIDIZED_COPPER_BULB
-      - WAXED_COPPER_BULB
-      - WAXED_EXPOSED_COPPER_BULB
-      - WAXED_WEATHERED_COPPER_BULB
-      - WAXED_OXIDIZED_COPPER_BULB
+    base:
+      difficulty: 2147483647
+      elements:
+        - CRAFTER
+        - COPPER_DOOR
+        - EXPOSED_COPPER_DOOR
+        - WEATHERED_COPPER_DOOR
+        - OXIDIZED_COPPER_DOOR
+        - WAXED_COPPER_DOOR
+        - WAXED_EXPOSED_COPPER_DOOR
+        - WAXED_WEATHERED_COPPER_DOOR
+        - WAXED_OXIDIZED_COPPER_DOOR
+        - COPPER_TRAPDOOR
+        - EXPOSED_COPPER_TRAPDOOR
+        - WEATHERED_COPPER_TRAPDOOR
+        - OXIDIZED_COPPER_TRAPDOOR
+        - WAXED_COPPER_TRAPDOOR
+        - WAXED_EXPOSED_COPPER_TRAPDOOR
+        - WAXED_WEATHERED_COPPER_TRAPDOOR
+        - WAXED_OXIDIZED_COPPER_TRAPDOOR
+        - COPPER_GRATE
+        - EXPOSED_COPPER_GRATE
+        - WEATHERED_COPPER_GRATE
+        - OXIDIZED_COPPER_GRATE
+        - WAXED_COPPER_GRATE
+        - WAXED_EXPOSED_COPPER_GRATE
+        - WAXED_WEATHERED_COPPER_GRATE
+        - WAXED_OXIDIZED_COPPER_GRATE
+        - COPPER_BULB
+        - EXPOSED_COPPER_BULB
+        - WEATHERED_COPPER_BULB
+        - OXIDIZED_COPPER_BULB
+        - WAXED_COPPER_BULB
+        - WAXED_EXPOSED_COPPER_BULB
+        - WAXED_WEATHERED_COPPER_BULB
+        - WAXED_OXIDIZED_COPPER_BULB
 
   impossible:
-    difficulty: inf
-    elements:
-      - PETRIFIED_OAK_SLAB
-      - STRUCTURE_VOID
-      - MOVING_PISTON
-      - LIGHT
-      - BARRIER
-      - COMMAND_BLOCK
-      - REPEATING_COMMAND_BLOCK
-      - CHAIN_COMMAND_BLOCK
-      - JIGSAW
+    difficulty: 1000000
+    base:
+      elements:
+        - PETRIFIED_OAK_SLAB
+        - STRUCTURE_VOID
+        - MOVING_PISTON
+        - LIGHT
+        - BARRIER
+        - COMMAND_BLOCK
+        - REPEATING_COMMAND_BLOCK
+        - CHAIN_COMMAND_BLOCK
+        - JIGSAW
+    other:
+      heads:
+        difficulty: 1000000
+        base:
+          difficulty: 1000000
+          elements:
+            - [ SKELETON_SKULL, SKELETON_WALL_SKULL ]
+            - [ PLAYER_HEAD, PLAYER_WALL_HEAD ]
+            - [ ZOMBIE_HEAD, ZOMBIE_WALL_HEAD ]
+            - [ CREEPER_HEAD, CREEPER_WALL_HEAD ]
+            - [ PIGLIN_HEAD, PIGLIN_WALL_HEAD ]
 
   other:
-    difficulty:
+    difficulty: 0
+    elements:
+      - END_GATEWAY
+      - END_PORTAL
       - WITHER_ROSE
       - HANGING_ROOTS
       - TORCHFLOWER
@@ -875,79 +832,85 @@ excluded:
       - PITCHER_CROP
       - TRIAL_SPAWNER
 
-#TODO
 waxed_oxidized_copper:
   difficulty: 0 #MAX
-  elements:
-    - EXPOSED_COPPER
-    - WEATHERED_COPPER
-    - OXIDIZED_COPPER
-    - EXPOSED_CHISELED_COPPER
-    - WEATHERED_CHISELED_COPPER
-    - OXIDIZED_CHISELED_COPPER
-    - EXPOSED_CUT_COPPER
-    - WEATHERED_CUT_COPPER
-    - OXIDIZED_CUT_COPPER
-    - EXPOSED_CUT_COPPER_STAIRS
-    - WEATHERED_CUT_COPPER_STAIRS
-    - OXIDIZED_CUT_COPPER_STAIRS
-    - EXPOSED_CUT_COPPER_SLAB
-    - WEATHERED_CUT_COPPER_SLAB
-    - OXIDIZED_CUT_COPPER_SLAB
-    - WAXED_EXPOSED_COPPER
-    - WAXED_WEATHERED_COPPER
-    - WAXED_OXIDIZED_COPPER
-    - WAXED_EXPOSED_CHISELED_COPPER
-    - WAXED_WEATHERED_CHISELED_COPPER
-    - WAXED_OXIDIZED_CHISELED_COPPER
-    - WAXED_EXPOSED_CUT_COPPER
-    - WAXED_WEATHERED_CUT_COPPER
-    - WAXED_OXIDIZED_CUT_COPPER
-    - WAXED_EXPOSED_CUT_COPPER_STAIRS
-    - WAXED_WEATHERED_CUT_COPPER_STAIRS
-    - WAXED_OXIDIZED_CUT_COPPER_STAIRS
-    - WAXED_EXPOSED_CUT_COPPER_SLAB
-    - WAXED_WEATHERED_CUT_COPPER_SLAB
-    - WAXED_OXIDIZED_CUT_COPPER_SLAB
-    - WAXED_COPPER_BLOCK
-    - WAXED_CHISELED_COPPER
-    - WAXED_CUT_COPPER
-    - WAXED_CUT_COPPER_STAIRS
-    - WAXED_CUT_COPPER_SLAB
+  base:
+    difficulty: 0
+    elements:
+      - EXPOSED_COPPER
+      - WEATHERED_COPPER
+      - OXIDIZED_COPPER
+      - EXPOSED_CHISELED_COPPER
+      - WEATHERED_CHISELED_COPPER
+      - OXIDIZED_CHISELED_COPPER
+      - EXPOSED_CUT_COPPER
+      - WEATHERED_CUT_COPPER
+      - OXIDIZED_CUT_COPPER
+      - EXPOSED_CUT_COPPER_STAIRS
+      - WEATHERED_CUT_COPPER_STAIRS
+      - OXIDIZED_CUT_COPPER_STAIRS
+      - EXPOSED_CUT_COPPER_SLAB
+      - WEATHERED_CUT_COPPER_SLAB
+      - OXIDIZED_CUT_COPPER_SLAB
+      - WAXED_EXPOSED_COPPER
+      - WAXED_WEATHERED_COPPER
+      - WAXED_OXIDIZED_COPPER
+      - WAXED_EXPOSED_CHISELED_COPPER
+      - WAXED_WEATHERED_CHISELED_COPPER
+      - WAXED_OXIDIZED_CHISELED_COPPER
+      - WAXED_EXPOSED_CUT_COPPER
+      - WAXED_WEATHERED_CUT_COPPER
+      - WAXED_OXIDIZED_CUT_COPPER
+      - WAXED_EXPOSED_CUT_COPPER_STAIRS
+      - WAXED_WEATHERED_CUT_COPPER_STAIRS
+      - WAXED_OXIDIZED_CUT_COPPER_STAIRS
+      - WAXED_EXPOSED_CUT_COPPER_SLAB
+      - WAXED_WEATHERED_CUT_COPPER_SLAB
+      - WAXED_OXIDIZED_CUT_COPPER_SLAB
+      - WAXED_COPPER_BLOCK
+      - WAXED_CHISELED_COPPER
+      - WAXED_CUT_COPPER
+      - WAXED_CUT_COPPER_STAIRS
+      - WAXED_CUT_COPPER_SLAB
 
 snow:
   difficulty: 0
   snow:
     difficulty: 0
-    elements:
-      - SNOW
-      - SNOW_BLOCK
-  powdered_snow:
-    difficulty: 0
-    elements:
-      - POWDER_SNOW
+    base:
+      difficulty: 0
+      elements:
+        - SNOW
+        - SNOW_BLOCK
+    variant:
+      difficulty: 0
+      elements:
+        - POWDER_SNOW
 
-ice:
-  difficulty: 0
-  base:
+  ice:
     difficulty: 0
-    elements:
-      - ICE
-  variant:
-    difficulty: 0
-    elements:
-      - PACKED_ICE
-      - BLUE_ICE
+    base:
+      difficulty: 0
+      elements:
+        - ICE
+    variant:
+      difficulty: 0
+      elements:
+        - PACKED_ICE
+        - BLUE_ICE
 
 #TODO test other air types
 air:
   difficulty: 0
-  elements:
-    - AIR
-    - VOID_AIR
-    - CAVE_AIR
+  base:
+    difficulty: 0
+    elements:
+      - AIR
+      - VOID_AIR
+      - CAVE_AIR
 
 brick:
+  difficulty: 0
   base:
     difficulty: 0
     elements:
@@ -959,8 +922,6 @@ brick:
       - BRICK_STAIRS
       - BRICK_WALL
       - FLOWER_POT
-
-
 
 mud:
   base:
@@ -976,31 +937,17 @@ mud:
       - MUD_BRICK_STAIRS
       - MUD_BRICK_WALL
 
-
-
-
-
-
-workstation:
-  - LOOM
-  - COMPOSTER
-  - SMOKER
-  - BLAST_FURNACE
-  - CARTOGRAPHY_TABLE
-  - FLETCHING_TABLE
-  - GRINDSTONE
-  - SMITHING_TABLE
-  - STONECUTTER
-  - LECTERN
-  - FURNACE
-
 sculk:
-  - SCULK
-  - SCULK_VEIN
-  - SCULK_CATALYST
-  - SCULK_SHRIEKER
-  - SCULK_SENSOR
-  - CALIBRATED_SCULK_SENSOR
+  difficulty: 0
+  base:
+    difficulty: 0
+    elements:
+      - SCULK
+      - SCULK_VEIN
+      - SCULK_CATALYST
+      - SCULK_SHRIEKER
+      - SCULK_SENSOR
+      - CALIBRATED_SCULK_SENSOR
 
 bee:
   difficulty: 0
@@ -1013,35 +960,19 @@ bee:
 
 #TODO
 zobaczymy:
-  - NETHER_PORTAL
-  - SUSPICIOUS_SAND
-  - SUSPICIOUS_GRAVEL
-  - DECORATED_POT
-  - TINTED_GLASS
-  - SKELETON_SKULL
-  - WITHER_SKELETON_SKULL
-  - PLAYER_HEAD
-  - ZOMBIE_HEAD
-  - CREEPER_HEAD
-  - DRAGON_HEAD
-  - PIGLIN_HEAD
-  - SKELETON_WALL_SKULL
-  - WITHER_SKELETON_WALL_SKULL
-  - ZOMBIE_WALL_HEAD
-  - PLAYER_WALL_HEAD
-  - CREEPER_WALL_HEAD
-  - DRAGON_WALL_HEAD
-  - PIGLIN_WALL_HEAD
-  - ENDER_CHEST
-  - END_PORTAL_FRAME
-  - END_PORTAL
-  - END_GATEWAY
-  - POWDER_SNOW_CAULDRON
-  - FROSTED_ICE
-  - TURTLE_EGG
-  - HONEY_BLOCK
-  - SLIME_BLOCK
-  - CAVE_VINES_PLANT
+  difficulty: 0
+  base:
+    difficulty: 0
+    elements:
+      - SUSPICIOUS_SAND
+      - SUSPICIOUS_GRAVEL
+      - DECORATED_POT
+      - [ WITHER_SKELETON_SKULL,WITHER_SKELETON_WALL_SKULL ]
+      - POWDER_SNOW_CAULDRON
+      - TURTLE_EGG
+      - HONEY_BLOCK
+      - SLIME_BLOCK
+      - CAVE_VINES_PLANT
 
 #TODO variants for all stone variants
 cave:
@@ -1360,18 +1291,25 @@ cave:
               - CUT_COPPER_SLAB
 
   amethyst:
-    difficulty: 1
-    elements:
-      - AMETHYST_BLOCK
-      - BUDDING_AMETHYST
-      - SMALL_AMETHYST_BUD
-      - MEDIUM_AMETHYST_BUD
-      - LARGE_AMETHYST_BUD
-      - AMETHYST_CLUSTER
-      - CALCITE
+    difficulty: 0
+    block:
+      difficulty: 0
+      elements:
+        - AMETHYST_BLOCK
+        - BUDDING_AMETHYST
+        - SMALL_AMETHYST_BUD
+        - MEDIUM_AMETHYST_BUD
+        - LARGE_AMETHYST_BUD
+        - AMETHYST_CLUSTER
+        - CALCITE
+    craftable:
+      difficulty: 0
+      elements:
+        - TINTED_GLASS
+
 
   craftable:
-    difficulty: 1
+    difficulty: 0
     elements:
       - IRON_DOOR
       - IRON_TRAPDOOR
@@ -1385,57 +1323,85 @@ cave:
       - LAVA_CAULDRON
       - LANTERN
     anvil:
-      difficulty: 2
+      difficulty: 0
       base:
-        difficulty: 2
+        difficulty: 0
         elements:
           - ANVIL
       variant:
-        difficulty: 4
+        difficulty: 0
         elements:
           - CHIPPED_ANVIL
           - DAMAGED_ANVIL
 
 plants:
   difficulty: 0
-  elements:
-    - SHORT_GRASS
-    - FERN
-    - DEAD_BUSH
-    - DANDELION
-    - POPPY
-    - BLUE_ORCHID
-    - ALLIUM
-    - AZURE_BLUET
-    - RED_TULIP
-    - ORANGE_TULIP
-    - WHITE_TULIP
-    - PINK_TULIP
-    - OXEYE_DAISY
-    - CORNFLOWER
-    - LILY_OF_THE_VALLEY
-    - SUGAR_CANE
-    - PINK_PETALS
-    - BIG_DRIPLEAF
-    - SMALL_DRIPLEAF
-    - SUNFLOWER
-    - LILAC
-    - ROSE_BUSH
-    - PEONY
-    - TALL_GRASS
-    - LARGE_FERN
-    - LILY_PAD
-    - WHEAT
-    - COCOA
-    - CARROTS
-    - POTATOES
-    - BEETROOTS
-    - SWEET_BERRY_BUSH
-    - CACTUS
-    - VINE
-    - GLOW_LICHEN
-
-
+  plants:
+    difficulty: 0
+    elements:
+      - SHORT_GRASS
+      - FERN
+      - DEAD_BUSH
+      - DANDELION
+      - POPPY
+      - BLUE_ORCHID
+      - ALLIUM
+      - AZURE_BLUET
+      - RED_TULIP
+      - ORANGE_TULIP
+      - WHITE_TULIP
+      - PINK_TULIP
+      - OXEYE_DAISY
+      - CORNFLOWER
+      - LILY_OF_THE_VALLEY
+      - SUGAR_CANE
+      - PINK_PETALS
+      - BIG_DRIPLEAF
+      - SMALL_DRIPLEAF
+      - SUNFLOWER
+      - LILAC
+      - ROSE_BUSH
+      - PEONY
+      - TALL_GRASS
+      - LARGE_FERN
+      - LILY_PAD
+      - COCOA
+      - SWEET_BERRY_BUSH
+      - CACTUS
+      - VINE
+      - GLOW_LICHEN
+  pots:
+    difficulty: 0
+    elements:
+      - POTTED_OAK_SAPLING
+      - POTTED_SPRUCE_SAPLING
+      - POTTED_BIRCH_SAPLING
+      - POTTED_JUNGLE_SAPLING
+      - POTTED_ACACIA_SAPLING
+      - POTTED_CHERRY_SAPLING
+      - POTTED_DARK_OAK_SAPLING
+      - POTTED_MANGROVE_PROPAGULE
+      - POTTED_FERN
+      - POTTED_DANDELION
+      - POTTED_POPPY
+      - POTTED_BLUE_ORCHID
+      - POTTED_ALLIUM
+      - POTTED_AZURE_BLUET
+      - POTTED_RED_TULIP
+      - POTTED_ORANGE_TULIP
+      - POTTED_WHITE_TULIP
+      - POTTED_PINK_TULIP
+      - POTTED_OXEYE_DAISY
+      - POTTED_CORNFLOWER
+      - POTTED_LILY_OF_THE_VALLEY
+      - POTTED_WITHER_ROSE
+      - POTTED_RED_MUSHROOM
+      - POTTED_BROWN_MUSHROOM
+      - POTTED_DEAD_BUSH
+      - POTTED_CACTUS
+      - POTTED_BAMBOO
+      - POTTED_AZALEA_BUSH
+      - POTTED_FLOWERING_AZALEA_BUSH
 
 sea:
   difficulty: 0
@@ -1454,6 +1420,43 @@ sea:
       - KELP
       - KELP_PLANT #sapling
       - TALL_SEAGRASS
+
+  coral:
+    difficulty: 0
+    elements:
+      - TUBE_CORAL_BLOCK
+      - BRAIN_CORAL_BLOCK
+      - BUBBLE_CORAL_BLOCK
+      - FIRE_CORAL_BLOCK
+      - HORN_CORAL_BLOCK
+      - TUBE_CORAL
+      - BRAIN_CORAL
+      - BUBBLE_CORAL
+      - FIRE_CORAL
+      - HORN_CORAL
+      - [ TUBE_CORAL_FAN, TUBE_CORAL_WALL_FAN ]
+      - [ BRAIN_CORAL_FAN, BRAIN_CORAL_WALL_FAN ]
+      - [ BUBBLE_CORAL_FAN, BUBBLE_CORAL_WALL_FAN ]
+      - [ FIRE_CORAL_FAN, FIRE_CORAL_WALL_FAN ]
+      - [ HORN_CORAL_FAN, HORN_CORAL_WALL_FAN ]
+    dead:
+      difficulty: 0 # +1
+      elements:
+        - DEAD_BRAIN_CORAL
+        - DEAD_BUBBLE_CORAL
+        - DEAD_FIRE_CORAL
+        - DEAD_HORN_CORAL
+        - DEAD_TUBE_CORAL
+        - DEAD_TUBE_CORAL_BLOCK
+        - DEAD_BRAIN_CORAL_BLOCK
+        - DEAD_BUBBLE_CORAL_BLOCK
+        - DEAD_FIRE_CORAL_BLOCK
+        - DEAD_HORN_CORAL_BLOCK
+        - [ DEAD_TUBE_CORAL_FAN, DEAD_TUBE_CORAL_WALL_FAN ]
+        - [ DEAD_BRAIN_CORAL_FAN, DEAD_BRAIN_CORAL_WALL_FAN ]
+        - [ DEAD_BUBBLE_CORAL_FAN, DEAD_BUBBLE_CORAL_WALL_FAN ]
+        - [ DEAD_FIRE_CORAL_FAN, DEAD_FIRE_CORAL_WALL_FAN ]
+        - [ DEAD_HORN_CORAL_FAN, DEAD_HORN_CORAL_WALL_FAN ]
 
   prismarine:
     difficulty: 0
@@ -1476,6 +1479,7 @@ sea:
         - DARK_PRISMARINE_SLAB
 
 dirt:
+  difficulty: 0
   dirt:
     difficulty: 0
     elements:
@@ -1484,6 +1488,7 @@ dirt:
       - CLAY
       - COARSE_DIRT
       - ROOTED_DIRT
+      - FARMLAND
   sand:
     difficulty: 0
     normal:
@@ -1545,15 +1550,19 @@ mushroom:
   difficulty: 0
   small:
     difficulty: 0
-    elements:
-      - BROWN_MUSHROOM
-      - RED_MUSHROOM
+    base:
+      difficulty:
+      elements:
+        - BROWN_MUSHROOM
+        - RED_MUSHROOM
   large:
-    difficulty:
-    elements:
-      - BROWN_MUSHROOM_BLOCK
-      - RED_MUSHROOM_BLOCK
-      - MUSHROOM_STEM
+    difficulty: 0
+    base:
+      difficulty: 0
+      elements:
+        - BROWN_MUSHROOM_BLOCK
+        - RED_MUSHROOM_BLOCK
+        - MUSHROOM_STEM
 
 special:
   difficulty: 0
@@ -1568,7 +1577,8 @@ mob:
     - COBWEB
     - BONE_BLOCK
 
-special_playermade:
+playermade:
+  difficulty: 0
   candle_cake:
     difficulty: 0
     base:
@@ -1596,37 +1606,92 @@ special_playermade:
         - BLACK_CANDLE_CAKE
   other:
     difficulty: 0
-    elements:
-      - CONDUIT
-      - BOOKSHELF
-      - ENCHANTING_TABLE
-      - LODESTONE
-      - RESPAWN_ANCHOR
-      - HONEYCOMB_BLOCK
-      - CAKE
-      - FROGSPAWN
+    base:
+      difficulty: 0
+      elements:
+        - CONDUIT
+        - BOOKSHELF
+        - ENCHANTING_TABLE
+        - LODESTONE
+        - RESPAWN_ANCHOR
+        - HONEYCOMB_BLOCK
+        - CAKE
+        - FROGSPAWN
+        - ENDER_CHEST
+        - FROSTED_ICE
+  candle:
+    difficulty: 0
+    base:
+      difficulty: 0
+      elements:
+        - CANDLE
+    variant:
+      difficulty: 0
+      elements:
+        - WHITE_CANDLE
+        - ORANGE_CANDLE
+        - MAGENTA_CANDLE
+        - LIGHT_BLUE_CANDLE
+        - YELLOW_CANDLE
+        - LIME_CANDLE
+        - PINK_CANDLE
+        - GRAY_CANDLE
+        - LIGHT_GRAY_CANDLE
+        - CYAN_CANDLE
+        - PURPLE_CANDLE
+        - BLUE_CANDLE
+        - BROWN_CANDLE
+        - GREEN_CANDLE
+        - RED_CANDLE
+        - BLACK_CANDLE
+  workstation:
+    difficulty: 0
+    base:
+      difficulty: 0
+      elements:
+        - LOOM
+        - COMPOSTER
+        - SMOKER
+        - BLAST_FURNACE
+        - CARTOGRAPHY_TABLE
+        - FLETCHING_TABLE
+        - GRINDSTONE
+        - SMITHING_TABLE
+        - STONECUTTER
+        - LECTERN
+        - FURNACE
 
 farm:
   difficulty: 0
-  elements:
-    - FARMLAND
-    - PUMPKIN
-    - MELON
-    - CARVED_PUMPKIN
-    - JACK_O_LANTERN
-    - HAY_BLOCK
+  base:
+    difficulty: 0
+    elements:
+      - PUMPKIN
+      - MELON
+      - CARVED_PUMPKIN
+      - JACK_O_LANTERN
+      - HAY_BLOCK
+      - WHEAT
+      - CARROTS
+      - POTATOES
+      - BEETROOTS
+
   stem:
     difficulty: 0 # +2
-    elements:
-      - ATTACHED_PUMPKIN_STEM
-      - ATTACHED_MELON_STEM
-      - PUMPKIN_STEM
-      - MELON_STEM
+    base:
+      difficulty: 0
+      elements:
+        - ATTACHED_PUMPKIN_STEM
+        - ATTACHED_MELON_STEM
+        - PUMPKIN_STEM
+        - MELON_STEM
 
 fluid:
   difficulty: 0
-  elements:
-    - BUBBLE_COLUMN
-    - WATER
-    - LAVA
-    - FIRE
+  base:
+    difficulty: 0
+    elements:
+      - BUBBLE_COLUMN
+      - WATER
+      - LAVA
+      - FIRE
