@@ -6,6 +6,7 @@ wood:
       elements:
         - OAK_PLANKS
         - OAK_WOOD
+        - OAK_SAPLING
     variant:
       difficulty: 0
       elements:
@@ -37,6 +38,7 @@ wood:
       elements:
         - BIRCH_PLANKS
         - BIRCH_LOG
+        - BIRCH_SAPLING
 
     variant:
       difficulty: 0
@@ -69,6 +71,7 @@ wood:
       elements:
         - SPRUCE_PLANKS
         - SPRUCE_LOG
+        - SPRUCE_SAPLING
 
     variant:
       difficulty: 0
@@ -102,6 +105,7 @@ wood:
       elements:
         - JUNGLE_PLANKS
         - JUNGLE_LOG
+        - JUNGLE_SAPLING
 
     variant:
       difficulty: 0
@@ -135,6 +139,7 @@ wood:
       elements:
         - DARK_OAK_LOG
         - DARK_OAK_PLANKS
+        - DARK_OAK_SAPLING
 
     variant:
       difficulty: 0
@@ -168,6 +173,7 @@ wood:
       elements:
         - ACACIA_PLANKS
         - ACACIA_LOG
+        - ACACIA_SAPLING
 
     variant:
       difficulty: 0
@@ -202,6 +208,7 @@ wood:
         - MANGROVE_PLANKS
         - MANGROVE_LOG
         - MANGROVE_ROOTS
+        - MANGROVE_PROPAGULE
 
     variant:
       difficulty: 0
@@ -236,6 +243,7 @@ wood:
       elements:
         - CHERRY_PLANKS
         - CHERRY_LOG
+        - CHERRY_SAPLING
 
     variant:
       difficulty: 0
@@ -269,6 +277,7 @@ wood:
       elements:
         - BAMBOO
         - BAMBOO_BLOCK
+        - BAMBOO_SAPLING
 
     variant:
       difficulty: 0
@@ -954,26 +963,23 @@ brick:
 
 
 mud:
-  - MUD
-  - MUD_BRICK_SLAB
-  - PACKED_MUD
-  - MUD_BRICKS
-  - MUD_BRICK_STAIRS
-  - MUD_BRICK_WALL
+  base:
+    difficulty: 0
+    elements:
+      - MUD
+  variant:
+    difficulty: 0
+    elements:
+      - MUD_BRICK_SLAB
+      - PACKED_MUD
+      - MUD_BRICKS
+      - MUD_BRICK_STAIRS
+      - MUD_BRICK_WALL
 
 
 
 
-sapling:
-  - OAK_SAPLING
-  - SPRUCE_SAPLING
-  - BIRCH_SAPLING
-  - JUNGLE_SAPLING
-  - ACACIA_SAPLING
-  - CHERRY_SAPLING
-  - DARK_OAK_SAPLING
-  - MANGROVE_PROPAGULE
-  - BAMBOO_SAPLING
+
 
 workstation:
   - LOOM
@@ -1588,17 +1594,17 @@ special_playermade:
         - GREEN_CANDLE_CAKE
         - RED_CANDLE_CAKE
         - BLACK_CANDLE_CAKE
-    other:
-      difficulty: 0
-      elements:
-        - CONDUIT
-        - BOOKSHELF
-        - ENCHANTING_TABLE
-        - LODESTONE
-        - RESPAWN_ANCHOR
-        - HONEYCOMB_BLOCK
-        - CAKE
-        - FROGSPAWN
+  other:
+    difficulty: 0
+    elements:
+      - CONDUIT
+      - BOOKSHELF
+      - ENCHANTING_TABLE
+      - LODESTONE
+      - RESPAWN_ANCHOR
+      - HONEYCOMB_BLOCK
+      - CAKE
+      - FROGSPAWN
 
 farm:
   difficulty: 0
