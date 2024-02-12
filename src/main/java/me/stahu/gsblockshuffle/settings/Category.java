@@ -22,6 +22,20 @@ public class Category {
         fromMap(map, name);
     }
 
+    public ArrayList<ArrayList<String>> getBlocks() {
+        ArrayList<ArrayList<String>> blocks = new ArrayList<>();
+
+        if(elements != null) {
+            blocks.addAll(elements);
+        } else {
+            for (Category subcategory : subCategories) {
+                blocks.addAll(subcategory.getBlocks());
+            }
+        }
+
+        return blocks;
+    }
+
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("isIncluded", isIncluded);
@@ -36,11 +50,12 @@ public class Category {
         return map;
     }
 
+    // TODO safe cast
     public void fromMap(Map<String, Object> map, String name) {
         this.name = name;
-        this.isIncluded = map.get("included") != null && (boolean) map.get("included");
+        this.isIncluded = map.get("isIncluded") != null && (boolean) map.get("isIncluded");
         this.difficulty = map.get("difficulty") != null ? (int) map.get("difficulty") : 0;
-        map.remove("included");
+        map.remove("isIncluded");
         map.remove("difficulty");
         if (map.containsKey("elements")) {
             this.elements = (ArrayList<ArrayList<String>>) map.get("elements");
