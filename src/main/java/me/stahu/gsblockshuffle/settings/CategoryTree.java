@@ -1,6 +1,5 @@
 package me.stahu.gsblockshuffle.settings;
 
-import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
@@ -24,7 +23,7 @@ public class CategoryTree {
         return map;
     }
 
-    public static void parseYaml(String filePath, CategoryTree categoryTree)
+    public void parseYaml(String filePath)
             throws FileNotFoundException {
         Yaml yaml = new Yaml();
 
@@ -37,7 +36,7 @@ public class CategoryTree {
             Category category = new Category((Map<String, Object>) entry.getValue(), entry.getKey());
             categories.add(category);
         }
-        categoryTree.categories = categories;
+        this.categories = categories;
     }
 
     public static void dumpYaml(String filePath, CategoryTree categoryTree) {

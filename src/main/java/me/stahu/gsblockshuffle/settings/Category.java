@@ -32,7 +32,6 @@ public class Category {
                 blocks.addAll(subcategory.getBlocks());
             }
         }
-
         return blocks;
     }
 
@@ -58,7 +57,8 @@ public class Category {
         map.remove("isIncluded");
         map.remove("difficulty");
         if (map.containsKey("elements")) {
-            this.elements = (ArrayList<ArrayList<String>>) map.get("elements");
+//            this.elements = (ArrayList<ArrayList<String>>) map.get("elements");
+            this.elements = castElements((ArrayList<Object>) map.get("elements"));
         } else {
             this.subCategories = new ArrayList<Category>();
             for (Map.Entry<String, Object> entry : map.entrySet()) {
@@ -66,6 +66,26 @@ public class Category {
                 this.subCategories.add(subcategory);
             }
         }
+    }
+
+    // TODO raise error if neither String or ArrayList
+    private ArrayList<ArrayList<String>> castElements(ArrayList<Object> elements){
+        ArrayList<ArrayList<String>> castedElements = new ArrayList<>();
+        //check if element is string or list
+        for (Object o : elements) {
+            if (o instanceof String) {
+                ArrayList<String> element = new ArrayList<>();
+                element.add((String) o);
+                castedElements.add(element);
+            } else {
+                castedElements.add((ArrayList<String>) o);
+            }
+        }
+        return castedElements;
+    }
+
+    public void setIncluded(boolean included) {
+        this.isIncluded = included;
     }
 }
 
