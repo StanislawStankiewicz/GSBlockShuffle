@@ -7,16 +7,15 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class CategoryTree {
     public ArrayList<Category> categories;
 
     public CategoryTree() { }
 
-    public Map<String, Object> toMap() {
-        Map<String, Object> map = new HashMap<>();
+    public LinkedHashMap<String, Object> toMap() {
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         for (Category category : categories) {
             map.put(category.name, category.toMap());
         }
@@ -29,19 +28,19 @@ public class CategoryTree {
 
         FileInputStream inputStream = new FileInputStream(filePath);
 
-        Map<String, Object> map = yaml.load(inputStream);
+        LinkedHashMap<String, Object> map = yaml.load(inputStream);
         ArrayList<Category> categories = new ArrayList<Category>();
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
+        for (String key : map.keySet()) {
             //TODO safe cast
-            Category category = new Category((Map<String, Object>) entry.getValue(), entry.getKey());
+            Category category = new Category((LinkedHashMap<String, Object>) map.get(key), key);
             categories.add(category);
         }
         this.categories = categories;
     }
 
-    public static void dumpYaml(String filePath, CategoryTree categoryTree) {
+    public void dumpYaml(String filePath) {
         Yaml yaml = new Yaml();
-        Map<String, Object> map = categoryTree.toMap();
+        LinkedHashMap<String, Object> map = this.toMap();
         String output = yaml.dump(map);
         try {
             FileWriter writer = new FileWriter(filePath);

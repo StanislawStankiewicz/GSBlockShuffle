@@ -1,7 +1,7 @@
 package me.stahu.gsblockshuffle.settings;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Category {
@@ -18,7 +18,7 @@ public class Category {
         this.subCategories = subcategories;
     }
 
-    public Category(Map<String, Object> map, String name) {
+    public Category(LinkedHashMap<String, Object> map, String name) {
         fromMap(map, name);
     }
 
@@ -35,8 +35,8 @@ public class Category {
         return blocks;
     }
 
-    public Map<String, Object> toMap() {
-        Map<String, Object> map = new HashMap<>();
+    public LinkedHashMap<String, Object> toMap() {
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         map.put("isIncluded", isIncluded);
         map.put("difficulty", difficulty);
         if (subCategories != null) {
@@ -62,7 +62,7 @@ public class Category {
         } else {
             this.subCategories = new ArrayList<Category>();
             for (Map.Entry<String, Object> entry : map.entrySet()) {
-                Category subcategory = new Category((Map<String, Object>) entry.getValue(), entry.getKey());
+                Category subcategory = new Category((LinkedHashMap<String, Object>) entry.getValue(), entry.getKey());
                 this.subCategories.add(subcategory);
             }
         }
