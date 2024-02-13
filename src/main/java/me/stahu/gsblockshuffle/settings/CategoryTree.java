@@ -9,11 +9,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+/**
+ * The CategoryTree class represents a tree of categories.
+ * It is used to store and manage the categories of blocks.
+ */
 public class CategoryTree {
     public ArrayList<Category> categories;
 
-    public CategoryTree() { }
+    /**
+     * The constructor for the CategoryTree class.
+     */
+    public CategoryTree() {
+    }
 
+    /**
+     * Method to convert the CategoryTree to a LinkedHashMap.
+     *
+     * @return LinkedHashMap<String, Object>
+     */
     public LinkedHashMap<String, Object> toMap() {
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         for (Category category : categories) {
@@ -22,6 +35,12 @@ public class CategoryTree {
         return map;
     }
 
+    /**
+     * Method to parse a YAML file and create a CategoryTree from it.
+     *
+     * @param filePath The path to the YAML file.
+     * @throws FileNotFoundException If the file is not found.
+     */
     public void parseYaml(String filePath)
             throws FileNotFoundException {
         Yaml yaml = new Yaml();
@@ -38,6 +57,11 @@ public class CategoryTree {
         this.categories = categories;
     }
 
+    /**
+     * Method to dump the CategoryTree to a YAML file.
+     *
+     * @param filePath The path to the YAML file.
+     */
     public void dumpYaml(String filePath) {
         Yaml yaml = new Yaml();
         LinkedHashMap<String, Object> map = this.toMap();
@@ -50,5 +74,12 @@ public class CategoryTree {
             // TODO Implement a logger
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Save the configuration to "plugins\GSBlockShuffle\block_list_categorized.yml"
+     */
+    public void saveConfiguration() {
+        this.dumpYaml("plugins\\GSBlockShuffle\\block_list_categorized.yml");
     }
 }
