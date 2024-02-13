@@ -1,5 +1,7 @@
 package me.stahu.gsblockshuffle.settings;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -22,16 +24,80 @@ public class Category {
         fromMap(map, name);
     }
 
+    // TODO refine code
+    public ArrayList<ArrayList<ArrayList<String>>> getBlockSet(YamlConfiguration settings) {
+        ArrayList<ArrayList<ArrayList<String>>> blocks = new ArrayList<>();
+        boolean treatAllAsIndividualBlocks = settings.getBoolean("treatAllAsIndividualBlocks");
+
+        if (!isIncluded || !checkDifficulty(settings)) {
+            return null;
+        }
+
+        if (treatAllAsIndividualBlocks) {
+            if (elements != null) {
+                for (ArrayList<String> element : elements) {
+                    ArrayList<ArrayList<String>> block = new ArrayList<>();
+                    block.add(element);
+                    blocks.add(block);
+                }
+            } else {
+                for (Category subcategory : subCategories) {
+                    ArrayList<ArrayList<ArrayList<String>>> blockSet = subcategory.getBlockSet(settings);
+                    if (blockSet != null) {
+                        blocks.addAll(blockSet);
+                    }
+                }
+            }
+        }
+        // Group blocks into packs like variants of wool, conrete, etc.
+        else {
+            if (elements != null) {
+                blocks.add(elements);
+            }
+            // Handle variants
+            if (subCategories != null) {
+                // This pack is used to group all "base" and "variant" subcategories to a group that will be treated as a single block
+                ArrayList<ArrayList<String>> pack = new ArrayList<>();
+                for (Category subcategory : subCategories) {
+                    // Only add "base" and "variant" subcategories + check difficulty and isIncluded
+                    if ((subcategory.name.equals("base") || subcategory.name.equals("variant")) && subcategory.isIncluded && subcategory.checkDifficulty(settings)) {
+                        pack.addAll(subcategory.elements);
+                    } else {
+                        ArrayList<ArrayList<ArrayList<String>>> blockSet = subcategory.getBlockSet(settings);
+                        if (blockSet != null) {
+                            blocks.addAll(blockSet);
+                        }
+                        //
+                        if (subcategory.elements != null && subcategory.isIncluded && subcategory.checkDifficulty(settings)) {
+                            for (ArrayList<String> element : subcategory.elements) {
+                                ArrayList<ArrayList<String>> wrap = new ArrayList<>();
+                                wrap.add(element);
+                                blocks.add(wrap);
+                            }
+                        }
+                    }
+                }
+                if (!pack.isEmpty()) {
+                    blocks.add(pack);
+                }
+            }
+        }
+
+
+        return blocks;
+    }
+
     public ArrayList<ArrayList<String>> getBlocks() {
         ArrayList<ArrayList<String>> blocks = new ArrayList<>();
 
-        if(elements != null) {
+        if (elements != null) {
             blocks.addAll(elements);
         } else {
             for (Category subcategory : subCategories) {
                 blocks.addAll(subcategory.getBlocks());
             }
         }
+
         return blocks;
     }
 
@@ -60,7 +126,7 @@ public class Category {
 //            this.elements = (ArrayList<ArrayList<String>>) map.get("elements");
             this.elements = castElements((ArrayList<Object>) map.get("elements"));
         } else {
-            this.subCategories = new ArrayList<Category>();
+            this.subCategories = new ArrayList<>();
             for (Map.Entry<String, Object> entry : map.entrySet()) {
                 Category subcategory = new Category((LinkedHashMap<String, Object>) entry.getValue(), entry.getKey());
                 this.subCategories.add(subcategory);
@@ -69,7 +135,7 @@ public class Category {
     }
 
     // TODO raise error if neither String or ArrayList
-    private ArrayList<ArrayList<String>> castElements(ArrayList<Object> elements){
+    private ArrayList<ArrayList<String>> castElements(ArrayList<Object> elements) {
         ArrayList<ArrayList<String>> castedElements = new ArrayList<>();
         //check if element is string or list
         for (Object o : elements) {
@@ -86,6 +152,20 @@ public class Category {
 
     public void setIncluded(boolean included) {
         this.isIncluded = included;
+    }
+
+    private boolean checkDifficulty(YamlConfiguration settings) {
+        boolean includeLowerDifficulties = settings.getBoolean("includeLowerDifficulties");
+        int gameDifficulty = settings.getInt("difficulty");
+
+        if (gameDifficulty == -1) {
+            return true;
+        }
+
+        if (includeLowerDifficulties) {
+            return this.difficulty <= gameDifficulty;
+        }
+        return this.difficulty == gameDifficulty;
     }
 }
 

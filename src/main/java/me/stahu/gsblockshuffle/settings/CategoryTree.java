@@ -1,5 +1,6 @@
 package me.stahu.gsblockshuffle.settings;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
@@ -48,7 +49,7 @@ public class CategoryTree {
         FileInputStream inputStream = new FileInputStream(filePath);
 
         LinkedHashMap<String, Object> map = yaml.load(inputStream);
-        ArrayList<Category> categories = new ArrayList<Category>();
+        ArrayList<Category> categories = new ArrayList<>();
         for (String key : map.keySet()) {
             //TODO safe cast
             Category category = new Category((LinkedHashMap<String, Object>) map.get(key), key);
@@ -74,6 +75,21 @@ public class CategoryTree {
             // TODO Implement a logger
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<ArrayList<ArrayList<String>>> getBlockList(YamlConfiguration settings) {
+        ArrayList<ArrayList<ArrayList<String>>> blocks = new ArrayList<>();
+
+        for (Category category : categories) {
+            ArrayList<ArrayList<ArrayList<String>>> blockList = category.getBlockSet(settings);
+            if (blockList != null) {
+                if(!blockList.isEmpty()){
+                    blocks.addAll(blockList);
+                }
+            }
+        }
+
+        return blocks;
     }
 
     /**
