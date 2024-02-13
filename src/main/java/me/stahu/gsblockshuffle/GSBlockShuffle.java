@@ -56,15 +56,19 @@ public final class GSBlockShuffle extends JavaPlugin {
             this.saveResource("settings.yml", false);
         }
     }
-//    private void createIncludedBlocksFile() {
-//        try {
-//            if (!this.includedBlocksFile.exists()) {
-//                this.saveResource("includedBlocks.yml", false);
-//            }
-//            System.out.println("Path of the created file: " + this.includedBlocksFile.getAbsolutePath());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            // Handle the error here
-//        }
-//    }
+
+    private void createIncludedBlocksFile() {
+        try {
+            if (!this.includedBlocksFile.exists()) {
+                this.saveResource("block_list_categorized.yml", false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle the error here
+        }
+    }
+
+    public void saveConfiguration() {
+        this.categoryTree.saveConfiguration();
+    }
 }
