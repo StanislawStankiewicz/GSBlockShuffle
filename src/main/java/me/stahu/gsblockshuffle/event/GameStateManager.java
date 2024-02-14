@@ -1,7 +1,6 @@
 package me.stahu.gsblockshuffle.event;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
-import me.stahu.gsblockshuffle.random_block.RandomBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -23,17 +22,19 @@ public class GameStateManager {
     public Map<String, Team> teams;
     public Map<String, ArrayList<String>> playerBlockMap;
     public int gameState; // 0 - not started, 1 - solo, 2 - team
+    public ArrayList<Player> playersWithATeam;
     private GSBlockShuffle plugin;
     private YamlConfiguration settings;
 
-    public GameStateManager(YamlConfiguration settings,GSBlockShuffle plugin) {
+
+    public GameStateManager(YamlConfiguration settings, GSBlockShuffle plugin) {
         this.teams = new HashMap<>();
 
         this.playerBlockMap = new HashMap<>();
 
         this.gameState = 0;
 
-        this.scoreboardManager =  Bukkit.getScoreboardManager();
+        this.scoreboardManager = Bukkit.getScoreboardManager();
         this.scoreboard = scoreboardManager.getNewScoreboard();
 
         this.settings = settings;
@@ -41,18 +42,19 @@ public class GameStateManager {
     }
 
     public void setGameState(int gameState) {
-        System.out.println("Setting game state to: " + gameState);
-        System.out.println("gamestate == 1: " + (gameState == 1));
-        this.gameState = gameState;
-        if (gameState == 1) {
-            clearPlayerBlocks();
-            assignRandomBlocks();
-            System.out.println("Player blocks: " + playerBlockMap);
-            Objective objective = scoreboard.registerNewObjective("BlockShuffle", "dummy", ChatColor.GOLD + "Block Shuffle", RenderType.INTEGER);
-            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        if (gameState == 0) {
+            // ..
         }
-        if (gameState == 2) {
-            //...
+        if (gameState == 1) {
+            // Adding players with no team to their own team
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (!playersWithATeam.contains(player)) {
+                    addTeam(player.getName(), ChatColor.WHITE);
+                    addPlayerToTeam(player.getName(), player.getName());
+                }
+            }
+
+            assignRandomBlocks();
         }
     }
 
@@ -69,6 +71,7 @@ public class GameStateManager {
     public void addPlayerToTeam(String teamName, String playerName) {
         Team team = teams.get(teamName);
         team.addEntry(playerName);
+        playersWithATeam.add(Bukkit.getPlayer(playerName));
     }
 
     public void removePlayerFromAllTeams(String playerName) {
@@ -100,25 +103,31 @@ public class GameStateManager {
     }
 
     private void assignRandomBlocks() {
-        System.out.println("Assigning random blocks");
-        System.out.println("Game state: " + gameState);
-        ArrayList<ArrayList<ArrayList<String>>> blocks = plugin.categoryTree.getBlockList(settings);
+        String assignmentMode = settings.getString("assignmentMode");
 
-
-        if (gameState == 2) {
-            for (Team team : teams.values()) {
-                //...
+        if (assignmentMode == "onePerPlayer") {
+            ArrayList<String> blockName;
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                blockName = plugin.categoryTree.getRandomBlock(settings);
+                assignBlockToPlayer(player.getName(), blockName);
             }
-            // TODO implement
         }
-        if (gameState == 1) {
-            // get all players
-            ArrayList<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
-            System.out.println("players: " + players);
-            for (Player player : players) {
-                // assign block to player
-                assignBlockToPlayer(player.getName(), RandomBlock.getRandomBlock(blocks));
-                player.sendRawMessage("Your block is: " + playerBlockMap.get(player.getName()));
+
+        if (assignmentMode == "onePerTeam") {
+            ArrayList<String> blockName;
+            for(Team team : teams.values()) {
+                blockName = plugin.categoryTree.getRandomBlock(settings);
+                for (String player : team.getEntries()) {
+                    assignBlockToPlayer(player, blockName);
+                }
+            }
+        }
+
+        if(assignmentMode == "onePerRound") {
+            ArrayList<String> blockName;
+            blockName = plugin.categoryTree.getRandomBlock(settings);
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                assignBlockToPlayer(player.getName(), blockName);
             }
         }
     }
