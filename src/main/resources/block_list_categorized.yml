@@ -1,18 +1,18 @@
 wood:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   oak:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [OAK_PLANKS]
         - [OAK_LOG]
         - [OAK_SAPLING]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [OAK_WOOD]
@@ -29,25 +29,25 @@ wood:
         - [OAK_LEAVES]
         - [OAK_SIGN, OAK_WALL_SIGN]
     other:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       hanging_sign:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [OAK_HANGING_SIGN, OAK_WALL_HANGING_SIGN]
   birch:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [BIRCH_PLANKS]
         - [BIRCH_LOG]
         - [BIRCH_SAPLING]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [STRIPPED_BIRCH_LOG]
@@ -64,25 +64,25 @@ wood:
         - [BIRCH_LEAVES]
         - [BIRCH_SIGN, BIRCH_WALL_SIGN]
     other:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       hanging_sign:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [BIRCH_HANGING_SIGN, BIRCH_WALL_HANGING_SIGN]
   spruce:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [SPRUCE_PLANKS]
         - [SPRUCE_LOG]
         - [SPRUCE_SAPLING]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [STRIPPED_SPRUCE_LOG]
@@ -99,25 +99,25 @@ wood:
         - [SPRUCE_LEAVES]
         - [SPRUCE_SIGN, SPRUCE_WALL_SIGN]
     other:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       hanging_sign:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [SPRUCE_HANGING_SIGN, SPRUCE_WALL_HANGING_SIGN]
   jungle:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [JUNGLE_PLANKS]
         - [JUNGLE_LOG]
         - [JUNGLE_SAPLING]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [STRIPPED_JUNGLE_LOG]
@@ -134,25 +134,25 @@ wood:
         - [JUNGLE_LEAVES]
         - [JUNGLE_SIGN, JUNGLE_WALL_SIGN]
     other:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       hanging_sign:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [JUNGLE_HANGING_SIGN, JUNGLE_WALL_HANGING_SIGN]
   dark_oak:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [DARK_OAK_LOG]
         - [DARK_OAK_PLANKS]
         - [DARK_OAK_SAPLING]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [STRIPPED_DARK_OAK_LOG]
@@ -169,25 +169,25 @@ wood:
         - [DARK_OAK_LEAVES]
         - [DARK_OAK_SIGN, DARK_OAK_WALL_SIGN]
     other:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       hanging_sign:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [DARK_OAK_HANGING_SIGN, DARK_OAK_WALL_HANGING_SIGN]
   acacia:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [ACACIA_PLANKS]
         - [ACACIA_LOG]
         - [ACACIA_SAPLING]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [STRIPPED_ACACIA_LOG]
@@ -204,18 +204,18 @@ wood:
         - [ACACIA_LEAVES]
         - [ACACIA_SIGN, ACACIA_WALL_SIGN]
     other:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       hanging_sign:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [ACACIA_HANGING_SIGN, ACACIA_WALL_HANGING_SIGN]
   mangrove:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [MANGROVE_PLANKS]
@@ -223,7 +223,7 @@ wood:
         - [MANGROVE_ROOTS]
         - [MANGROVE_PROPAGULE]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [MUDDY_MANGROVE_ROOTS]
@@ -241,25 +241,25 @@ wood:
         - [MANGROVE_LEAVES]
         - [MANGROVE_SIGN, MANGROVE_WALL_SIGN]
     other:
-      isIncluded: false
+      isIncluded: true
       difficulty: 1
       hanging_sign:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [MANGROVE_HANGING_SIGN, MANGROVE_WALL_HANGING_SIGN]
   cherry:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [CHERRY_PLANKS]
         - [CHERRY_LOG]
         - [CHERRY_SAPLING]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [STRIPPED_CHERRY_LOG]
@@ -276,25 +276,25 @@ wood:
         - [CHERRY_LEAVES]
         - [CHERRY_SIGN, CHERRY_WALL_SIGN]
     other:
-      isIncluded: false
+      isIncluded: true
       difficulty: 1
       hanging_sign:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [CHERRY_HANGING_SIGN, CHERRY_WALL_HANGING_SIGN]
   bamboo:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [BAMBOO]
         - [BAMBOO_BLOCK]
         - [BAMBOO_SAPLING]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [BAMBOO_SLAB]
@@ -313,15 +313,15 @@ wood:
         - [SCAFFOLDING]
         - [BAMBOO_SIGN, BAMBOO_WALL_SIGN]
     other:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       hanging_sign:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [BAMBOO_HANGING_SIGN, BAMBOO_WALL_HANGING_SIGN]
   craftable:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [TORCH, WALL_TORCH]
@@ -333,15 +333,15 @@ wood:
       - [CAMPFIRE]
       - [CRAFTING_TABLE]
   bed:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [WHITE_BED]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [ORANGE_BED]
@@ -360,25 +360,25 @@ wood:
         - [RED_BED]
         - [BLACK_BED]
 redstone:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   ore:
-    isIncluded: false
+    isIncluded: true
     difficulty: 1
     elements:
       - [REDSTONE_ORE]
       - [DEEPSLATE_REDSTONE_ORE]
   block:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [REDSTONE_BLOCK]
       - [REDSTONE_WIRE]
   components:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     simple:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [PISTON]
@@ -390,7 +390,7 @@ redstone:
         - [NOTE_BLOCK]
         - [REDSTONE_TORCH, REDSTONE_WALL_TORCH]
     complex:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [TRIPWIRE]
@@ -404,17 +404,17 @@ redstone:
         - [PISTON_HEAD]
         - [TARGET]
 nether:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   froglight:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [OCHRE_FROGLIGHT]
       - [VERDANT_FROGLIGHT]
       - [PEARLESCENT_FROGLIGHT]
   nether_redstone:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [COMPARATOR]
@@ -423,7 +423,7 @@ nether:
       - [REDSTONE_LAMP]
       - [OBSERVER]
   other:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [SHROOMLIGHT]
@@ -519,44 +519,44 @@ nether:
       - [WEEPING_VINES_PLANT]
       - [TWISTING_VINES_PLANT]
 end:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   chorus:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [CHORUS_PLANT]
       - [CHORUS_FLOWER]
   end_portal:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [END_PORTAL_FRAME]
   dragon_egg:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [DRAGON_EGG]
   dragon_head:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [DRAGON_HEAD, DRAGON_WALL_HEAD]
   end_rod:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [END_ROD]
   end_stone:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [END_STONE]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [END_STONE_BRICKS]
@@ -564,30 +564,30 @@ end:
         - [END_STONE_BRICK_STAIRS]
         - [END_STONE_BRICK_SLAB]
   purpur:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [PURPUR_BLOCK]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [PURPUR_SLAB]
         - [PURPUR_PILLAR]
         - [PURPUR_STAIRS]
   shulker_box:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [SHULKER_BOX]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [WHITE_SHULKER_BOX]
@@ -607,10 +607,10 @@ end:
         - [RED_SHULKER_BOX]
         - [BLACK_SHULKER_BOX]
 concrete:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   variant:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [WHITE_CONCRETE]
@@ -646,16 +646,16 @@ concrete:
       - [RED_CONCRETE_POWDER]
       - [BLACK_CONCRETE_POWDER]
 glass:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   base:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [GLASS_PANE]
       - [GLASS]
   variant:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [WHITE_STAINED_GLASS]
@@ -691,15 +691,15 @@ glass:
       - [RED_STAINED_GLASS_PANE]
       - [BLACK_STAINED_GLASS_PANE]
 terracotta:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   base:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [TERRACOTTA]
   variant:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [WHITE_TERRACOTTA]
@@ -735,16 +735,16 @@ terracotta:
       - [RED_GLAZED_TERRACOTTA]
       - [BLACK_GLAZED_TERRACOTTA]
 wool:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   base:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [WHITE_WOOL]
       - [WHITE_CARPET]
   variant:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [ORANGE_WOOL]
@@ -778,18 +778,18 @@ wool:
       - [RED_CARPET]
       - [BLACK_CARPET]
   other:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     banners:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       base:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [WHITE_BANNER, WHITE_WALL_BANNER]
       variant:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [ORANGE_BANNER, ORANGE_WALL_BANNER]
@@ -942,56 +942,56 @@ waxed_oxidized_copper:
       - [WAXED_CUT_COPPER_STAIRS]
       - [WAXED_CUT_COPPER_SLAB]
 snow:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   snow:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [SNOW]
         - [SNOW_BLOCK]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [POWDER_SNOW]
   ice:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [ICE]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [PACKED_ICE]
         - [BLUE_ICE]
 air:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   base:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [AIR]
       - [VOID_AIR]
       - [CAVE_AIR]
 brick:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   base:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [BRICKS]
   variant:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [BRICK_SLAB]
@@ -999,10 +999,10 @@ brick:
       - [BRICK_WALL]
       - [FLOWER_POT]
 sculk:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   base:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [SCULK]
@@ -1012,15 +1012,15 @@ sculk:
       - [SCULK_SENSOR]
       - [CALIBRATED_SCULK_SENSOR]
 bee:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   elements:
     - [BEE_NEST]
 zobaczymy:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   base:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [SUSPICIOUS_SAND]
@@ -1033,23 +1033,23 @@ zobaczymy:
       - [SLIME_BLOCK]
       - [CAVE_VINES_PLANT]
 cave:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   stone:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     stone:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       base:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [STONE]
           - [STONE_BRICKS]
           - [SMOOTH_STONE]
       variant:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [STONE_SLAB]
@@ -1063,7 +1063,7 @@ cave:
           - [STONE_BUTTON]
           - [STONE_PRESSURE_PLATE]
       mossy:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [MOSSY_STONE_BRICKS]
@@ -1071,7 +1071,7 @@ cave:
           - [MOSSY_STONE_BRICK_STAIRS]
           - [MOSSY_STONE_BRICK_SLAB]
     infested:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [INFESTED_STONE]
@@ -1082,15 +1082,15 @@ cave:
         - [INFESTED_CHISELED_STONE_BRICKS]
         - [INFESTED_DEEPSLATE]
     cobblestone:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       base:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [COBBLESTONE]
       variant:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [COBBLESTONE_SLAB]
@@ -1101,26 +1101,26 @@ cave:
           - [MOSSY_COBBLESTONE_SLAB]
           - [MOSSY_COBBLESTONE]
     obsidian:
-      isIncluded: false
+      isIncluded: true
       difficulty: 1
       elements:
         - [OBSIDIAN]
     bedrock:
-      isIncluded: false
+      isIncluded: true
       difficulty: 1
       elements:
         - [BEDROCK]
     granite:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       base:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [GRANITE]
           - [POLISHED_GRANITE]
       variant:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [GRANITE_WALL]
@@ -1129,16 +1129,16 @@ cave:
           - [POLISHED_GRANITE_SLAB]
           - [GRANITE_SLAB]
     diorite:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       base:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [DIORITE]
           - [POLISHED_DIORITE]
       variant:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [DIORITE_WALL]
@@ -1147,16 +1147,16 @@ cave:
           - [POLISHED_DIORITE_SLAB]
           - [DIORITE_SLAB]
     andesite:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       base:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [ANDESITE]
           - [POLISHED_ANDESITE]
       variant:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [ANDESITE_WALL]
@@ -1165,16 +1165,16 @@ cave:
           - [ANDESITE_SLAB]
           - [POLISHED_ANDESITE_SLAB]
     tuff:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       base:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [TUFF]
           - [POLISHED_TUFF]
       variant:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [TUFF_SLAB]
@@ -1190,15 +1190,15 @@ cave:
           - [TUFF_BRICK_WALL]
           - [CHISELED_TUFF_BRICKS]
     deepslate:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       base:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [DEEPSLATE]
       variant:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [DEEPSLATE_BRICKS]
@@ -1214,16 +1214,16 @@ cave:
           - [DEEPSLATE_BRICK_SLAB]
           - [DEEPSLATE_TILE_SLAB]
     cobbled_deepslate:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       base:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [COBBLED_DEEPSLATE]
           - [POLISHED_DEEPSLATE]
       variant:
-        isIncluded: false
+        isIncluded: true
         difficulty: 1
         elements:
           - [COBBLED_DEEPSLATE_WALL]
@@ -1233,16 +1233,16 @@ cave:
           - [POLISHED_DEEPSLATE_STAIRS]
           - [POLISHED_DEEPSLATE_SLAB]
     blackstone:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       base:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [BLACKSTONE]
           - [POLISHED_BLACKSTONE]
       variant:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [POLISHED_BLACKSTONE_BUTTON]
@@ -1261,10 +1261,10 @@ cave:
           - [POLISHED_BLACKSTONE_WALL]
           - [POLISHED_BLACKSTONE_BRICK_WALL]
   block:
-    isIncluded: false
+    isIncluded: true
     difficulty: 1
     moss:
-      isIncluded: false
+      isIncluded: true
       difficulty: 1
       elements:
         - [MOSS_CARPET]
@@ -1276,130 +1276,130 @@ cave:
         - [CAVE_VINES]
         - [BIG_DRIPLEAF_STEM]
     dripstone:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [DRIPSTONE_BLOCK]
         - [POINTED_DRIPSTONE]
     mineral:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       coal:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         ore:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [COAL_ORE]
             - [DEEPSLATE_COAL_ORE]
         block:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [COAL_BLOCK]
       iron:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         ore:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [IRON_ORE]
             - [DEEPSLATE_IRON_ORE]
         block:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [IRON_BLOCK]
             - [RAW_IRON_BLOCK]
       gold:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         ore:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [GOLD_ORE]
             - [DEEPSLATE_GOLD_ORE]
         block:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [RAW_GOLD_BLOCK]
             - [GOLD_BLOCK]
       diamond:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         ore:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [DIAMOND_ORE]
             - [DEEPSLATE_DIAMOND_ORE]
         block:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [DIAMOND_BLOCK]
       lapis:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         ore:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [LAPIS_ORE]
             - [DEEPSLATE_LAPIS_ORE]
         block:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [LAPIS_BLOCK]
       emerald:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         ore:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [EMERALD_ORE]
             - [DEEPSLATE_EMERALD_ORE]
         block:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [EMERALD_BLOCK]
       copper:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         ore:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [COPPER_ORE]
             - [DEEPSLATE_COPPER_ORE]
         block:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           base:
-            isIncluded: false
+            isIncluded: true
             difficulty: 0
             elements:
               - [RAW_COPPER_BLOCK]
               - [COPPER_BLOCK]
           variant:
-            isIncluded: false
+            isIncluded: true
             difficulty: 0
             elements:
               - [CUT_COPPER]
               - [CUT_COPPER_STAIRS]
               - [CUT_COPPER_SLAB]
   amethyst:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     block:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [AMETHYST_BLOCK]
@@ -1410,12 +1410,12 @@ cave:
         - [AMETHYST_CLUSTER]
         - [CALCITE]
     craftable:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [TINTED_GLASS]
   craftable:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [IRON_DOOR]
@@ -1430,10 +1430,10 @@ cave:
       - [LAVA_CAULDRON]
       - [LANTERN]
 plants:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   plants:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [SHORT_GRASS]
@@ -1468,7 +1468,7 @@ plants:
       - [VINE]
       - [GLOW_LICHEN]
   pots:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [POTTED_OAK_SAPLING]
@@ -1501,17 +1501,17 @@ plants:
       - [POTTED_AZALEA_BUSH]
       - [POTTED_FLOWERING_AZALEA_BUSH]
 sea:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   temple:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [SEA_LANTERN]
       - [SPONGE]
       - [WET_SPONGE]
   sea_plants:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [DRIED_KELP_BLOCK]
@@ -1521,7 +1521,7 @@ sea:
       - [KELP_PLANT]
       - [TALL_SEAGRASS]
   coral:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [TUBE_CORAL_BLOCK]
@@ -1540,16 +1540,16 @@ sea:
       - [FIRE_CORAL_FAN, FIRE_CORAL_WALL_FAN]
       - [HORN_CORAL_FAN, HORN_CORAL_WALL_FAN]
   prismarine:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [PRISMARINE]
         - [DARK_PRISMARINE]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [PRISMARINE_BRICKS]
@@ -1561,10 +1561,10 @@ sea:
         - [DARK_PRISMARINE_STAIRS]
         - [DARK_PRISMARINE_SLAB]
 dirt:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   dirt:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [DIRT]
@@ -1574,26 +1574,26 @@ dirt:
       - [ROOTED_DIRT]
       - [FARMLAND]
   sand:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     normal:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       sand:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [SAND]
       sandstone:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         base:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [SANDSTONE]
         variant:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [CHISELED_SANDSTONE]
@@ -1606,23 +1606,23 @@ dirt:
             - [SMOOTH_SANDSTONE_STAIRS]
             - [SMOOTH_SANDSTONE_SLAB]
     red:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       sand:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         elements:
           - [RED_SAND]
       sandstone:
-        isIncluded: false
+        isIncluded: true
         difficulty: 0
         base:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [RED_SANDSTONE]
         variant:
-          isIncluded: false
+          isIncluded: true
           difficulty: 0
           elements:
             - [RED_SANDSTONE_SLAB]
@@ -1635,15 +1635,15 @@ dirt:
             - [SMOOTH_RED_SANDSTONE_STAIRS]
             - [SMOOTH_RED_SANDSTONE_SLAB]
   mud:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [MUD]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [MUD_BRICK_SLAB]
@@ -1652,7 +1652,7 @@ dirt:
         - [MUD_BRICK_STAIRS]
         - [MUD_BRICK_WALL]
   grass:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [GRASS_BLOCK]
@@ -1660,53 +1660,53 @@ dirt:
       - [MYCELIUM]
       - [DIRT_PATH]
 mushroom:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   small:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [BROWN_MUSHROOM]
         - [RED_MUSHROOM]
   large:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [BROWN_MUSHROOM_BLOCK]
         - [RED_MUSHROOM_BLOCK]
         - [MUSHROOM_STEM]
 special:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   elements:
     - [BELL]
     - [SPAWNER]
     - [CRYING_OBSIDIAN]
 mob:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   elements:
     - [COBWEB]
     - [BONE_BLOCK]
 playermade:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   candle_cake:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [CANDLE_CAKE]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [WHITE_CANDLE_CAKE]
@@ -1726,10 +1726,10 @@ playermade:
         - [RED_CANDLE_CAKE]
         - [BLACK_CANDLE_CAKE]
   other:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [CONDUIT]
@@ -1743,15 +1743,15 @@ playermade:
         - [ENDER_CHEST]
         - [FROSTED_ICE]
   candle:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [CANDLE]
     variant:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [WHITE_CANDLE]
@@ -1771,10 +1771,10 @@ playermade:
         - [RED_CANDLE]
         - [BLACK_CANDLE]
   workstation:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [LOOM]
@@ -1789,10 +1789,10 @@ playermade:
         - [LECTERN]
         - [FURNACE]
 farm:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   base:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [PUMPKIN]
@@ -1805,10 +1805,10 @@ farm:
       - [POTATOES]
       - [BEETROOTS]
   stem:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     base:
-      isIncluded: false
+      isIncluded: true
       difficulty: 0
       elements:
         - [ATTACHED_PUMPKIN_STEM]
@@ -1816,10 +1816,10 @@ farm:
         - [PUMPKIN_STEM]
         - [MELON_STEM]
 fluid:
-  isIncluded: false
+  isIncluded: true
   difficulty: 0
   base:
-    isIncluded: false
+    isIncluded: true
     difficulty: 0
     elements:
       - [BUBBLE_COLUMN]

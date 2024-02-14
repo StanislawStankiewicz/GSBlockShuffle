@@ -1,6 +1,8 @@
 package me.stahu.gsblockshuffle;
 
 import me.stahu.gsblockshuffle.commands.BlockShuffleCommand;
+import me.stahu.gsblockshuffle.event.GameStateManager;
+import me.stahu.gsblockshuffle.event.PlayerListener;
 import me.stahu.gsblockshuffle.gui.page.SubcategoryGui;
 import me.stahu.gsblockshuffle.settings.Category;
 import me.stahu.gsblockshuffle.settings.CategoryTree;
@@ -13,7 +15,7 @@ import java.io.FileNotFoundException;
 public final class GSBlockShuffle extends JavaPlugin {
     private File settingsFile;
     private File includedBlocksFile;
-    private CategoryTree categoryTree;
+    public CategoryTree categoryTree;
 
     @Override
     public void onEnable() {
@@ -41,9 +43,16 @@ public final class GSBlockShuffle extends JavaPlugin {
                 categoryTree.categories.toArray(new Category[0]),
                 this);
 
-        //register commands
-        this.getCommand("gsblockshuffle").setExecutor(new BlockShuffleCommand(subcategoryGui));
 
+        GameStateManager gameStateManager = new GameStateManager(settings,this);
+        //register events for PlayerListener
+        getServer().getPluginManager().registerEvents(new PlayerListener(settings, this, gameStateManager), this);
+
+
+        BlockShuffleCommand blockShuffleCommand = new BlockShuffleCommand(subcategoryGui, gameStateManager);
+        //register commands
+        this.getCommand("gsblockshuffle").setExecutor(blockShuffleCommand);
+        this.getCommand("gsblockshuffle_set_game_state").setExecutor(blockShuffleCommand);
     }
 
     @Override
