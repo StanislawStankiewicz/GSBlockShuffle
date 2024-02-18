@@ -50,7 +50,7 @@ public final class GSBlockShuffle extends JavaPlugin {
                 this);
 
         // TODO setting this up immediately is inefficient
-        this.teamsManager = new TeamsManager();
+        this.teamsManager = new TeamsManager(settings, this);
         gameStateManager= new GameStateManager(settings, this, teamsManager);
         //register events for PlayerListener
         getServer().getPluginManager().registerEvents(new PlayerListener(settings, this, gameStateManager, teamsManager), this);

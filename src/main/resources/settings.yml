@@ -14,4 +14,5 @@ firstToWin: true # the round ends when the first player/team finds their block i
 teamScoreIncrementPerPlayer: false # team score increments for each player who found their block if false, otherwise only 1 point is awarded to the team that found their block
 
 muteSounds: false
+showTeamCoords: true
 displaySplashWinnerMessage: false

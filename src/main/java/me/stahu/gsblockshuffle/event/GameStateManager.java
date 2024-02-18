@@ -2,14 +2,13 @@ package me.stahu.gsblockshuffle.event;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.team.TeamsManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scoreboard.*;
 
 import java.util.*;
@@ -347,7 +346,7 @@ public class GameStateManager {
      * @param player The player who has found a block.
      */
 // TODO refactor
-    public void playerFoundBlock(Player player) {
+    private void playerFoundBlock(Player player) {
         String blockAssignmentMode = settings.getString("blockAssignmentMode");
         boolean firstToWin = settings.getBoolean("firstToWin");
         boolean allPlayersRequiredForTeamWin = settings.getBoolean("allPlayersRequiredForTeamWin");
@@ -493,7 +492,9 @@ public class GameStateManager {
     }
 
     public void clearBossBars() {
-        bossBar.removeAll();
+        if(bossBar != null){
+            bossBar.removeAll();
+        }
     }
 
     /**
@@ -620,6 +621,30 @@ public class GameStateManager {
 
         for (Player player : teamsManager.getPlayersWithATeam()) {
             player.playSound(player.getLocation(), sound, volume, pitch);
+        }
+    }
+
+    public void handlePlayerMove(Player player) {
+        if (gameState == 0) {
+            return;
+        }
+
+        String playerName = player.getName();
+        Location playerLocation = player.getLocation();
+
+        if (!teamsManager.isPlayerInAnyTeam(player)) {
+            return;
+        }
+        if (playerBlockMap.get(playerName) == null) {
+            return;
+        }
+
+        for (String blockName : playerBlockMap.get(playerName)) {
+            Material playerBlock = Material.getMaterial(blockName);
+            if (playerBlock == playerLocation.getBlock().getType() || playerBlock == playerLocation.getBlock().getRelative(0, -1, 0).getType()) {
+                player.sendRawMessage("You are standing on the right block");
+                playerFoundBlock(player);
+            }
         }
     }
 }

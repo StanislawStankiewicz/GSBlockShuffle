@@ -49,7 +49,9 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
-
+        // TODO allow the player to comeback midgame
+        Player player = event.getPlayer();
+        teamsManager.removePlayerFromTeam(player, teamsManager.getPlayerTeam(player));
     }
 
     //Disable PvP
