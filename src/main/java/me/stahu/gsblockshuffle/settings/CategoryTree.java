@@ -111,7 +111,7 @@ public class CategoryTree {
     /**
      * Save the configuration to "plugins\GSBlockShuffle\block_list_categorized.yml"
      */
-    public void saveConfiguration() {
-        this.dumpYaml("plugins\\GSBlockShuffle\\block_list_categorized.yml");
+    public void saveConfiguration(String filePath) {
+        this.dumpYaml(filePath);
     }
 }

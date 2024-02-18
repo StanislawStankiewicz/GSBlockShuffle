@@ -13,12 +13,6 @@ public class CategoryHeader extends GuiItemSlot {
     Category category;
     GuiPage subCategoryPage;
 
-    /**
-     * This method should be called when the slot is clicked.
-     * It opens the subcategory GUI.
-     *
-     * @param ent The HumanEntity that clicked the slot.
-     */
     @Override
     public void slotAction(final HumanEntity ent) {
         // open subcategory gui

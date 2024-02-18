@@ -1,5 +1,6 @@
 package me.stahu.gsblockshuffle.gui.item;
 
+import me.stahu.gsblockshuffle.gui.GuiUtils;
 import me.stahu.gsblockshuffle.settings.Category;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -36,8 +37,8 @@ public class CategoryInclusionSwitch extends GuiItemSlot {
     public CategoryInclusionSwitch(Category category, int switchIndex) {
         super();
         this.category = category;
-        this.switchArray = new ItemStack[]{GuiUtils.createGuiItem(Material.RED_STAINED_GLASS_PANE, "Exclude", "Exclude this category from the shuffle"),
-                GuiUtils.createGuiItem(Material.GREEN_STAINED_GLASS_PANE, "Include", "Include this category in the shuffle")};
+        this.switchArray = new ItemStack[]{GuiUtils.createGuiItem(Material.RED_STAINED_GLASS_PANE, "Include", "Include this category in the shuffle"),
+                GuiUtils.createGuiItem(Material.GREEN_STAINED_GLASS_PANE, "Exclude", "Exclude this category from the shuffle")};
         this.switchIndex = switchIndex;
         this.itemStack = switchArray[switchIndex];
     }

@@ -8,8 +8,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.Team;
 
 import java.util.*;
 
@@ -346,7 +345,7 @@ public class GameStateManager {
      * @param player The player who has found a block.
      */
 // TODO refactor
-    private void playerFoundBlock(Player player) {
+    public void playerFoundBlock(Player player) {
         String blockAssignmentMode = settings.getString("blockAssignmentMode");
         boolean firstToWin = settings.getBoolean("firstToWin");
         boolean allPlayersRequiredForTeamWin = settings.getBoolean("allPlayersRequiredForTeamWin");

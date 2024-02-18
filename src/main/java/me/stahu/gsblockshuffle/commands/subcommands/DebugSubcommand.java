@@ -105,7 +105,7 @@ public class DebugSubcommand {
 
     private void saveSettings(CommandSender sender) {
         try {
-            plugin.saveSettings(settings);
+            plugin.saveConfiguration();
             sender.sendMessage(ChatColor.GREEN + "Successfully saved settings.");
         } catch (Exception e) {
             System.out.println(e);

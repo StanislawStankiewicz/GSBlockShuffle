@@ -9,5 +9,11 @@ import org.bukkit.inventory.ItemStack;
 public abstract class GuiItemSlot {
     public ItemStack itemStack;
 
+    /**
+     * This method should be called when the slot is clicked.
+     * It opens the subcategory GUI.
+     *
+     * @param ent The HumanEntity that clicked the slot.
+     */
     public abstract void slotAction(final HumanEntity ent);
 }

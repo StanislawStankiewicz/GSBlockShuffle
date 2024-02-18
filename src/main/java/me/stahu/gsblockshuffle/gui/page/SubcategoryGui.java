@@ -1,12 +1,12 @@
 package me.stahu.gsblockshuffle.gui.page;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
+import me.stahu.gsblockshuffle.gui.GuiUtils;
 import me.stahu.gsblockshuffle.gui.item.*;
 import me.stahu.gsblockshuffle.settings.Category;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;

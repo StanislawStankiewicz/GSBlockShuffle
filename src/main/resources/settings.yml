@@ -6,7 +6,7 @@ roundTime: 300 #seconds
 roundBreakTime: 10 #seconds
 roundsPerGame: 1 # -1 for infinite
 blockAssignmentMode: onePerPlayer # onePerPlayer | onePerTeam | onePerRound
-allPlayersRequiredForTeamWin: true # all | any
+allPlayersRequiredForTeamWin: true
 #teamWinBy: score # score | time
 #winScore: 5
 eliminateAfterRound: false

@@ -3,8 +3,7 @@ package me.stahu.gsblockshuffle;
 import me.stahu.gsblockshuffle.commands.BlockShuffleCommand;
 import me.stahu.gsblockshuffle.event.GameStateManager;
 import me.stahu.gsblockshuffle.event.PlayerListener;
-import me.stahu.gsblockshuffle.gui.page.SubcategoryGui;
-import me.stahu.gsblockshuffle.settings.Category;
+import me.stahu.gsblockshuffle.gui.page.MainMenuGui;
 import me.stahu.gsblockshuffle.settings.CategoryTree;
 import me.stahu.gsblockshuffle.team.TeamsManager;
 import org.bukkit.ChatColor;
@@ -18,9 +17,10 @@ import java.io.IOException;
 
 public final class GSBlockShuffle extends JavaPlugin {
     private File settingsFile;
+    private YamlConfiguration settings;
     private File includedBlocksFile;
     public CategoryTree categoryTree;
-    private GameStateManager gameStateManager;
+    public GameStateManager gameStateManager;
     private TeamsManager teamsManager;
 
     @Override
@@ -29,12 +29,12 @@ public final class GSBlockShuffle extends JavaPlugin {
         this.settingsFile = this.getDataFolder().toPath().resolve("settings.yml").toFile();
         this.createSettingsFile();
 
-        YamlConfiguration settings = YamlConfiguration.loadConfiguration(this.settingsFile);
-        System.out.println(settings.getString("roundsPerGame"));
+        this.settings = YamlConfiguration.loadConfiguration(this.settingsFile);
 
         this.includedBlocksFile = this.getDataFolder().toPath().resolve("block_list_categorized.yml").toFile();
         this.createIncludedBlocksFile();
 
+        //load categories configuration
         this.categoryTree = new CategoryTree();
         try {
             categoryTree.parseYaml(includedBlocksFile.getPath());
@@ -43,25 +43,19 @@ public final class GSBlockShuffle extends JavaPlugin {
         }
 
         //create gui
-        SubcategoryGui subcategoryGui = new SubcategoryGui(
-                "Block Shuffle Settings",
-                null,
-                categoryTree.categories.toArray(new Category[0]),
-                this);
+        MainMenuGui mainMenuGui = new MainMenuGui(null, settings,this);
 
         // TODO setting this up immediately is inefficient
         this.teamsManager = new TeamsManager(settings, this);
         gameStateManager= new GameStateManager(settings, this, teamsManager);
+
         //register events for PlayerListener
         getServer().getPluginManager().registerEvents(new PlayerListener(settings, this, gameStateManager, teamsManager), this);
 
-        BlockShuffleCommand blockShuffleCommand = new BlockShuffleCommand(subcategoryGui, gameStateManager, settings, this, teamsManager);
+
+        BlockShuffleCommand blockShuffleCommand = new BlockShuffleCommand(mainMenuGui, gameStateManager, settings, this, teamsManager);
         //register commands
         this.getCommand("gsblockshuffle").setExecutor(blockShuffleCommand);
-
-        for(Player player : getServer().getOnlinePlayers()) {
-            this.sendMessage(player, "BlockShuffle v1.0.0 has been enabled");
-        }
     }
 
     @Override
@@ -77,11 +71,6 @@ public final class GSBlockShuffle extends JavaPlugin {
         }
     }
 
-    public void saveSettings(YamlConfiguration settings) throws IOException {
-        // TODO this doesnt work
-        settings.save(this.settingsFile.toString());
-    }
-
     private void createIncludedBlocksFile() {
         try {
             if (!this.includedBlocksFile.exists()) {
@@ -94,7 +83,13 @@ public final class GSBlockShuffle extends JavaPlugin {
     }
 
     public void saveConfiguration() {
-        this.categoryTree.saveConfiguration();
+        this.categoryTree.saveConfiguration(includedBlocksFile.getPath());
+        //save settings
+        try {
+            this.settings.save(this.settingsFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // TODO check if this is the best way to handle this

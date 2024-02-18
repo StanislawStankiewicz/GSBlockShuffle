@@ -14,7 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class BlockShuffleCommand implements CommandExecutor {
-    private final GuiPage categorySelectionGui;
+    private final GuiPage mainMenuGui;
     private final GameStateManager gameStateManager;
     private final YamlConfiguration settings;
     private final GSBlockShuffle plugin;
@@ -22,8 +22,8 @@ public class BlockShuffleCommand implements CommandExecutor {
     private final DebugSubcommand debugSubcommand;
     private final TeamSubcommand teamSubcommand;
 
-    public BlockShuffleCommand(GuiPage categorySelectionGui, GameStateManager gameStateManager, YamlConfiguration settings, GSBlockShuffle plugin, TeamsManager teamManager) {
-        this.categorySelectionGui = categorySelectionGui;
+    public BlockShuffleCommand(GuiPage mainMenuGui, GameStateManager gameStateManager, YamlConfiguration settings, GSBlockShuffle plugin, TeamsManager teamManager) {
+        this.mainMenuGui = mainMenuGui;
         this.gameStateManager = gameStateManager;
         this.settings = settings;
         this.plugin = plugin;
@@ -44,7 +44,8 @@ public class BlockShuffleCommand implements CommandExecutor {
                 return true;
             }
             if (args.length == 0) {
-                this.categorySelectionGui.open(player);
+                this.mainMenuGui.open(player);
+                return true;
             }
             switch (args[0].toLowerCase()) {
                 case "debug" -> debugSubcommand.parseSubcommand(sender, command, label, args);
