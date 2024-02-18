@@ -6,7 +6,10 @@ import me.stahu.gsblockshuffle.event.PlayerListener;
 import me.stahu.gsblockshuffle.gui.page.SubcategoryGui;
 import me.stahu.gsblockshuffle.settings.Category;
 import me.stahu.gsblockshuffle.settings.CategoryTree;
+import me.stahu.gsblockshuffle.team.TeamsManager;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -18,6 +21,7 @@ public final class GSBlockShuffle extends JavaPlugin {
     private File includedBlocksFile;
     public CategoryTree categoryTree;
     private GameStateManager gameStateManager;
+    private TeamsManager teamsManager;
 
     @Override
     public void onEnable() {
@@ -31,8 +35,6 @@ public final class GSBlockShuffle extends JavaPlugin {
         this.includedBlocksFile = this.getDataFolder().toPath().resolve("block_list_categorized.yml").toFile();
         this.createIncludedBlocksFile();
 
-        // TODO get path of the yml file when creating it
-        //load categories configuration
         this.categoryTree = new CategoryTree();
         try {
             categoryTree.parseYaml(includedBlocksFile.getPath());
@@ -48,26 +50,25 @@ public final class GSBlockShuffle extends JavaPlugin {
                 this);
 
         // TODO setting this up immediately is inefficient
-        gameStateManager= new GameStateManager(settings, this);
+        this.teamsManager = new TeamsManager();
+        gameStateManager= new GameStateManager(settings, this, teamsManager);
         //register events for PlayerListener
-        getServer().getPluginManager().registerEvents(new PlayerListener(settings, this, gameStateManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(settings, this, gameStateManager, teamsManager), this);
 
-        BlockShuffleCommand blockShuffleCommand = new BlockShuffleCommand(subcategoryGui, gameStateManager, settings, this);
+        BlockShuffleCommand blockShuffleCommand = new BlockShuffleCommand(subcategoryGui, gameStateManager, settings, this, teamsManager);
         //register commands
         this.getCommand("gsblockshuffle").setExecutor(blockShuffleCommand);
 
-        try {
-            settings.save("savedSettings.yml");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        for(Player player : getServer().getOnlinePlayers()) {
+            this.sendMessage(player, "BlockShuffle v1.0.0 has been enabled");
         }
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        gameStateManager.clearScoreboard();
-        gameStateManager.clearBossBar();
+        teamsManager.clearScoreboards();
+        gameStateManager.clearBossBars();
     }
 
     private void createSettingsFile() {
@@ -113,5 +114,11 @@ public final class GSBlockShuffle extends JavaPlugin {
         } else {
             settings.set(key, value);
         }
+    }
+
+    public void sendMessage(Player player, String message) {
+        String prefix = "[" + ChatColor.BLUE + "BlockShuffle" + ChatColor.WHITE + "] ";
+
+        player.sendMessage(prefix + message);
     }
 }

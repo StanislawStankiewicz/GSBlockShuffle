@@ -1,6 +1,7 @@
 package me.stahu.gsblockshuffle.event;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
+import me.stahu.gsblockshuffle.team.TeamsManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,14 +13,12 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener {
-    private final YamlConfiguration settings;
-    private final GSBlockShuffle plugin;
     private final GameStateManager gameStateManager;
+    private final TeamsManager teamsManager;
 
-    public PlayerListener(YamlConfiguration settings, GSBlockShuffle plugin, GameStateManager gameStateManager) {
-        this.settings = settings;
-        this.plugin = plugin;
+    public PlayerListener(YamlConfiguration settings, GSBlockShuffle plugin, GameStateManager gameStateManager, TeamsManager teamsManager) {
         this.gameStateManager = gameStateManager;
+        this.teamsManager = teamsManager;
     }
 
     @EventHandler
@@ -32,7 +31,7 @@ public class PlayerListener implements Listener {
         String playerName = player.getName();
         Location playerLocation = player.getLocation();
 
-        if (!gameStateManager.playersWithATeam.contains(player)) {
+        if (!teamsManager.isPlayerInAnyTeam(player)) {
             return;
         }
         if (gameStateManager.playerBlockMap.get(playerName) == null) {
