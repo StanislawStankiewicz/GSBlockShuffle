@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Random;
 
 /**
  * The CategoryTree class represents a tree of categories.
@@ -90,6 +91,21 @@ public class CategoryTree {
         }
 
         return blocks;
+    }
+
+    public ArrayList<String> getRandomBlock(YamlConfiguration settings) {
+        Random random = new Random();
+
+        ArrayList<ArrayList<ArrayList<String>>> blockList = getBlockList(settings);
+
+        if(blockList.isEmpty()) {
+            throw new IllegalArgumentException("Block list is empty");
+        }
+
+        ArrayList<ArrayList<String>> block = blockList.get(random.nextInt(blockList.size()));
+
+        // Return random variant of the block
+        return block.get(random.nextInt(block.size()));
     }
 
     /**

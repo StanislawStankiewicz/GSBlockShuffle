@@ -1,0 +1,18 @@
+difficulty: 0
+includeLowerDifficulties: true
+includeVariants: true
+treatAllAsIndividualBlocks: true
+roundTime: 300 #seconds
+roundBreakTime: 10 #seconds
+roundsPerGame: 1 # -1 for infinite
+blockAssignmentMode: onePerPlayer # onePerPlayer | onePerTeam | onePerRound
+allPlayersRequiredForTeamWin: true # all | any
+#teamWinBy: score # score | time
+#winScore: 5
+eliminateAfterRound: false
+firstToWin: true # the round ends when the first player/team finds their block if true
+teamScoreIncrementPerPlayer: false # team score increments for each player who found their block if false, otherwise only 1 point is awarded to the team that found their block
+
+muteSounds: false
+showTeamCoords: true
+displaySplashWinnerMessage: false

@@ -7,3 +7,9 @@ commands:
     description: Your description
     usage: /<command>
     permission: gsblockshuffle.admin
+    aliases: [gsbs]
+  gsblockshuffle_set_game_state:
+    description: Your description
+    usage: /<command> <game_state>
+    permission: gsblockshuffle.admin
+    aliases: [gsbs_set_game_state]
