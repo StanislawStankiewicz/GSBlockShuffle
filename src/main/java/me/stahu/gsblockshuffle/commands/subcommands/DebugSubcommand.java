@@ -1,15 +1,18 @@
 package me.stahu.gsblockshuffle.commands.subcommands;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
+import me.stahu.gsblockshuffle.commands.CommandBase;
 import me.stahu.gsblockshuffle.event.GameStateManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
-public class DebugSubcommand {
+public class DebugSubcommand extends CommandBase implements Subcommand {
     private final GSBlockShuffle plugin;
     private final GameStateManager gameStateManager;
     private final YamlConfiguration settings;
@@ -45,7 +48,6 @@ public class DebugSubcommand {
             case "getroundsremaining" -> getRoundsRemaining(sender);
             case "get" -> getSetting(sender, args);
             case "set" -> setSetting(sender, args);
-            case "savesettings" -> saveSettings(sender);
         }
     }
 
@@ -103,13 +105,33 @@ public class DebugSubcommand {
         sender.sendMessage(ChatColor.GREEN + "Successfully set " + ChatColor.DARK_AQUA + key + " to " + ChatColor.DARK_GREEN + value);
     }
 
-    private void saveSettings(CommandSender sender) {
-        try {
-            plugin.saveConfiguration();
-            sender.sendMessage(ChatColor.GREEN + "Successfully saved settings.");
-        } catch (Exception e) {
-            System.out.println(e);
-            sender.sendMessage(ChatColor.RED + "Failed to save settings.");
+    @Override
+    public List<String> parseTabCompletions(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length == 2) {
+            // keep this in alphabetical order
+            List<String> options = List.of( "endGame",
+                                            "endRound",
+                                            "get",
+                                            "getRoundsRemaining",
+                                            "newRound",
+                                            "saveSettings",
+                                            "set",
+                                            "startGame");
+            return filterCompletions(options, args[1]);
         }
+
+        List<String> settingKeysList = settings.getKeys(false).stream().toList();
+        switch (args[1].toLowerCase()) {
+            case "get" -> {
+                return filterCompletions(settingKeysList, args[2]);
+            }
+            case "set" -> {
+                if (args.length == 3) {
+                    return filterCompletions(settingKeysList, args[2]);
+                }
+            }
+        }
+
+        return Collections.emptyList();
     }
 }
