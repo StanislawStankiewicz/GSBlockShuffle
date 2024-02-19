@@ -3,6 +3,7 @@ package me.stahu.gsblockshuffle.team;
 import me.stahu.gsblockshuffle.GSBlockShuffle;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
@@ -145,6 +146,7 @@ public class TeamsManager {
         return false;
     }
 
+    // TODO refactor the return value
     /**
      * This method handles the teleport request between two players in the same team.
      * The tpRequester is the player who initiates the teleport request, and the tpTarget is the player who receives the request.
@@ -159,12 +161,40 @@ public class TeamsManager {
         Team senderTeam = getTeam(tpRequester);
         Team targetTeam = getTeam(tpTarget);
 
-        if(tpRequester == tpTarget){
-            return false;
+        String teleportMode = settings.getString("teleportMode").toLowerCase();
+
+        boolean teleportModeDisabled = Objects.equals(teleportMode, "disabled");
+        boolean requesterAndTargetAreTheSame = tpRequester == tpTarget;
+        boolean eitherTeamIsNull = senderTeam == null || targetTeam == null;
+
+        if(teleportModeDisabled) {
+            tpRequester.sendMessage(ChatColor.RED + "Teleporting is disabled.");
+            return true;
         }
 
-        if(senderTeam == null || targetTeam == null){
-            return false;
+        if(requesterAndTargetAreTheSame){
+            tpRequester.sendMessage(ChatColor.RED + "You cannot teleport to yourself.");
+            return true;
+        }
+
+        if(eitherTeamIsNull){
+            tpRequester.sendMessage(ChatColor.RED + "You or the target are not in a team.");
+            return true;
+        }
+
+        if(Objects.equals(teleportMode, "amountperteam")){
+            // if team used up their teleports cancel the tp
+            if(teamTpUsed.contains(getTeam(tpRequester))){
+                tpRequester.sendMessage(ChatColor.RED + "Your team has 0 teleports left.");
+                return true;
+            }
+        }
+        if(Objects.equals(teleportMode, "amountperplayer")){
+            // if team used up their teleports cancel the tp
+            if(teamTpUsed.contains(getTeam(tpRequester))){
+                tpRequester.sendMessage(ChatColor.RED + "You have 0 teleports left.");
+                return true;
+            }
         }
 
         if(senderTeam.equals(targetTeam)){
@@ -206,12 +236,6 @@ public class TeamsManager {
             return;
         }
         if(Objects.equals(teleportMode, "amountperteam")){
-            // if team used up their teleports cancel the tp
-            if(teamTpUsed.contains(getTeam(tpRequester))){
-                plugin.sendMessage(tpRequester, "Your team has already used their teleport.");
-                plugin.sendMessage(tpTarget, "Your team has already used their teleport.");
-                return;
-            }
             tpRequester.teleport(tpTarget);
             // if team not already in usage counter - add it
             if(!tpUsageCounter.containsKey(getTeam(tpRequester))){
@@ -221,16 +245,22 @@ public class TeamsManager {
             int tpsUsed = tpUsageCounter.get(getTeam(tpRequester));
             // increment tp counter and check if team reached their limit
             tpUsageCounter.put(getTeam(tpRequester), tpsUsed + 1);
+
+            // send message to all players in the team
+            for(String playerName : getTeam(tpRequester).getEntries()){
+                OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
+                if(player.isOnline()){
+                    plugin.sendMessage((Player) player, tpRequester.getName() + ChatColor.GRAY + " has used teleport!\n" +
+                            " Your team has " + ChatColor.WHITE + (amountOfTeleports - tpsUsed) + ChatColor.GRAY +" teleports left.");
+                }
+            }
+
             if(tpsUsed >= amountOfTeleports){
                 teamTpUsed.add(getTeam(tpRequester));
             }
             return;
         }
         if(Objects.equals(teleportMode, "amountperplayer")){
-            if(playerTpUsed.contains(tpRequester)){
-                plugin.sendMessage(tpRequester, "You have used up all your teleports.");
-                return;
-            }
             tpRequester.teleport(tpTarget);
             // if team not already in usage counter - add it
             if(!tpUsageCounter.containsKey(tpRequester)){
@@ -240,7 +270,7 @@ public class TeamsManager {
             int tpsUsed = tpUsageCounter.get(tpRequester);
             // increment tp counter and check if team reached their limit
             tpsUsed++;
-            tpRequester.sendMessage("You have " + (amountOfTeleports - tpsUsed) + " teleports left.");
+            plugin.sendMessage(tpRequester, ChatColor.GRAY + "You have " + ChatColor.WHITE + (amountOfTeleports - tpsUsed) + ChatColor.GRAY +" teleports left.");
             tpUsageCounter.put(tpRequester, tpsUsed);
             if(tpsUsed >= amountOfTeleports){
                 playerTpUsed.add(tpRequester);

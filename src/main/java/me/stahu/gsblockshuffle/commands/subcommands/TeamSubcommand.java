@@ -53,11 +53,37 @@ public class TeamSubcommand implements Subcommand {
         }
         switch (args[1].toLowerCase()) {
             case "create" -> createTeam(sender, args);
+            case "add" -> teamAdd(sender, args);
             case "join" -> joinTeamRequest(sender, args);
             case "invite" -> teamInviteRequest(sender, args);
+            case "tp" -> teamTeleportRequest(sender, args);
+            case "tpaccept" -> teamTeleportAccept(sender);
             case "leave" -> leaveTeam(sender);
             case "accept" -> joinTeamAccept(sender, args);
         }
+    }
+
+    private void teamAdd(CommandSender sender, String[] args) {
+        if (args.length == 2) {
+            sender.sendMessage(ChatColor.RED + "You must specify a player to add to your team.");
+            return;
+        }
+        Player target = Bukkit.getPlayer(args[2]);
+        if (target == null) {
+            sender.sendMessage(ChatColor.RED + "Player " + ChatColor.DARK_AQUA + args[2] + ChatColor.RED + " is not online.");
+            return;
+        }
+        if (teamManager.getTeam((Player) sender) == teamManager.getTeam(target)) {
+            sender.sendMessage(ChatColor.RED + "Player is already in your team.");
+            return;
+        }
+        if(teamManager.getTeam(target) != null) {
+            sender.sendMessage(ChatColor.RED + "Player is already in another team.");
+            return;
+        }
+        teamManager.addPlayerToTeam(target, teamManager.getTeam((Player) sender), true);
+        sender.sendMessage(ChatColor.GREEN + "Player " + ChatColor.DARK_AQUA + target.getName() + ChatColor.GREEN + " has been added to your team.");
+        target.sendMessage(ChatColor.GREEN + "You have been added to team " + ChatColor.DARK_AQUA + teamManager.getTeam((Player) sender).getDisplayName());
     }
 
     private void createTeam(CommandSender sender, String[] args) {

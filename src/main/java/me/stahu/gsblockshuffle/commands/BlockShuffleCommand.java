@@ -55,7 +55,7 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
             switch (args[0].toLowerCase()) {
                 case "debug" -> debugSubcommand.parseSubcommand(sender, command, label, args);
                 case "team" -> teamSubcommand.parseSubcommand(sender, command, label, args);
-                case "tp" -> teamSubcommand.teamTeleportRequest(sender, args);
+                case "tp" -> teamTeleportRequest(sender, args);
                 case "tpaccept" -> teamSubcommand.teamTeleportAccept(player);
                 case "start" -> startGame(player);
                 case "end" -> endGame(player);
@@ -63,6 +63,16 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
             }
         }
         return true;
+    }
+
+    private void teamTeleportRequest(CommandSender sender, String[] args) {
+        // insert "team" subcommand to ensure correct indexes
+        String[] newArgs = new String[args.length + 1];
+        newArgs[0] = "team";
+        newArgs[1] = args[0];
+        newArgs[2] = args[1];
+        System.out.println("newArgs: " + newArgs[0] + " " + newArgs[1] + " " + newArgs[2]);
+        teamSubcommand.teamTeleportRequest(sender, newArgs);
     }
 
     private void startGame(Player player) {

@@ -8,6 +8,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.*;
 
 import java.util.*;
@@ -22,10 +23,11 @@ public class GameStateManager {
     public int secondsInRoundBreak;
     private int secondsLeft;
     private int roundTickTask;
+    private int roundBreakTickTask;
+    private int roundStartTask;
     private BossBar bossBar;
     public Map<String, ArrayList<String>> playerBlockMap;
     public HashSet<Player> playersWithFoundBlock = new HashSet<>();
-    private int roundBreakTickTask;
 
     public boolean setGameState(int gameState) {
         if (this.gameState == gameState) {
@@ -72,7 +74,8 @@ public class GameStateManager {
         roundsRemaining = settings.getInt("roundsPerGame");
 
         playRoundCountdownSound();
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this::newRound, 40);
+
+        roundStartTask = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this::newRound, 40);
     }
 
     public void newRound() {
@@ -197,6 +200,7 @@ public class GameStateManager {
      * Note: The getTeamScore method is used to retrieve the score of each team.
      */
     public void endGame() {
+        Bukkit.getScheduler().cancelTask(this.roundStartTask);
         Bukkit.getScheduler().cancelTask(this.roundBreakTickTask);
         Bukkit.getScheduler().cancelTask(this.roundTickTask);
 
