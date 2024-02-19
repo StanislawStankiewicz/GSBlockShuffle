@@ -92,6 +92,8 @@ public class GameStateManager {
         }
         double progress = secondsLeft / (double) (secondsInRound);
 
+        double progress = secondsLeft / (double) (settings.getInt("roundTime"));
+
         updateBossBar(progress);
 
         if (secondsLeft < 61) {
