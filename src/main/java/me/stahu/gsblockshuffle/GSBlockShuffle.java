@@ -92,7 +92,17 @@ public final class GSBlockShuffle extends JavaPlugin {
         }
     }
 
-    // TODO check if this is the best way to handle this
+    /**
+     * Used to change a setting in the settings.yml file.
+     * Verifies that the value is valid for the setting type.
+     * Note: if the setting's type was incorrectly set in the settings.yml file,
+     * this method will not repair it.
+     *
+     * @param settings The YamlConfiguration object where the setting is to be changed.
+     * @param key The key of the setting to be changed.
+     * @param value The new value for the setting.
+     * @throws IllegalArgumentException If the value is not valid for the setting type.
+     */
     public void changeSetting(YamlConfiguration settings, String key, String value) throws IllegalArgumentException {
         if (settings.isBoolean(key)) {
             if(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
@@ -109,8 +119,15 @@ public final class GSBlockShuffle extends JavaPlugin {
         } else {
             settings.set(key, value);
         }
+        saveConfiguration();
     }
-
+    /**
+     * Used to send a message to a player as the plugin.
+     * Should be used to send a message to all players.
+     *
+     * @param player The player to whom the message will be sent.
+     * @param message The message to be sent to the player.
+     */
     public void sendMessage(Player player, String message) {
         String prefix = "[" + ChatColor.BLUE + "BlockShuffle" + ChatColor.WHITE + "] ";
 

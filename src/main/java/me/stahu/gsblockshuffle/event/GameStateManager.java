@@ -8,7 +8,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.*;
 
 import java.util.*;
 
@@ -18,9 +18,7 @@ public class GameStateManager {
     private final YamlConfiguration settings;
     private final TeamsManager teamsManager;
     private int gameState; // 0 - not started, 1 - started
-    public int roundsPerGame;
     private int roundsRemaining;
-    public int secondsInRound;
     public int secondsInRoundBreak;
     private int secondsLeft;
     private int roundTickTask;
@@ -63,9 +61,6 @@ public class GameStateManager {
 
         this.settings = settings;
         this.plugin = plugin;
-
-        this.roundsPerGame = settings.getInt("roundsPerGame");
-        this.secondsInRound = settings.getInt("roundTime");
     }
 
     public void startGame() {
@@ -74,8 +69,10 @@ public class GameStateManager {
 
         teamsManager.setUpScoreboard();
 
-        roundsRemaining = roundsPerGame;
-        newRound();
+        roundsRemaining = settings.getInt("roundsPerGame");
+
+        playRoundCountdownSound();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this::newRound, 40);
     }
 
     public void newRound() {
@@ -84,7 +81,7 @@ public class GameStateManager {
         assignRandomBlocks();
 
         bossBar = this.createBossBar();
-        secondsLeft = secondsInRound;
+        secondsLeft = settings.getInt("roundTime");
         roundTickTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::roundTick, 0, 20);
     }
 
@@ -350,7 +347,7 @@ public class GameStateManager {
         boolean firstToWin = settings.getBoolean("firstToWin");
         boolean allPlayersRequiredForTeamWin = settings.getBoolean("allPlayersRequiredForTeamWin");
         boolean teamScoreIncrementPerPlayer = settings.getBoolean("teamScoreIncrementPerPlayer");
-        Team team = teamsManager.getPlayerTeam(player);
+        Team team = teamsManager.getTeam(player);
         playBlockFoundSound(player, true);
 
         playerBlockMap.remove(player.getName());
@@ -506,6 +503,8 @@ public class GameStateManager {
      */
     private void pingPlayers(int secondsLeft) {
         boolean muteSounds = settings.getBoolean("muteSounds");
+        int secondsInRound = settings.getInt("roundTime");
+
         if (muteSounds) {
             return;
         }
@@ -582,7 +581,7 @@ public class GameStateManager {
 
         if (blockFound) {
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1.189207F);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1.781797F), 4);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1.781797F), 3);
         } else {
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1.781797F);
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1.059463F), 3);
