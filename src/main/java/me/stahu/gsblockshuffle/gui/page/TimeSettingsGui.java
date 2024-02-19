@@ -59,11 +59,11 @@ public class TimeSettingsGui extends GuiPage {
         //create time gui items
         slotArray[0] = minutesDisplay;
         slotArray[1] = secondsDisplay;
-        slotArray[2] = new Icon(GuiUtils.createGuiItem(Material.RED_STAINED_GLASS_PANE, "-60s", secondIncrement));
-        slotArray[3] = new Icon(GuiUtils.createGuiItem(Material.ORANGE_STAINED_GLASS_PANE, "-15s", firstIncrement));
+        slotArray[2] = new Icon(GuiUtils.createGuiItem(Material.RED_STAINED_GLASS_PANE, "-"+secondIncrement+"s", secondIncrement));
+        slotArray[3] = new Icon(GuiUtils.createGuiItem(Material.ORANGE_STAINED_GLASS_PANE, "-"+firstIncrement+"s", firstIncrement));
         slotArray[4] = new Icon(GuiUtils.createGuiItem(Material.CLOCK, name, description));
-        slotArray[5] = new Icon(GuiUtils.createGuiItem(Material.LIME_STAINED_GLASS_PANE, "+15s", firstIncrement));
-        slotArray[6] = new Icon(GuiUtils.createGuiItem(Material.GREEN_STAINED_GLASS_PANE, "+60s", secondIncrement));
+        slotArray[5] = new Icon(GuiUtils.createGuiItem(Material.LIME_STAINED_GLASS_PANE, "+"+firstIncrement+"s", firstIncrement));
+        slotArray[6] = new Icon(GuiUtils.createGuiItem(Material.GREEN_STAINED_GLASS_PANE, "+"+firstIncrement+"s", secondIncrement));
         slotArray[8] = new NavigationButton(GuiUtils.createGuiItem(Material.BARRIER, "Back", "Go back to the previous page"), parentPage);
 
         updateItems();
