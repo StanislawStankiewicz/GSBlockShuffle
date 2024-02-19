@@ -90,7 +90,6 @@ public class GameStateManager {
             endRound();
             return;
         }
-        double progress = secondsLeft / (double) (secondsInRound);
 
         double progress = secondsLeft / (double) (settings.getInt("roundTime"));
 
@@ -345,7 +344,6 @@ public class GameStateManager {
      */
 // TODO refactor
     public void playerFoundBlock(Player player) {
-        String blockAssignmentMode = settings.getString("blockAssignmentMode");
         boolean firstToWin = settings.getBoolean("firstToWin");
         boolean allPlayersRequiredForTeamWin = settings.getBoolean("allPlayersRequiredForTeamWin");
         boolean teamScoreIncrementPerPlayer = settings.getBoolean("teamScoreIncrementPerPlayer");
@@ -417,14 +415,6 @@ public class GameStateManager {
             }
             eliminatedTeam.unregister();
         }
-    }
-
-    /**
-     * Clears the playerBlockMap, which is used to track the blocks assigned to each player.
-     * This method is typically used at the end of a round or game to reset the block assignments for the next round or game.
-     */
-    private void clearPlayerBlocks() {
-        playerBlockMap.clear();
     }
 
     /**
