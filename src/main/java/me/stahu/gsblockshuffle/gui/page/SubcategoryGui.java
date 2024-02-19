@@ -5,6 +5,7 @@ import me.stahu.gsblockshuffle.gui.GuiUtils;
 import me.stahu.gsblockshuffle.gui.item.*;
 import me.stahu.gsblockshuffle.settings.Category;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
@@ -12,6 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
 
 /**
  * Class that represents a page in the GUI that displays categories and subcategories
@@ -78,10 +81,23 @@ public class SubcategoryGui extends GuiPage implements Listener {
         }
 
         //create the category header item
+        String firstLoreLine = ChatColor.AQUA + (subcategories[index].subCategories == null ? "There are no subcategories" : "Click to see " + subcategories[index].subCategories.size() + " more subcategor" + (subcategories[index].subCategories.size() == 1 ? "y" : "ies"));
+        ArrayList<ArrayList<String>> allBlocks = subcategories[index].getBlocks();
+        String[] lore;
+        if (subcategories[index].elements != null) {
+            lore = new String[allBlocks.size() + 1];
+            lore[0] = firstLoreLine;
+            for (int i = 0; i < allBlocks.size(); i++) {
+                lore[i + 1] = allBlocks.get(i).get(0);
+            }
+        }else {
+            lore = new String[1];
+            lore[0] = firstLoreLine;
+        }
+
         ItemStack categoryItem = GuiUtils.createGuiItem(
                 categoryMaterial,
-                (subcategories[index].name.substring(0, 1).toUpperCase() + subcategories[index].name.substring(1).toLowerCase()).replace("_", " "),
-                subcategories[index].subCategories == null ? "There are no subcategories" : "Click to see " + subcategories[index].subCategories.size() + " more subcategor" + (subcategories[index].subCategories.size() == 1 ? "y" : "ies"));
+                (ChatColor.RESET + subcategories[index].name.substring(0, 1).toUpperCase() + subcategories[index].name.substring(1).toLowerCase()).replace("_", " "),lore);
 
         // do not create subcategory gui if there are no subcategories
         if (subcategories[index].subCategories == null || subcategories[index].subCategories.isEmpty())

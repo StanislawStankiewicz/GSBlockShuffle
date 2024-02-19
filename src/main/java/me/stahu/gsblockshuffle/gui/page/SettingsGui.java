@@ -4,6 +4,7 @@ import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.gui.GuiUtils;
 import me.stahu.gsblockshuffle.gui.item.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
@@ -36,8 +37,8 @@ public class SettingsGui extends GuiPage{
         Bukkit.getPluginManager().registerEvents(this, plugin);
 
         //time settings
-        this.slotArray[0] = new NavigationButton(GuiUtils.createGuiItem(Material.CLOCK, "Round Time", "Set the time for each round"), new TimeSettingsGui("Round Time","Change round duration",this, settings, "roundTime",plugin));
-        this.slotArray[9] = new NavigationButton(GuiUtils.createGuiItem(Material.CLOCK, "Time Between Rounds", "Set the time between rounds", "Current time: "+settings.getString("roundBreakTime")+"s"), new TimeSettingsGui("Break Time","Change time between rounds",this, settings,"roundBreakTime",plugin));
+        this.slotArray[0] = new NavigationButton(GuiUtils.createGuiItem(Material.CLOCK, "Round Time", "Set the time for each round"), new TimeSettingsGui("Round Time","Change round duration",this, settings, "roundTime",plugin,15,60,15));
+        this.slotArray[9] = new NavigationButton(GuiUtils.createGuiItem(Material.CLOCK, "Time Between Rounds", "Set the time between rounds"), new TimeSettingsGui("Break Time","Change time between rounds",this, settings,"roundBreakTime",plugin,5,30,0));
 
         //rounds settings
         this.slotArray[1] = new NavigationButton(GuiUtils.createGuiItem(Material.BELL, "Rounds", "Set the amount of rounds"), new IntegerSettingsGui("Rounds","Change the amount of rounds",this, settings,"roundsPerGame",plugin));
@@ -63,9 +64,9 @@ public class SettingsGui extends GuiPage{
 
         // block assignment mode switch
         ItemStack[] blockAssignmentModeSwitchArray = new ItemStack[3];
-        blockAssignmentModeSwitchArray[0] = GuiUtils.createGuiItem(Material.FROGSPAWN, "Block Assignment Mode:", "onePerPlayer");
-        blockAssignmentModeSwitchArray[1] = GuiUtils.createGuiItem(Material.BEETROOT_SEEDS, "Block Assignment Mode:", "onePerTeam");
-        blockAssignmentModeSwitchArray[2] = GuiUtils.createGuiItem(Material.OAK_BUTTON, "Block Assignment Mode:", "onePerRound");
+        blockAssignmentModeSwitchArray[0] = GuiUtils.createGuiItem(Material.FROGSPAWN, "Block Assignment Mode:", ChatColor.AQUA + "onePerPlayer");
+        blockAssignmentModeSwitchArray[1] = GuiUtils.createGuiItem(Material.BEETROOT_SEEDS, "Block Assignment Mode:", ChatColor.AQUA + "onePerTeam");
+        blockAssignmentModeSwitchArray[2] = GuiUtils.createGuiItem(Material.OAK_BUTTON, "Block Assignment Mode:", ChatColor.AQUA + "onePerRound");
         this.slotArray[27] = new ItemSwitch(blockAssignmentModeSwitchArray, getIndexOfBlockAssignmentMode(settings.getString("blockAssignmentMode")));
 
         //create back button

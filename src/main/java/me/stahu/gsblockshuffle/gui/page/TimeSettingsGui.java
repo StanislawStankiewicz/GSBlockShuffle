@@ -4,6 +4,7 @@ import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.gui.GuiUtils;
 import me.stahu.gsblockshuffle.gui.item.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
@@ -22,6 +23,9 @@ public class TimeSettingsGui extends GuiPage {
     String timeIntPath;
     GSBlockShuffle plugin;
     int time;
+    private int minValue;
+    private int secondIncrement;
+    private int firstIncrement;
 
     /**
      * Constructor for the TimeSettingsGui class
@@ -33,7 +37,7 @@ public class TimeSettingsGui extends GuiPage {
      * @param timeIntPath the path to the time setting in the settings
      * @param plugin      the plugin
      */
-    public TimeSettingsGui(String name, String description, GuiPage parentPage, YamlConfiguration settings, String timeIntPath, GSBlockShuffle plugin) {
+    public TimeSettingsGui(String name, String description, GuiPage parentPage, YamlConfiguration settings, String timeIntPath, GSBlockShuffle plugin, int firstIncrement, int secondIncrement, int minValue) {
         super("Time Settings", 1, parentPage);
 
         this.plugin = plugin;
@@ -41,6 +45,9 @@ public class TimeSettingsGui extends GuiPage {
         this.settings = settings;
         this.timeIntPath = timeIntPath;
         this.time = settings.getInt(timeIntPath);
+        this.minValue = minValue;
+        this.secondIncrement = secondIncrement;
+        this.firstIncrement = firstIncrement;
 
         //register event
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -52,11 +59,11 @@ public class TimeSettingsGui extends GuiPage {
         //create time gui items
         slotArray[0] = minutesDisplay;
         slotArray[1] = secondsDisplay;
-        slotArray[2] = new Icon(GuiUtils.createGuiItem(Material.RED_STAINED_GLASS_PANE, "-60s", 60));
-        slotArray[3] = new Icon(GuiUtils.createGuiItem(Material.ORANGE_STAINED_GLASS_PANE, "-15s", 15));
+        slotArray[2] = new Icon(GuiUtils.createGuiItem(Material.RED_STAINED_GLASS_PANE, "-60s", secondIncrement));
+        slotArray[3] = new Icon(GuiUtils.createGuiItem(Material.ORANGE_STAINED_GLASS_PANE, "-15s", firstIncrement));
         slotArray[4] = new Icon(GuiUtils.createGuiItem(Material.CLOCK, name, description));
-        slotArray[5] = new Icon(GuiUtils.createGuiItem(Material.LIME_STAINED_GLASS_PANE, "+15s", 15));
-        slotArray[6] = new Icon(GuiUtils.createGuiItem(Material.GREEN_STAINED_GLASS_PANE, "+60s", 60));
+        slotArray[5] = new Icon(GuiUtils.createGuiItem(Material.LIME_STAINED_GLASS_PANE, "+15s", firstIncrement));
+        slotArray[6] = new Icon(GuiUtils.createGuiItem(Material.GREEN_STAINED_GLASS_PANE, "+60s", secondIncrement));
         slotArray[8] = new NavigationButton(GuiUtils.createGuiItem(Material.BARRIER, "Back", "Go back to the previous page"), parentPage);
 
         updateItems();
@@ -92,16 +99,16 @@ public class TimeSettingsGui extends GuiPage {
         //button logic
         switch (e.getRawSlot()) {
             case 2:
-                this.time -= 60;
+                this.time -= secondIncrement;
                 break;
             case 3:
-                this.time -= 15;
+                this.time -= firstIncrement;
                 break;
             case 5:
-                this.time += 15;
+                this.time += firstIncrement;
                 break;
             case 6:
-                this.time += 60;
+                this.time += secondIncrement;
                 break;
             case 8: //back button
                 this.slotArray[8].slotAction(e.getWhoClicked());
@@ -110,8 +117,8 @@ public class TimeSettingsGui extends GuiPage {
                 break;
         }
         //cap time
-        if (this.time < 15) {
-            this.time = 15;
+        if (this.time < minValue) {
+            this.time = minValue;
         }
 
         //update time
@@ -139,7 +146,7 @@ public class TimeSettingsGui extends GuiPage {
 
         //update time in lore
         ItemMeta meta = slotArray[4].itemStack.getItemMeta();
-        meta.setDisplayName(name + ": " + time + "s");
+        meta.setDisplayName(ChatColor.RESET + name + ": " + time + "s ("+time/60+"m "+time%60+"s)");
         slotArray[4].itemStack.setItemMeta(meta);
 
 

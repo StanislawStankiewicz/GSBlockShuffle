@@ -1,9 +1,10 @@
 package me.stahu.gsblockshuffle.gui;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
+import org.bukkit.inventory.ItemFlag;
 import java.util.Arrays;
 
 
@@ -24,7 +25,12 @@ public class GuiUtils {
         final ItemStack item = new ItemStack(material, 1);
         final ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(name);
+            meta.setDisplayName(ChatColor.RESET + name);
+            //add ChatColor.RESET to every element of the lore array
+            for (int i = 0; i < lore.length; i++) {
+                lore[i] = ChatColor.GRAY + lore[i];
+            }
+            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
             meta.setLore(Arrays.asList(lore));
             item.setItemMeta(meta);
         }
@@ -45,7 +51,12 @@ public class GuiUtils {
         final ItemStack item = new ItemStack(material, amount);
         final ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(name);
+            meta.setDisplayName(ChatColor.RESET + name);
+            //add ChatColor.RESET to every element of the lore array
+            for (int i = 0; i < lore.length; i++) {
+                lore[i] = ChatColor.GRAY + lore[i];
+            }
+            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
             meta.setLore(Arrays.asList(lore));
             item.setItemMeta(meta);
         }

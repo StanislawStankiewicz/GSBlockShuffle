@@ -43,9 +43,9 @@ public class MainMenuGui extends GuiPage implements Listener {
         slotArray[1] = new NavigationButton(GuiUtils.createGuiItem(Material.BOOK, "Category Selection", "Select the categories for the game"), new SubcategoryGui("Block Shuffle Settings", this, plugin.categoryTree.categories.toArray(new Category[0]), plugin));
 
         //start game button
-        slotArray[2] = new Icon(GuiUtils.createGuiItem(Material.EMERALD_BLOCK, "Start Game", "Start the game with the current settings"));
+        slotArray[3] = new Icon(GuiUtils.createGuiItem(Material.EMERALD_BLOCK, "Start Game", "Start the game with the current settings"));
 
-        slotArray[3] = new Icon(GuiUtils.createGuiItem(Material.REDSTONE_BLOCK, "Stop Ghe Game", "End the current game"));
+        slotArray[5] = new Icon(GuiUtils.createGuiItem(Material.REDSTONE_BLOCK, "Stop The Game", "End the current game"));
         //create back button
         this.slotArray[8] = new NavigationButton(GuiUtils.createGuiItem(Material.BARRIER, "Back", "Go back to the previous page"), parentPage);
 
@@ -94,18 +94,22 @@ public class MainMenuGui extends GuiPage implements Listener {
         slotArray[e.getRawSlot()].slotAction(e.getWhoClicked());
 
         //start game
-        if (e.getRawSlot() == 2) {
+        if (e.getRawSlot() == 3) {
             if (!plugin.gameStateManager.setGameState(1)) {
                 Player player = (Player) e.getWhoClicked();
                 player.sendMessage(ChatColor.RED + "Game is already running.");
+            }else{
+                close(e.getWhoClicked());
             }
         }
 
         //end game
-        if (e.getRawSlot() == 3) {
+        if (e.getRawSlot() == 5) {
             if (!plugin.gameStateManager.setGameState(0)) {
                 Player player = (Player) e.getWhoClicked();
                 player.sendMessage(ChatColor.RED + "Game is already stopped.");
+            }else{
+                close(e.getWhoClicked());
             }
         }
 

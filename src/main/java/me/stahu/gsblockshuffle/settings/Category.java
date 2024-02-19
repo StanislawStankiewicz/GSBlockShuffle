@@ -87,6 +87,11 @@ public class Category {
         return blocks;
     }
 
+    /**
+     * Get all blocks under this category.
+     *
+     * @return ArrayList of blocks
+     */
     public ArrayList<ArrayList<String>> getBlocks() {
         ArrayList<ArrayList<String>> blocks = new ArrayList<>();
 
