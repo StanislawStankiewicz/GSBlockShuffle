@@ -33,7 +33,7 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
         this.settings = settings;
         this.plugin = plugin;
         this.teamManager = teamManager;
-        this.debugSubcommand = new DebugSubcommand(plugin, gameStateManager, settings);
+        this.debugSubcommand = new DebugSubcommand(plugin, gameStateManager, teamManager, settings);
         this.teamSubcommand = new TeamSubcommand(plugin, gameStateManager, settings, teamManager);
     }
 
@@ -55,8 +55,11 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
             switch (args[0].toLowerCase()) {
                 case "debug" -> debugSubcommand.parseSubcommand(sender, command, label, args);
                 case "team" -> teamSubcommand.parseSubcommand(sender, command, label, args);
+                case "tp" -> teamSubcommand.teamTeleportRequest(sender, args);
+                case "tpaccept" -> teamSubcommand.teamTeleportAccept(player);
                 case "start" -> startGame(player);
                 case "end" -> endGame(player);
+                default -> sender.sendMessage(ChatColor.RED + "Unknown command.");
             }
         }
         return true;

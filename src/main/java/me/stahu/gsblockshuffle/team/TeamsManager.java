@@ -26,7 +26,12 @@ public class TeamsManager {
     private final Scoreboard scoreboard;
     private final YamlConfiguration settings;
     private final GSBlockShuffle plugin;
-
+    public final Set<Team> teamTpUsed = new HashSet<>();
+    public final Set<Player> playerTpUsed = new HashSet<>();
+    /*
+    * A HashMap that stores the amount of times a player or a team has used a teleport.
+     */
+    private HashMap<Object, Integer> tpUsageCounter = new HashMap<>();
 
     public TeamsManager(YamlConfiguration settings, GSBlockShuffle plugin) {
         this.scoreboardManager = Bukkit.getScoreboardManager();
@@ -38,7 +43,7 @@ public class TeamsManager {
 
     public void handleRemainingPlayers() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!isPlayerInAnyTeam(player)) {
+            if (isPlayerInNoTeam(player)) {
                 Team team = addTeam(player.getName(), ChatColor.WHITE);
                 addPlayerToTeam(player, team, false);
                 teamCaptains.put(player, team);
@@ -140,36 +145,115 @@ public class TeamsManager {
         return false;
     }
 
-    // TODO rename sender and target as they mean different things in different methods
-    public boolean teamTeleportRequest(Player sender, Player target){
-        Team senderTeam = getTeam(sender);
-        Team targetTeam = getTeam(target);
+    /**
+     * This method handles the teleport request between two players in the same team.
+     * The tpRequester is the player who initiates the teleport request, and the tpTarget is the player who receives the request.
+     * If either the tpRequester or the tpTarget is not in a team, or they are not in the same team, the method will return false.
+     * If the teleport request is successfully sent, the method will return true.
+     *
+     * @param tpRequester The player who is sending the teleport request.
+     * @param tpTarget The player who is receiving the teleport request.
+     * @return boolean Returns true if the teleport request is successfully sent, false otherwise.
+     */
+    public boolean teamTeleportRequest(Player tpRequester, Player tpTarget){
+        Team senderTeam = getTeam(tpRequester);
+        Team targetTeam = getTeam(tpTarget);
+
+        if(tpRequester == tpTarget){
+            return false;
+        }
 
         if(senderTeam == null || targetTeam == null){
             return false;
         }
 
         if(senderTeam.equals(targetTeam)){
-            sender.sendMessage(ChatColor.GREEN + "Team request sent to: " + target.getName());
-            target.sendMessage( ChatColor.GREEN + "You have received a teleport request from: " + sender.getName() + ". Type /gsblockshuffle tpaccept to accept.");
-            teleportRequests.put(sender, target);
+            tpRequester.sendMessage(ChatColor.GREEN + "Teleport request sent to: " + tpTarget.getName());
+            tpTarget.sendMessage( ChatColor.GREEN + "You have received a teleport request from: " + tpRequester.getName() + ". Type /gsblockshuffle tpaccept to accept.");
+            teleportRequests.put(tpTarget, tpRequester);
             return true;
         }
         return false;
     }
 
-    public boolean teamTeleportAccept(Player sender){
-        if (teleportRequests.containsKey(sender)) {
-            Player target = teleportRequests.get(sender);
-            handleTeamTeleport(sender, target);
-            teleportRequests.remove(sender);
+    /**
+     * This method handles the acceptance of a teleport request by a player.
+     * The tpTarget is the player who is accepting the teleport request.
+     * If the tpTarget does not have any pending teleport requests, the method will return false.
+     * If the teleport request is successfully accepted, the method will handle the teleportation of the players and remove the request from the pending requests.
+     *
+     * @param tpTarget The player who is accepting the teleport request.
+     * @return boolean Returns true if the teleport request is successfully accepted, false otherwise.
+     */
+    public boolean teamTeleportAccept(Player tpTarget){
+        if (teleportRequests.containsKey(tpTarget)) {
+            Player tpRequester = teleportRequests.get(tpTarget);
+            tpTarget.sendMessage(ChatColor.GREEN + "Teleport request accepted.");
+            tpRequester.sendMessage(ChatColor.GREEN + "Teleport request accepted.");
+            handleTeamTeleport(tpRequester, tpTarget);
+            teleportRequests.remove(tpTarget);
             return true;
         }
         return false;
     }
 
-    public void handleTeamTeleport(Player sender, Player target){
-        sender.teleport(target);
+    // TODO manage error messages and manage duplicated code
+    public void handleTeamTeleport(Player tpRequester, Player tpTarget){
+        String teleportMode = settings.getString("teleportMode").toLowerCase();
+        int amountOfTeleports = settings.getInt("amountOfTeleports");
+
+        if(Objects.equals(teleportMode, "disabled")){
+            return;
+        }
+        if(Objects.equals(teleportMode, "amountperteam")){
+            // if team used up their teleports cancel the tp
+            if(teamTpUsed.contains(getTeam(tpRequester))){
+                plugin.sendMessage(tpRequester, "Your team has already used their teleport.");
+                plugin.sendMessage(tpTarget, "Your team has already used their teleport.");
+                return;
+            }
+            tpRequester.teleport(tpTarget);
+            // if team not already in usage counter - add it
+            if(!tpUsageCounter.containsKey(getTeam(tpRequester))){
+                tpUsageCounter.put(getTeam(tpRequester), 0);
+            }
+            // increment usage counter
+            int tpsUsed = tpUsageCounter.get(getTeam(tpRequester));
+            // increment tp counter and check if team reached their limit
+            tpUsageCounter.put(getTeam(tpRequester), tpsUsed + 1);
+            if(tpsUsed >= amountOfTeleports){
+                teamTpUsed.add(getTeam(tpRequester));
+            }
+            return;
+        }
+        if(Objects.equals(teleportMode, "amountperplayer")){
+            if(playerTpUsed.contains(tpRequester)){
+                plugin.sendMessage(tpRequester, "You have used up all your teleports.");
+                return;
+            }
+            tpRequester.teleport(tpTarget);
+            // if team not already in usage counter - add it
+            if(!tpUsageCounter.containsKey(tpRequester)){
+                tpUsageCounter.put(tpRequester, 0);
+            }
+            // increment usage counter
+            int tpsUsed = tpUsageCounter.get(tpRequester);
+            // increment tp counter and check if team reached their limit
+            tpsUsed++;
+            tpRequester.sendMessage("You have " + (amountOfTeleports - tpsUsed) + " teleports left.");
+            tpUsageCounter.put(tpRequester, tpsUsed);
+            if(tpsUsed >= amountOfTeleports){
+                playerTpUsed.add(tpRequester);
+            }
+
+            return;
+        }
+        if(Objects.equals(teleportMode, "unlimited")){
+            tpRequester.teleport(tpTarget);
+            return;
+        }
+
+        plugin.sendMessage(tpRequester, "Invalid teleport mode. Please check the settings file.");
     }
 
     public void removePlayerFromTeam(Player player, Team team) {
@@ -195,13 +279,13 @@ public class TeamsManager {
         return team.hasEntry(player.getName());
     }
 
-    public boolean isPlayerInAnyTeam(Player player) {
+    public boolean isPlayerInNoTeam(Player player) {
         for (Team team : teams) {
             if (team.hasEntry(player.getName())) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     private void setTeamScore(Team team, int score) {

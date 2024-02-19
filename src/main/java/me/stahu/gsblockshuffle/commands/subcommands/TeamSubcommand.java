@@ -42,7 +42,7 @@ public class TeamSubcommand implements Subcommand {
             sender.sendMessage(ChatColor.GRAY + "Team " + team.getDisplayName() + ChatColor.GRAY + " members:");
             for (String entry : team.getEntries()) {
                 String message = " ● ";
-                if(teamManager.teamCaptains.containsKey(Bukkit.getPlayer(entry))) {
+                if (teamManager.teamCaptains.containsKey(Bukkit.getPlayer(entry))) {
                     message += ChatColor.AQUA + entry;
                 } else {
                     message += entry;
@@ -57,8 +57,6 @@ public class TeamSubcommand implements Subcommand {
             case "invite" -> teamInviteRequest(sender, args);
             case "leave" -> leaveTeam(sender);
             case "accept" -> joinTeamAccept(sender, args);
-            case "tp" -> teamTeleportRequest(sender, args);
-            case "tpaccept" -> teamTeleportAccept(sender);
         }
     }
 
@@ -67,18 +65,16 @@ public class TeamSubcommand implements Subcommand {
             sender.sendMessage(ChatColor.RED + "You must specify a team name.");
             return;
         }
+        // check if team already exists
         Team team = teamManager.getTeam(args[2]);
-        // TODO this is probably unnecessary
-        if(team == null) {
-            return;
-        }
-        if (teamManager.getTeam(args[2]) != null) {
+
+        if (teamManager.teams.contains(team)) {
             sender.sendMessage(ChatColor.RED + "Team " + ChatColor.DARK_AQUA + team.getDisplayName() + ChatColor.RED + " already exists.");
             return;
         }
+        team = teamManager.addTeam(args[2], ChatColor.WHITE);
+        teamManager.addPlayerToTeam((Player) sender, teamManager.getTeam(args[2]), false);
         sender.sendMessage(ChatColor.GREEN + "Team " + ChatColor.DARK_AQUA + team.getDisplayName() + ChatColor.GREEN + " has been created.");
-        teamManager.addTeam(args[2], ChatColor.WHITE);
-        teamManager.addPlayerToTeam((Player) sender, teamManager.getTeam(args[2]), true);
     }
 
     private void joinTeamRequest(CommandSender sender, String[] args) {
@@ -95,8 +91,8 @@ public class TeamSubcommand implements Subcommand {
     }
 
     private void joinTeamAccept(CommandSender sender, String[] args) {
-        if(teamManager.teamCaptains.containsKey((Player) sender)) {
-            if (!teamManager.joinTeamRequestAccept((Player) sender)){
+        if (teamManager.teamCaptains.containsKey((Player) sender)) {
+            if (!teamManager.joinTeamRequestAccept((Player) sender)) {
                 sender.sendMessage(ChatColor.RED + "You do not have any pending team requests.");
                 return;
             }
@@ -104,7 +100,7 @@ public class TeamSubcommand implements Subcommand {
         }
         // accept invite
         // sender should have no team
-        if(!teamManager.teamInviteRequestAccept((Player) sender)) {
+        if (!teamManager.teamInviteRequestAccept((Player) sender)) {
             sender.sendMessage(ChatColor.RED + "You do not have any pending team invites.");
         }
     }
@@ -137,7 +133,7 @@ public class TeamSubcommand implements Subcommand {
         teamManager.leaveTeam((Player) sender);
     }
 
-    private void teamTeleportRequest(CommandSender sender, String[] args) {
+    public void teamTeleportRequest(CommandSender sender, String[] args) {
         if (args.length == 2) {
             sender.sendMessage(ChatColor.RED + "You must specify a player to teleport to.");
             return;
@@ -148,12 +144,12 @@ public class TeamSubcommand implements Subcommand {
             return;
         }
         if (!teamManager.teamTeleportRequest((Player) sender, target)) {
-            sender.sendMessage(ChatColor.RED + "You cannot teleport to a player that is not on your team.");
+            sender.sendMessage(ChatColor.RED + "You cannot teleport to that player.");
         }
     }
 
-    private void teamTeleportAccept(CommandSender sender) {
-        if(!teamManager.teamTeleportAccept((Player) sender)) {
+    public void teamTeleportAccept(CommandSender sender) {
+        if (!teamManager.teamTeleportAccept((Player) sender)) {
             sender.sendMessage(ChatColor.RED + "You do not have any pending teleport requests.");
         }
     }

@@ -139,6 +139,8 @@ public class GameStateManager {
         playerBlockMap.clear();
         this.clearBossBars();
         this.eliminateTeams(eliminatedTeams);
+        teamsManager.playerTpUsed.clear();
+        teamsManager.teamTpUsed.clear();
 
         roundsRemaining--;
 
@@ -216,10 +218,6 @@ public class GameStateManager {
         StringBuilder endMessage = new StringBuilder("Game ended!\n " + "Final scores:");
 
         ArrayList<Team> sortedTeams = teamsManager.getSortedTeams();
-
-        for (Team team : sortedTeams) {
-            System.out.println(team.getName() + " " + teamsManager.getTeamScore(team));
-        }
 
         for (int i = 0; (i < sortedTeams.size()) && i < 3; i++) {
             if (i == 0) {
@@ -382,7 +380,6 @@ public class GameStateManager {
         }// if no players left - endRound
         else if (playerBlockMap.isEmpty()) {
             endRound();
-            return;
         }// if allPlayersRequiredForTeamWin - check if all players have found block, if so endRound
         else if (allPlayersRequiredForTeamWin) {
             for (String playerName : team.getEntries()) {
@@ -394,7 +391,6 @@ public class GameStateManager {
                 playersWithFoundBlock.remove(Bukkit.getPlayer(playerName));
                 playerBlockMap.remove(playerName);
             }
-            return;
         }
     }
 
@@ -622,7 +618,7 @@ public class GameStateManager {
         String playerName = player.getName();
         Location playerLocation = player.getLocation();
 
-        if (!teamsManager.isPlayerInAnyTeam(player)) {
+        if (teamsManager.isPlayerInNoTeam(player)) {
             return;
         }
         if (playerBlockMap.get(playerName) == null) {
