@@ -23,16 +23,22 @@ public class TeamsManager {
      * The key is the player (Player) who sent the request, and the value is the player who received the request.
      */
     public final HashMap<Player, Player> teleportRequests = new HashMap<>();
-    private ScoreboardManager scoreboardManager;
+    private final ScoreboardManager scoreboardManager;
     private final Scoreboard scoreboard;
     private final YamlConfiguration settings;
     private final GSBlockShuffle plugin;
-    public final Set<Team> teamTpUsed = new HashSet<>();
-    public final Set<Player> playerTpUsed = new HashSet<>();
-    /*
-    * A HashMap that stores the amount of times a player or a team has used a teleport.
+    /**
+     * A Set that stores teams who have used their teleports.
      */
-    private HashMap<Object, Integer> tpUsageCounter = new HashMap<>();
+    public final Set<Team> teamTpUsed = new HashSet<>();
+    /**
+     * A Set that stores players who have used their teleports.
+     */
+    public final Set<Player> playerTpUsed = new HashSet<>();
+    /**
+    * A HashMap that stores the amount of times a player or a team has teleported.
+     */
+    private final HashMap<Object, Integer> tpUsageCounter = new HashMap<>();
 
     public TeamsManager(YamlConfiguration settings, GSBlockShuffle plugin) {
         this.scoreboardManager = Bukkit.getScoreboardManager();
@@ -100,7 +106,7 @@ public class TeamsManager {
         teamRequests.remove(captain);
 
         plugin.sendMessage(player, "You have been added to team " + team.getDisplayName());
-        plugin.sendMessage(captain, player.getName() + " has been added to your team.");
+        plugin.sendMessage(captain, player.getDisplayName() + " has been added to your team.");
 
         return true;
     }
@@ -297,6 +303,7 @@ public class TeamsManager {
      */
     public void removeTeam(Team team) {
         Player captain = getTeamCaptain(team);
+        teams.remove(team);
         teamCaptains.remove(captain);
         teamRequests.remove(captain);
 
@@ -344,7 +351,7 @@ public class TeamsManager {
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         for (Team team : teams) {
-            Score score = objective.getScore(team.getName());
+            Score score = objective.getScore(team.getDisplayName());
             score.setScore(0);
         }
 
@@ -390,5 +397,22 @@ public class TeamsManager {
             removeTeam(team);
         }
         sender.sendMessage(ChatColor.GREEN + "You have left your team.");
+    }
+
+    /**
+     * Sets the display name of the team and the display names of its members to the teams color.
+     *
+     * @param team The team whose display name and the display names of its members are to be updated.
+     */
+    public void updateTeamColor(Team team) {
+        team.setDisplayName(team.getColor() + team.getName());
+        for (String entry : team.getEntries()) {
+            Player player = Bukkit.getPlayer(entry);
+            if (player != null) {
+                player.setDisplayName(team.getColor() + player.getName() + ChatColor.RESET);
+
+                player.setScoreboard(scoreboard);
+            }
+        }
     }
 }
