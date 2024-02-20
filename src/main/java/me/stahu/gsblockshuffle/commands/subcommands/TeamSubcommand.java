@@ -118,10 +118,7 @@ public void parseSubcommand(CommandSender sender, Command command, String label,
         }
 
         ChatColor color = stringToColorMap.get(args[2]);
-        Team team = teamManager.getTeam((Player) sender);
-        team.setColor(color);
-        team.setPrefix(color.toString());
-        teamManager.updateTeamColor(team);
+        teamManager.setTeamColor((Player) sender, color);
         sender.sendMessage(ChatColor.GREEN + "Team color has been changed to " + color + args[2] + ChatColor.GREEN + ".");
     }
     private void teamAdd(CommandSender sender, String[] args) {

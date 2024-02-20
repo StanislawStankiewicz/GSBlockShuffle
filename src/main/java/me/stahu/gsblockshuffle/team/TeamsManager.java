@@ -39,6 +39,17 @@ public class TeamsManager {
     * A HashMap that stores the amount of times a player or a team has teleported.
      */
     private final HashMap<Object, Integer> tpUsageCounter = new HashMap<>();
+    private final HashMap<Team, Integer> teamPointsMap = new HashMap<>();
+    private boolean showScoreboard = false;
+
+    public void setShowScoreboard(boolean showScoreboard) {
+        this.showScoreboard = showScoreboard;
+        if(showScoreboard){
+            showScoreboard();
+        } else {
+            hideScoreboard();
+        }
+    }
 
     public TeamsManager(YamlConfiguration settings, GSBlockShuffle plugin) {
         this.scoreboardManager = Bukkit.getScoreboardManager();
@@ -326,7 +337,9 @@ public class TeamsManager {
     }
 
     private void setTeamScore(Team team, int score) {
-        scoreboard.getObjective("Score").getScore(team.getName()).setScore(score);
+        teamPointsMap.put(team, score);
+
+        System.out.println(scoreboard.getTeams());
     }
 
     public void incrementTeamScore(Team team) {
@@ -346,22 +359,23 @@ public class TeamsManager {
         return null;
     }
 
-    public void setUpScoreboard() {
+    public void setScoreboard() {
+        scoreboard.getObjectives().forEach(Objective::unregister);
         Objective objective = scoreboard.registerNewObjective("Score", "dummy", "Score");
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         for (Team team : teams) {
             Score score = objective.getScore(team.getDisplayName());
-            score.setScore(0);
+            score.setScore(teamPointsMap.getOrDefault(team, 0));
         }
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setScoreboard(scoreboard);
         }
+        setShowScoreboard(showScoreboard);
     }
 
     public int getTeamScore(Team team) {
-        return scoreboard.getObjective("Score").getScore(team.getName()).getScore();
+        return scoreboard.getObjective("Score").getScore(team.getDisplayName()).getScore();
     }
 
     public void clearScoreboards() {
@@ -399,20 +413,35 @@ public class TeamsManager {
         sender.sendMessage(ChatColor.GREEN + "You have left your team.");
     }
 
+    public void setTeamColor(Player sender, ChatColor color) {
+        Team team = getTeam(sender);
+        team.setColor(color);
+        team.setPrefix(color.toString());
+        updateTeamColor(team);
+    }
+
     /**
      * Sets the display name of the team and the display names of its members to the teams color.
      *
      * @param team The team whose display name and the display names of its members are to be updated.
      */
-    public void updateTeamColor(Team team) {
+    private void updateTeamColor(Team team) {
         team.setDisplayName(team.getColor() + team.getName());
         for (String entry : team.getEntries()) {
             Player player = Bukkit.getPlayer(entry);
             if (player != null) {
                 player.setDisplayName(team.getColor() + player.getName() + ChatColor.RESET);
-
                 player.setScoreboard(scoreboard);
             }
         }
+        setScoreboard();
+    }
+
+    public void showScoreboard(){
+        scoreboard.getObjective("Score").setDisplaySlot(DisplaySlot.SIDEBAR);
+    }
+
+    private void hideScoreboard(){
+        scoreboard.getObjective("Score").setDisplaySlot(null);
     }
 }

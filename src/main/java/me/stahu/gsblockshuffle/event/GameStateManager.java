@@ -64,6 +64,8 @@ public class GameStateManager {
         teamsManager.handleRemainingPlayers();
 
         teamsManager.setUpScoreboard();
+        teamsManager.setScoreboard();
+        teamsManager.setShowScoreboard(true);
 
         roundsRemaining = settings.getInt("roundsPerGame");
 
@@ -229,16 +231,16 @@ public class GameStateManager {
 
         for (int i = 0; (i < sortedTeams.size()) && i < 3; i++) {
             if (i == 0) {
-                endMessage.append("\n ").append(ChatColor.GOLD).append(i + 1).append(ChatColor.WHITE).append(". ").append(sortedTeams.get(i).getName()).append(": ").append(teamsManager.getTeamScore(sortedTeams.get(i)));
+                endMessage.append("\n ").append(ChatColor.GOLD).append(i + 1).append(ChatColor.WHITE).append(". ").append(sortedTeams.get(i).getDisplayName()).append(": ").append(teamsManager.getTeamScore(sortedTeams.get(i)));
             } else if (i == 1) {
-                endMessage.append("\n ").append(ChatColor.GRAY).append(i + 1).append(ChatColor.WHITE).append(". ").append(sortedTeams.get(i).getName()).append(": ").append(teamsManager.getTeamScore(sortedTeams.get(i)));
+                endMessage.append("\n ").append(ChatColor.GRAY).append(i + 1).append(ChatColor.WHITE).append(". ").append(sortedTeams.get(i).getDisplayName()).append(": ").append(teamsManager.getTeamScore(sortedTeams.get(i)));
             } else if (i == 2) {
-                endMessage.append("\n ").append(ChatColor.RED).append(i + 1).append(ChatColor.WHITE).append(". ").append(sortedTeams.get(i).getName()).append(": ").append(teamsManager.getTeamScore(sortedTeams.get(i)));
+                endMessage.append("\n ").append(ChatColor.RED).append(i + 1).append(ChatColor.WHITE).append(". ").append(sortedTeams.get(i).getDisplayName()).append(": ").append(teamsManager.getTeamScore(sortedTeams.get(i)));
             }
         }
 
         for (int i = 3; i < sortedTeams.size(); i++) {
-            endMessage.append("\n ").append(ChatColor.DARK_GRAY).append(i + 1).append(ChatColor.WHITE).append(". ").append(sortedTeams.get(i).getName()).append(": ").append(teamsManager.getTeamScore(sortedTeams.get(i)));
+            endMessage.append("\n ").append(ChatColor.DARK_GRAY).append(i + 1).append(ChatColor.WHITE).append(". ").append(sortedTeams.get(i).getDisplayName()).append(": ").append(teamsManager.getTeamScore(sortedTeams.get(i)));
         }
 
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -353,6 +355,7 @@ public class GameStateManager {
         boolean firstToWin = settings.getBoolean("firstToWin");
         boolean allPlayersRequiredForTeamWin = settings.getBoolean("allPlayersRequiredForTeamWin");
         boolean teamScoreIncrementPerPlayer = settings.getBoolean("teamScoreIncrementPerPlayer");
+        boolean teamFoundBlock = false;
         Team team = teamsManager.getTeam(player);
         playBlockFoundSound(player, true);
 
@@ -364,14 +367,16 @@ public class GameStateManager {
             for (String playerName : team.getEntries()) {
                 Player p = Bukkit.getPlayer(playerName);
                 if (playersWithFoundBlock.contains(p)) {
+                    teamFoundBlock = true;
                     break;
                 }
+            }
+            if(!teamFoundBlock){
                 teamsManager.incrementTeamScore(team);
             }
         }
 
         playerBlockMap.remove(player.getName());
-        playersWithFoundBlock.add(player);
 
         // if firstToWin endRound
         if (firstToWin) {
