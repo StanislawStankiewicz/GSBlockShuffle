@@ -37,6 +37,8 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
         this.teamSubcommand = new TeamSubcommand(plugin, gameStateManager, settings, teamManager);
     }
 
+
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equals("gsblockshuffle")) {
@@ -44,14 +46,23 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
                 sender.sendMessage("You cannot execute this command from console.");
                 return true;
             }
-            if (!player.hasPermission("gsblockshuffle.admin")) {
-                player.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
-                return true;
-            }
+
             if (args.length == 0) {
+                //check if player has permission to open the main menu
+                if (!player.hasPermission("gsblockshuffle.admin")) {
+                    player.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
+                    return true;
+                }
                 this.mainMenuGui.open(player);
                 return true;
             }
+
+            //check if player has permission to execute the subcommand
+            if (!sender.hasPermission("GSBlockShuffle.command." + args[0].toLowerCase())) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
+                return true;
+            }
+            //execute subcommand
             switch (args[0].toLowerCase()) {
                 case "debug" -> debugSubcommand.parseSubcommand(sender, command, label, args);
                 case "end" -> endGame(player);
@@ -64,18 +75,21 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
         }
         return true;
     }
+
     // /gsbs end
     private void endGame(Player player) {
         if (!gameStateManager.setGameState(0)) {
             player.sendMessage(ChatColor.RED + "Game is already stopped.");
         }
     }
+
     // /gsbs start
     private void startGame(Player player) {
         if (!gameStateManager.setGameState(1)) {
             player.sendMessage(ChatColor.RED + "Game is already running.");
         }
     }
+
     // /gsbs tp <team> <player>
     private void teamTeleportRequest(CommandSender sender, String[] args) {
         // insert "team" subcommand to ensure correct indexes
@@ -94,7 +108,6 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
             "team",
             "tp",
             "tpaccept");
-
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 1) {
@@ -116,12 +129,13 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
             };
         }
     }
+
     /**
      * This method is used to parse the teleport command by masking it as "/gsbs team tp"
      * and return the tab completions for it.
      *
      * @param sender The sender of the command, usually a player.
-     * @param args The arguments provided with the command.
+     * @param args   The arguments provided with the command.
      * @return A list of strings representing the possible completions for the teleport command.
      */
     private List<String> parseTp(CommandSender sender, String[] args) {

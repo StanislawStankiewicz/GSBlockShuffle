@@ -45,11 +45,7 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
         stringToColorMap.put("black", ChatColor.BLACK);
     }
 
-    public void parseSubcommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("gsblockshuffle.command.team")) {
-            sender.sendMessage("You do not have permission to execute this command.");
-            return;
-        }
+public void parseSubcommand(CommandSender sender, Command command, String label, String[] args) {
         // tell player his team and team members
         if (args.length == 1) {
             Team team = teamManager.getTeam((Player) sender);
@@ -69,6 +65,12 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
             }
             return;
         }
+
+        //check if player has permission to execute the subcommand
+        if (!sender.hasPermission("GSBlockShuffle.command.team." + args[0].toLowerCase())) {
+            sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
+        }
+
         switch (args[1].toLowerCase()) {
             case "create" -> createTeam(sender, args);
             case "color" -> changeTeamColor(sender, args);
@@ -242,19 +244,9 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
     @Override
     public List<String> parseTabCompletions(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 2) {
-            List<String> completions = List.of(
-                    // keep alphabetical order
-                    "accept",
-                    "add",
-                    "color",
-                    "create",
-                    "invite",
-                    "join",
-                    "leave",
-                    "remove",
-                    "tp",
-                    "tpaccept");
-            return filterCompletions(completions, args[1]);
+            final List<String> suggestions = getAllowedCommands(sender);
+
+            return filterCompletions(suggestions, args[1]);
         }
         System.out.println("args[1]: " + args[1]);
         System.out.println(filterCompletions(teamManager.teams.stream().map(Team::getName).toList(), args[2]));
@@ -273,5 +265,29 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
             }
         }
         return Collections.emptyList();
+    }
+
+    private static List<String> getAllowedCommands(CommandSender sender) {
+        List<String> completions = List.of(
+                // keep alphabetical order
+                "accept",
+                "add",
+                "color",
+                "create",
+                "invite",
+                "join",
+                "leave",
+                "remove",
+                "tp",
+                "tpaccept");
+
+        final List<String> suggestions = new LinkedList<>();
+
+        completions.forEach(cmd -> {
+            if (sender.hasPermission("GSBlockShuffle.command.team." + cmd)) {
+                suggestions.add(cmd);
+            }
+        });
+        return suggestions;
     }
 }
