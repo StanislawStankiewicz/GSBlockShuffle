@@ -347,9 +347,6 @@ public class GameStateManager {
         Team team = teamsManager.getTeam(player);
         playBlockFoundSound(player, true);
 
-        playerBlockMap.remove(player.getName());
-        playersWithFoundBlock.add(player);
-
         // if true just increment the teams score
         if (teamScoreIncrementPerPlayer) {
             teamsManager.incrementTeamScore(team);
@@ -363,6 +360,9 @@ public class GameStateManager {
                 teamsManager.incrementTeamScore(team);
             }
         }
+
+        playerBlockMap.remove(player.getName());
+        playersWithFoundBlock.add(player);
 
         // if firstToWin endRound
         if (firstToWin) {
