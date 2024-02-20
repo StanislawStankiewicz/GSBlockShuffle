@@ -18,3 +18,4 @@ muteSounds: false
 showTeamCoords: true
 displaySplashWinnerMessage: false
 showTeamCompass: true
+disablePvP: true

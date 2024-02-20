@@ -15,13 +15,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerListener implements Listener {
     private final GameStateManager gameStateManager;
     private final TeamsManager teamsManager;
-
     private TeammateCompass teammateCompass;
+    private YamlConfiguration settings;
 
     public PlayerListener(YamlConfiguration settings, GSBlockShuffle plugin, GameStateManager gameStateManager, TeamsManager teamsManager, TeammateCompass teammateCompass) {
         this.gameStateManager = gameStateManager;
         this.teamsManager = teamsManager;
         this.teammateCompass = teammateCompass;
+        this.settings = settings;
     }
 
     @EventHandler
@@ -44,7 +45,7 @@ public class PlayerListener implements Listener {
     //Disable PvP
     @EventHandler
     public void onTestEntityDamage(EntityDamageByEntityEvent event) {
-        //TODO check if game has started and if the pvp should be disabled
+        if (!settings.getBoolean("disablePvP")){return;}
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             event.setCancelled(true);
         }
