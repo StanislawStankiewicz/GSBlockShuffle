@@ -3,6 +3,7 @@ package me.stahu.gsblockshuffle;
 import me.stahu.gsblockshuffle.commands.BlockShuffleCommand;
 import me.stahu.gsblockshuffle.event.GameStateManager;
 import me.stahu.gsblockshuffle.event.PlayerListener;
+import me.stahu.gsblockshuffle.gui.BossBarTimer;
 import me.stahu.gsblockshuffle.gui.TeammateCompass;
 import me.stahu.gsblockshuffle.gui.page.MainMenuGui;
 import me.stahu.gsblockshuffle.settings.CategoryTree;
@@ -25,6 +26,7 @@ public final class GSBlockShuffle extends JavaPlugin {
     public GameStateManager gameStateManager;
     private TeamsManager teamsManager;
     public TeammateCompass teammateCompass;
+    private BossBarTimer bossBarTimer;
 
     @Override
     public void onEnable() {
@@ -51,7 +53,8 @@ public final class GSBlockShuffle extends JavaPlugin {
         // TODO setting this up immediately is inefficient
         this.teamsManager = new TeamsManager(settings, this);
         this.teammateCompass = new TeammateCompass(teamsManager);
-        gameStateManager= new GameStateManager(settings, this, teamsManager);
+        this.bossBarTimer = new BossBarTimer(teamsManager);
+        gameStateManager= new GameStateManager(settings, this, teamsManager, bossBarTimer);
 
         //register events for PlayerListener
         getServer().getPluginManager().registerEvents(new PlayerListener(settings, this, gameStateManager, teamsManager, teammateCompass), this);
@@ -66,7 +69,7 @@ public final class GSBlockShuffle extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         teamsManager.clearScoreboards();
-        gameStateManager.clearBossBars();
+        bossBarTimer.clearBossBars();
         teammateCompass.clearCompassBars();
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.setDisplayName(ChatColor.RESET + player.getName() + ChatColor.RESET);

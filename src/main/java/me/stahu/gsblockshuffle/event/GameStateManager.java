@@ -1,11 +1,9 @@
 package me.stahu.gsblockshuffle.event;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
+import me.stahu.gsblockshuffle.gui.BossBarTimer;
 import me.stahu.gsblockshuffle.team.TeamsManager;
 import org.bukkit.*;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
@@ -24,7 +22,7 @@ public class GameStateManager {
     private int roundTickTask;
     private int roundBreakTickTask;
     private int roundStartTask;
-    private BossBar bossBar;
+    private BossBarTimer bossBarTimer;
     public Map<String, ArrayList<String>> playerBlockMap;
     public HashSet<Player> playersWithFoundBlock = new HashSet<>();
 
@@ -49,8 +47,9 @@ public class GameStateManager {
         return roundsRemaining;
     }
 
-    public GameStateManager(YamlConfiguration settings, GSBlockShuffle plugin, TeamsManager teamsManager) {
+    public GameStateManager(YamlConfiguration settings, GSBlockShuffle plugin, TeamsManager teamsManager, BossBarTimer bossBarTimer) {
         this.teamsManager = teamsManager;
+        this.bossBarTimer = bossBarTimer;
 
         this.playerBlockMap = new HashMap<>();
 
@@ -85,7 +84,7 @@ public class GameStateManager {
 
         assignRandomBlocks();
 
-        bossBar = this.createBossBar();
+        bossBarTimer.createBossBar();
         secondsLeft = settings.getInt("roundTime");
         roundTickTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::roundTick, 0, 20);
     }
@@ -98,7 +97,7 @@ public class GameStateManager {
 
         double progress = secondsLeft / (double) (settings.getInt("roundTime"));
 
-        updateBossBar(progress);
+        bossBarTimer.updateBossBar(progress, secondsLeft);
 
         if (secondsLeft < 61) {
             pingPlayers(secondsLeft);
@@ -142,7 +141,7 @@ public class GameStateManager {
         // Cleanup
         playersWithFoundBlock.clear();
         playerBlockMap.clear();
-        this.clearBossBars();
+        bossBarTimer.clearBossBars();
         this.eliminateTeams(eliminatedTeams);
         teamsManager.playerTpUsed.clear();
         teamsManager.teamTpUsed.clear();
@@ -168,7 +167,7 @@ public class GameStateManager {
     public void roundBreak() {
         secondsInRoundBreak = settings.getInt("roundBreakTime");
         secondsLeft = secondsInRoundBreak;
-        bossBar = this.createBossBar();
+        bossBarTimer.createBossBar();
 
         roundBreakTickTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::roundBreakTick, 0, 20);
     }
@@ -182,7 +181,7 @@ public class GameStateManager {
      */
     private void roundBreakTick() {
         if (secondsLeft-- <= 0) {
-            this.bossBar.removeAll();
+            bossBarTimer.clearBossBars();
             newRound();
             return;
         }
@@ -192,7 +191,7 @@ public class GameStateManager {
         }
 
         double progress = secondsLeft / (double) (secondsInRoundBreak);
-        updateBreakBossBar(progress);
+        bossBarTimer.updateBreakBossBar(progress, secondsLeft);
     }
 
     /**
@@ -211,7 +210,7 @@ public class GameStateManager {
         //remove compass
         plugin.teammateCompass.clearCompassBars();
 
-        bossBar.removeAll();
+        bossBarTimer.clearBossBars();
         teamsManager.clearScoreboards();
 
         setGameState(0);
@@ -422,72 +421,7 @@ public class GameStateManager {
         }
     }
 
-    /**
-     * Creates a new boss bar with a default message, color, and style.
-     * The boss bar is initially green and solid, with the message "Something might've failed.".
-     * The boss bar is then added to all players who are part of a team.
-     *
-     * @return The newly created boss bar.
-     */
-    private BossBar createBossBar() {
-        BossBar bossBar = Bukkit.createBossBar("Something might've failed.", BarColor.GREEN, BarStyle.SOLID);
-        for (Player player : teamsManager.getPlayersWithATeam()) {
-            bossBar.addPlayer(player);
-        }
-        return bossBar;
-    }
 
-    /**
-     * Updates the boss bar's progress, color, and title based on the remaining time in the round.
-     * The progress of the boss bar is set to the provided progress value.
-     * The color of the boss bar changes from green to red as the time decreases.
-     * The title of the boss bar displays the remaining time in seconds.
-     *
-     * @param progress The progress of the boss bar, represented as a double value between 0 and 1.
-     */
-    private void updateBossBar(double progress) {
-        ChatColor timerColor;
-
-        if (progress < 0.1) {
-            timerColor = ChatColor.DARK_RED;
-        } else if (progress < 0.2) {
-            bossBar.setColor(BarColor.RED);
-            timerColor = ChatColor.RED;
-        } else if (progress < 0.3) {
-            timerColor = ChatColor.GOLD;
-        } else if (progress < 0.5) {
-            bossBar.setColor(BarColor.YELLOW);
-            timerColor = ChatColor.YELLOW;
-        } else if (progress < 0.75) {
-            bossBar.setColor(BarColor.GREEN);
-            timerColor = ChatColor.GREEN;
-        } else {
-            timerColor = ChatColor.DARK_GREEN;
-            bossBar.setColor(BarColor.GREEN);
-        }
-        this.bossBar.setProgress(progress);
-        this.bossBar.setTitle(ChatColor.WHITE + "Time left: " + timerColor + String.format("%02d", secondsLeft / 60) + ChatColor.WHITE + ":" + timerColor + String.format("%02d", secondsLeft % 60));
-    }
-
-    /**
-     * Updates the boss bar during the break between rounds.
-     * The progress of the boss bar is set to the provided progress value.
-     * The color of the boss bar is set to blue.
-     * The title of the boss bar is set to display the time left until the new block is assigned.
-     *
-     * @param progress The progress of the boss bar, represented as a double value between 0 and 1.
-     */
-    private void updateBreakBossBar(double progress) {
-        this.bossBar.setProgress(progress);
-        this.bossBar.setColor(BarColor.BLUE);
-        this.bossBar.setTitle(ChatColor.WHITE + "New block in: " + ChatColor.DARK_AQUA + String.format("%02d", secondsLeft / 60) + ChatColor.WHITE + ":" + ChatColor.DARK_AQUA + String.format("%02d", secondsLeft % 60));
-    }
-
-    public void clearBossBars() {
-        if (bossBar != null) {
-            bossBar.removeAll();
-        }
-    }
 
     /**
      * Sends a ping sound to all online players based on the remaining seconds in the round.
