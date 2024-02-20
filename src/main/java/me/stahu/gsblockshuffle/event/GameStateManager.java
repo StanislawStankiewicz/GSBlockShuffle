@@ -443,7 +443,6 @@ public class GameStateManager {
     private void updateBossBar(double progress) {
         ChatColor timerColor;
 
-        // TODO do this like a binary search
         if (progress < 0.1) {
             timerColor = ChatColor.DARK_RED;
         } else if (progress < 0.2) {
@@ -462,7 +461,7 @@ public class GameStateManager {
             bossBar.setColor(BarColor.GREEN);
         }
         this.bossBar.setProgress(progress);
-        this.bossBar.setTitle(ChatColor.WHITE + "Time left: " + timerColor + secondsLeft + ChatColor.WHITE + "s");
+        this.bossBar.setTitle(ChatColor.WHITE + "Time left: " + timerColor + String.format("%02d", secondsLeft / 60) + ChatColor.WHITE + ":" + timerColor + String.format("%02d", secondsLeft % 60));
     }
 
     /**
@@ -476,11 +475,11 @@ public class GameStateManager {
     private void updateBreakBossBar(double progress) {
         this.bossBar.setProgress(progress);
         this.bossBar.setColor(BarColor.BLUE);
-        this.bossBar.setTitle(ChatColor.WHITE + "New block in: " + ChatColor.DARK_AQUA + secondsLeft + ChatColor.WHITE + "s");
+        this.bossBar.setTitle(ChatColor.WHITE + "New block in: " + ChatColor.DARK_AQUA + String.format("%02d", secondsLeft / 60) + ChatColor.WHITE + ":" + ChatColor.DARK_AQUA + String.format("%02d", secondsLeft % 60));
     }
 
     public void clearBossBars() {
-        if(bossBar != null){
+        if (bossBar != null) {
             bossBar.removeAll();
         }
     }

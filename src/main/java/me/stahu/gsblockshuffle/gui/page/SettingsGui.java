@@ -11,23 +11,26 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
  * GUI page that displays settings
  */
-public class SettingsGui extends GuiPage{
+public class SettingsGui extends GuiPage {
     private final GuiItemSlot[] slotArray = new GuiItemSlot[36];
+    GuiItemSlot settingsIcon;
     private final YamlConfiguration settings;
     private final GSBlockShuffle plugin;
 
     /**
      * Constructor for the SettingsGui class
      *
-     * @param parentPage    the parent page of this page
-     * @param settings      the YamConfiguration object that stores the settings
-     * @param plugin        plugin
+     * @param parentPage the parent page of this page
+     * @param settings   the YamConfiguration object that stores the settings
+     * @param plugin     plugin
      */
     public SettingsGui(GuiPage parentPage, YamlConfiguration settings, GSBlockShuffle plugin) {
         super("Settings", 4, parentPage);
@@ -37,16 +40,16 @@ public class SettingsGui extends GuiPage{
         Bukkit.getPluginManager().registerEvents(this, plugin);
 
         //time settings
-        this.slotArray[0] = new NavigationButton(GuiUtils.createGuiItem(Material.CLOCK, "Round Time", "Set the time for each round"), new TimeSettingsGui("Round Time","Change round duration",this, settings, "roundTime",plugin,15,60,15));
-        this.slotArray[9] = new NavigationButton(GuiUtils.createGuiItem(Material.CLOCK, "Time Between Rounds", "Set the time between rounds"), new TimeSettingsGui("Break Time","Change time between rounds",this, settings,"roundBreakTime",plugin,5,30,0));
+        this.slotArray[0] = new NavigationButton(GuiUtils.createGuiItem(Material.CLOCK, "Round Time", "Set the time for each round"), new TimeSettingsGui("Round Time", "Change round duration", this, settings, "roundTime", plugin, 15, 60, 15));
+        this.slotArray[9] = new NavigationButton(GuiUtils.createGuiItem(Material.CLOCK, "Time Between Rounds", "Set the time between rounds"), new TimeSettingsGui("Break Time", "Change time between rounds", this, settings, "roundBreakTime", plugin, 5, 30, 0));
 
         //rounds settings
-        this.slotArray[1] = new NavigationButton(GuiUtils.createGuiItem(Material.BELL, "Rounds", "Set the amount of rounds"), new IntegerSettingsGui("Rounds","Change the amount of rounds",this, settings,"roundsPerGame",plugin));
+        this.slotArray[1] = new NavigationButton(GuiUtils.createGuiItem(Material.BELL, "Rounds", "Set the amount of rounds"), new IntegerSettingsGui("Rounds", "Change the amount of rounds", this, settings, "roundsPerGame", plugin));
 
         //difficulty settings
         ItemStack[] switchArray = new ItemStack[10];
         for (int i = 0; i < 10; i++) {
-            switchArray[i] = GuiUtils.createGuiItem(Material.SPAWNER, "Difficulty: "+ i, i == 0 ? 1 : i , "Change Current difficulty");
+            switchArray[i] = GuiUtils.createGuiItem(Material.SPAWNER, "Difficulty: " + i, i == 0 ? 1 : i, "Change Current difficulty");
         }
         this.slotArray[18] = new ItemSwitch(switchArray, settings.getInt("difficulty"));
 
@@ -61,6 +64,11 @@ public class SettingsGui extends GuiPage{
         createSettingsSwitch(settings, "muteSounds", 22);
         createSettingsSwitch(settings, "showTeamCoords", 23);
         createSettingsSwitch(settings, "displaySplashWinnerMessage", 24);
+        createSettingsSwitch(settings, "firstToWin", 11);
+        createSettingsSwitch(settings, "teamScoreIncrementPerPlayer", 12);
+        createSettingsSwitch(settings, "muteSounds", 13);
+        createSettingsSwitch(settings, "showTeamCoords", 14);
+        createSettingsSwitch(settings, "displaySplashWinnerMessage", 15);
 
         // block assignment mode switch
         ItemStack[] blockAssignmentModeSwitchArray = new ItemStack[3];
@@ -68,6 +76,10 @@ public class SettingsGui extends GuiPage{
         blockAssignmentModeSwitchArray[1] = GuiUtils.createGuiItem(Material.BEETROOT_SEEDS, "Block Assignment Mode:", ChatColor.AQUA + "onePerTeam");
         blockAssignmentModeSwitchArray[2] = GuiUtils.createGuiItem(Material.OAK_BUTTON, "Block Assignment Mode:", ChatColor.AQUA + "onePerRound");
         this.slotArray[27] = new ItemSwitch(blockAssignmentModeSwitchArray, getIndexOfBlockAssignmentMode(settings.getString("blockAssignmentMode")));
+
+        //icon that has the config file in lore
+        this.settingsIcon = new Icon(GuiUtils.createGuiItem(Material.FILLED_MAP, "Config File", ""));
+        this.slotArray[8] = settingsIcon;
 
         //create back button
         this.slotArray[35] = new NavigationButton(GuiUtils.createGuiItem(Material.BARRIER, "Back", "Go back to the previous page"), parentPage);
@@ -78,13 +90,12 @@ public class SettingsGui extends GuiPage{
     /**
      * Method to create a switch for a boolean setting
      *
-     * @param settings  the YamlConfiguration object that stores the settings
-     * @param name      the name of the setting
-     * @param index     the index of the slotArray
+     * @param settings the YamlConfiguration object that stores the settings
+     * @param name     the name of the setting
+     * @param index    the index of the slotArray
      */
     public void createSettingsSwitch(YamlConfiguration settings, String name, int index) {
-        this.slotArray[index] = new Icon(GuiUtils.createGuiItem(Material.FILLED_MAP, name));
-        this.slotArray[index+9] = new SettingsSwitch(settings, name);
+        this.slotArray[index] = new SettingsSwitch(settings, name);
     }
 
     @Override
@@ -112,8 +123,8 @@ public class SettingsGui extends GuiPage{
         slotArray[e.getRawSlot()].slotAction(e.getWhoClicked());
 
         //save the changes to the config
-        settings.set("difficulty", ((ItemSwitch)slotArray[18]).getState());
-        settings.set("blockAssignmentMode", getBlockAssignmentMode(((ItemSwitch)slotArray[27]).getState()));
+        settings.set("difficulty", ((ItemSwitch) slotArray[18]).getState());
+        settings.set("blockAssignmentMode", getBlockAssignmentMode(((ItemSwitch) slotArray[27]).getState()));
         plugin.saveConfiguration();
 
         updateItems();
@@ -125,6 +136,15 @@ public class SettingsGui extends GuiPage{
                 inv.setItem(i, slotArray[i].itemStack);
             }
         }
+
+        //update the lore of the settingsIcon
+        ArrayList<String> settingsLines = new ArrayList<>();
+        for (String key : settings.getKeys(true)) {
+            settingsLines.add(ChatColor.DARK_AQUA + key + ": " +ChatColor.YELLOW+ settings.get(key));
+        }
+        ItemMeta tempMeta = settingsIcon.itemStack.getItemMeta();
+        tempMeta.setLore(settingsLines);
+        settingsIcon.itemStack.setItemMeta(tempMeta);
     }
 
     /**
@@ -138,7 +158,7 @@ public class SettingsGui extends GuiPage{
             return 0;
         } else if (Objects.equals(value, "onePerTeam")) {
             return 1;
-        } else if (Objects.equals(value, "onePerRound")){
+        } else if (Objects.equals(value, "onePerRound")) {
             return 2;
         }
         return -1;
@@ -155,7 +175,7 @@ public class SettingsGui extends GuiPage{
             return "onePerPlayer";
         } else if (index == 1) {
             return "onePerTeam";
-        } else if (index == 2){
+        } else if (index == 2) {
             return "onePerRound";
         }
         return "onePerPlayer";
