@@ -45,7 +45,7 @@ public class MainMenuGui extends GuiPage implements Listener {
         //start game button
         slotArray[3] = new Icon(GuiUtils.createGuiItem(Material.EMERALD_BLOCK, "Start Game", "Start the game with the current settings"));
 
-        slotArray[5] = new Icon(GuiUtils.createGuiItem(Material.REDSTONE_BLOCK, "Stop The Game", "End the current game"));
+        slotArray[5] = new Icon(GuiUtils.createGuiItem(Material.REDSTONE_BLOCK, "Stop Game", "End the current game"));
         //create back button
         this.slotArray[8] = new NavigationButton(GuiUtils.createGuiItem(Material.BARRIER, "Back", "Go back to the previous page"), parentPage);
 
