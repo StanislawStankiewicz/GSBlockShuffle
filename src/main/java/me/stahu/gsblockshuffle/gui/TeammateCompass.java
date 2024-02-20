@@ -17,7 +17,7 @@ public class TeammateCompass {
 
     public Map<String, BossBar> compassBars = new HashMap<>();
 
-    private static String compassBarString = "--------S--------W--------N--------E";
+    private static String compassBarString = "--------.--------<--------^-------->";
 
     private TeamsManager teamsManager;
 
@@ -73,6 +73,9 @@ public class TeammateCompass {
     private String placeTeammatesInCompass(Player player, String compassBarString) {
         boolean useFirstLetterOfTeammates = true;
         for (Team team : teamsManager.getSortedTeams()) {
+            System.out.println(team.getName()+": ");
+            System.out.println(team.getEntries());
+            System.out.println("compassbars: "+compassBars.keySet());
             if (team.hasEntry(player.getName())) {
                 if (team.getEntries().size() == 1) {
                     return compassBarString;
@@ -88,11 +91,9 @@ public class TeammateCompass {
                             direction.normalize();
                             double angle = direction.angle(new Vector(1, 0, 0)) * direction.getZ() / Math.abs(direction.getZ());
                             int offset = getCompassOffset(angle);
-                            offset = (offset + compassBarString.length()) % compassBarString.length();
+                            offset = (offset + compassBarString.length()-1) % compassBarString.length();
                             if (offset < compassBarString.length()) {
                                 compassBarString = compassBarString.substring(0, offset) + (useFirstLetterOfTeammates ? teammate.substring(0,1):"☻")  + compassBarString.substring(offset, compassBarString.length());
-                            } else {
-                                compassBarString = compassBarString.substring(0, offset - compassBarString.length()) + (useFirstLetterOfTeammates ? teammate.substring(0,1):"☻") + compassBarString.substring(offset - compassBarString.length(), compassBarString.length());
                             }
                         }
                     }
@@ -106,14 +107,14 @@ public class TeammateCompass {
         //add white before every letter and gray before every - if the letter is N add red color ☻ green
         StringBuilder coloredCompassBar = new StringBuilder();
         for (char c : compassBarString.toCharArray()) {
-            if (c == 'E') {
-                coloredCompassBar.append(ChatColor.WHITE).append(c);
-            } else if (c == 'S') {
-                coloredCompassBar.append(ChatColor.WHITE).append(c);
-            } else if (c == 'W') {
-                coloredCompassBar.append(ChatColor.WHITE).append(c);
-            } else if (c == 'N') {
-                coloredCompassBar.append(ChatColor.RED).append(c);
+            if (c == '>') {
+                coloredCompassBar.append(ChatColor.WHITE).append("E");
+            } else if (c == '.') {
+                coloredCompassBar.append(ChatColor.WHITE).append("S");
+            } else if (c == '<') {
+                coloredCompassBar.append(ChatColor.WHITE).append("W");
+            } else if (c == '^') {
+                coloredCompassBar.append(ChatColor.RED).append("N");
             } else if (c == '-') {
                 coloredCompassBar.append(ChatColor.GRAY).append(c);
             } else if (c == '☻') {
