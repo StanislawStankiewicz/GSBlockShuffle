@@ -65,6 +65,7 @@ public class SettingsGui extends GuiPage {
         createSettingsSwitch(settings, "showTeamCoords", 14);
         createSettingsSwitch(settings, "displaySplashWinnerMessage", 15);
         createSettingsSwitch(settings, "showTeamCompass", 20);
+        createSettingsSwitch(settings, "disablePvP", 21);
 
         // block assignment mode switch
         ItemStack[] blockAssignmentModeSwitchArray = new ItemStack[3];
@@ -72,6 +73,9 @@ public class SettingsGui extends GuiPage {
         blockAssignmentModeSwitchArray[1] = GuiUtils.createGuiItem(Material.BEETROOT_SEEDS, "Block Assignment Mode:", ChatColor.AQUA + "onePerTeam");
         blockAssignmentModeSwitchArray[2] = GuiUtils.createGuiItem(Material.OAK_BUTTON, "Block Assignment Mode:", ChatColor.AQUA + "onePerRound");
         this.slotArray[27] = new ItemSwitch(blockAssignmentModeSwitchArray, getIndexOfBlockAssignmentMode(settings.getString("blockAssignmentMode")));
+
+        //teleport settings
+        this.slotArray[28] = new NavigationButton(GuiUtils.createGuiItem(Material.ENDER_PEARL, "Teleport Settings", "Set the teleport settings", "Change number of allowed teleports"), new TeleportSettingsGui("Teleport Settings", "Change teleport settings", this, settings, plugin));
 
         //icon that has the config file in lore
         this.settingsIcon = new Icon(GuiUtils.createGuiItem(Material.FILLED_MAP, "Config File", ""));

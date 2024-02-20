@@ -387,7 +387,7 @@ public class TeamsManager {
 
     public ArrayList<Team> getSortedTeams() {
         ArrayList<Team> sortedTeams = new ArrayList<>(teams);
-        sortedTeams.sort(Comparator.comparingInt(this::getTeamScore));
+        sortedTeams.sort(Comparator.comparingInt(this::getTeamScore).reversed());
         return sortedTeams;
     }
 
