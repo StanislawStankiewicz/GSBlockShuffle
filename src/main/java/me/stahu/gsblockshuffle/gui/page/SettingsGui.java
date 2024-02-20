@@ -59,16 +59,12 @@ public class SettingsGui extends GuiPage {
         createSettingsSwitch(settings, "treatAllAsIndividualBlocks", 4);
         createSettingsSwitch(settings, "allPlayersRequiredForTeamWin", 5);
         createSettingsSwitch(settings, "eliminateAfterRound", 6);
-        createSettingsSwitch(settings, "firstToWin", 20);
-        createSettingsSwitch(settings, "teamScoreIncrementPerPlayer", 21);
-        createSettingsSwitch(settings, "muteSounds", 22);
-        createSettingsSwitch(settings, "showTeamCoords", 23);
-        createSettingsSwitch(settings, "displaySplashWinnerMessage", 24);
         createSettingsSwitch(settings, "firstToWin", 11);
         createSettingsSwitch(settings, "teamScoreIncrementPerPlayer", 12);
         createSettingsSwitch(settings, "muteSounds", 13);
         createSettingsSwitch(settings, "showTeamCoords", 14);
         createSettingsSwitch(settings, "displaySplashWinnerMessage", 15);
+        createSettingsSwitch(settings, "showTeamCompass", 20);
 
         // block assignment mode switch
         ItemStack[] blockAssignmentModeSwitchArray = new ItemStack[3];

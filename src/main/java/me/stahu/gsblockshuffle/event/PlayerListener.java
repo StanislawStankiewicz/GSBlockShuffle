@@ -1,7 +1,9 @@
 package me.stahu.gsblockshuffle.event;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
+import me.stahu.gsblockshuffle.gui.TeammateCompass;
 import me.stahu.gsblockshuffle.team.TeamsManager;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,14 +16,22 @@ public class PlayerListener implements Listener {
     private final GameStateManager gameStateManager;
     private final TeamsManager teamsManager;
 
-    public PlayerListener(YamlConfiguration settings, GSBlockShuffle plugin, GameStateManager gameStateManager, TeamsManager teamsManager) {
+    private TeammateCompass teammateCompass;
+
+    public PlayerListener(YamlConfiguration settings, GSBlockShuffle plugin, GameStateManager gameStateManager, TeamsManager teamsManager, TeammateCompass teammateCompass) {
         this.gameStateManager = gameStateManager;
         this.teamsManager = teamsManager;
+        this.teammateCompass = teammateCompass;
     }
 
     @EventHandler
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
         gameStateManager.handlePlayerMove(event.getPlayer());
+
+        //update the compass for everyone
+        for (Player serverPlayer : Bukkit.getOnlinePlayers()) {
+            teammateCompass.updateCompass(serverPlayer);
+        }
     }
 
     @EventHandler
@@ -36,7 +46,7 @@ public class PlayerListener implements Listener {
     public void onTestEntityDamage(EntityDamageByEntityEvent event) {
         //TODO check if game has started and if the pvp should be disabled
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
-                event.setCancelled(true);
+            event.setCancelled(true);
         }
     }
 }

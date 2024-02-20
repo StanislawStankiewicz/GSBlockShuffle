@@ -76,6 +76,13 @@ public class GameStateManager {
     public void newRound() {
         Bukkit.getScheduler().cancelTask(this.roundBreakTickTask);
 
+        //create compass based on setings.get("showTeamCompass")
+        if (settings.getBoolean("showTeamCompass")) {
+            plugin.teammateCompass.createCompassBars();
+        } else {
+            plugin.teammateCompass.clearCompassBars();
+        }
+
         assignRandomBlocks();
 
         bossBar = this.createBossBar();
@@ -200,6 +207,9 @@ public class GameStateManager {
         Bukkit.getScheduler().cancelTask(this.roundTickTask);
 
         sendEndGameMessageToAllPlayers();
+
+        //remove compass
+        plugin.teammateCompass.clearCompassBars();
 
         bossBar.removeAll();
         teamsManager.clearScoreboards();
