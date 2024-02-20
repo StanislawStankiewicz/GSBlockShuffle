@@ -6,6 +6,7 @@ import me.stahu.gsblockshuffle.event.PlayerListener;
 import me.stahu.gsblockshuffle.gui.page.MainMenuGui;
 import me.stahu.gsblockshuffle.settings.CategoryTree;
 import me.stahu.gsblockshuffle.team.TeamsManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -63,6 +64,11 @@ public final class GSBlockShuffle extends JavaPlugin {
         // Plugin shutdown logic
         teamsManager.clearScoreboards();
         gameStateManager.clearBossBars();
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            player.setDisplayName(ChatColor.RESET + player.getName() + ChatColor.RESET);
+            // reset color on tab
+            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        }
     }
 
     private void createSettingsFile() {

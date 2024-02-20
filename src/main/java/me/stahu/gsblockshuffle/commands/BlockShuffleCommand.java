@@ -54,17 +54,29 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
             }
             switch (args[0].toLowerCase()) {
                 case "debug" -> debugSubcommand.parseSubcommand(sender, command, label, args);
-                case "team" -> teamSubcommand.parseSubcommand(sender, command, label, args);
-                case "tp" -> teamTeleportRequest(sender, args);
-                case "tpaccept" -> teamSubcommand.teamTeleportAccept(player);
-                case "start" -> startGame(player);
                 case "end" -> endGame(player);
-                default -> sender.sendMessage(ChatColor.RED + "Unknown command.");
+                case "start" -> startGame(player);
+                case "team" -> teamSubcommand.parseSubcommand(sender, command, label, args);
+                case "tp" -> parseTp(sender, args);
+                case "tpaccept" -> teamSubcommand.teamTeleportAccept(player);
+                default -> sender.sendMessage(ChatColor.RED + "Unknown GSBlockShuffle command.");
             }
         }
         return true;
     }
-
+    // /gsbs end
+    private void endGame(Player player) {
+        if (!gameStateManager.setGameState(0)) {
+            player.sendMessage(ChatColor.RED + "Game is already stopped.");
+        }
+    }
+    // /gsbs start
+    private void startGame(Player player) {
+        if (!gameStateManager.setGameState(1)) {
+            player.sendMessage(ChatColor.RED + "Game is already running.");
+        }
+    }
+    // /gsbs tp <team> <player>
     private void teamTeleportRequest(CommandSender sender, String[] args) {
         // insert "team" subcommand to ensure correct indexes
         String[] newArgs = new String[args.length + 1];
@@ -75,19 +87,13 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
         teamSubcommand.teamTeleportRequest(sender, newArgs);
     }
 
-    private void startGame(Player player) {
-        if (!gameStateManager.setGameState(1)) {
-            player.sendMessage(ChatColor.RED + "Game is already running.");
-        }
-    }
-
-    private void endGame(Player player) {
-        if (!gameStateManager.setGameState(0)) {
-            player.sendMessage(ChatColor.RED + "Game is already stopped.");
-        }
-    }
-
-    private final List<String> commandsToCheck = List.of("debug", "team", "start", "end");
+    private final List<String> commandsToCheck = List.of(
+            "debug",
+            "end",
+            "start",
+            "team",
+            "tp",
+            "tpaccept");
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
@@ -105,9 +111,23 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
             return switch (args[0].toLowerCase()) {
                 case "debug" -> debugSubcommand.parseTabCompletions(sender, command, label, args);
                 case "team" -> teamSubcommand.parseTabCompletions(sender, command, label, args);
-                // the missing subcommands don't have tab completions, don't bother including them.
+                case "tp" -> filterCompletions(playerList(), args[args.length - 1]);
                 default -> Collections.emptyList();
             };
         }
+    }
+    /**
+     * This method is used to parse the teleport command by masking it as "/gsbs team tp"
+     * and return the tab completions for it.
+     *
+     * @param sender The sender of the command, usually a player.
+     * @param args The arguments provided with the command.
+     * @return A list of strings representing the possible completions for the teleport command.
+     */
+    private List<String> parseTp(CommandSender sender, String[] args) {
+        String[] newArgs = new String[args.length + 1];
+        newArgs[0] = "team";
+        newArgs[1] = args[0];
+        return teamSubcommand.parseTabCompletions(sender, null, null, newArgs);
     }
 }

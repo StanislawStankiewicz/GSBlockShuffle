@@ -135,8 +135,8 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
     @Override
     public List<String> parseTabCompletions(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 2) {
-            // keep this in alphabetical order
-            List<String> options = List.of(
+            // keep alphabetical order
+            List<String> completions = List.of(
                     "endGame",
                     "endRound",
                     "get",
@@ -146,15 +146,12 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
                     "set",
                     "startGame",
                     "tp");
-            return filterCompletions(options, args[1]);
+            return filterCompletions(completions, args[1]);
         }
 
         List<String> settingKeysList = settings.getKeys(false).stream().toList();
         switch (args[1].toLowerCase()) {
-            case "get" -> {
-                return filterCompletions(settingKeysList, args[2]);
-            }
-            case "set" -> {
+            case "get", "set" -> {
                 if (args.length == 3) {
                     return filterCompletions(settingKeysList, args[2]);
                 }

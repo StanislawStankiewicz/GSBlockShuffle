@@ -8,7 +8,6 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.*;
 
 import java.util.*;
@@ -44,10 +43,6 @@ public class GameStateManager {
             return true;
         }
         return false;
-    }
-
-    public int getGameState() {
-        return gameState;
     }
 
     public int getRoundsRemaining() {
@@ -125,7 +120,7 @@ public class GameStateManager {
             }
             if (allPlayersRequiredForTeamWin && membersWithoutBlock > 0) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    player.sendRawMessage(team.getName() + " eliminated!");
+                    player.sendRawMessage(team.getDisplayName() + " eliminated!");
                 }
                 eliminatedTeams.add(team);
             }
@@ -408,7 +403,7 @@ public class GameStateManager {
     private void eliminateTeams(HashSet<Team> eliminatedTeams) {
         for (Team eliminatedTeam : eliminatedTeams) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                plugin.sendMessage(player, eliminatedTeam.getName() + " has been eliminated!");
+                plugin.sendMessage(player, eliminatedTeam.getDisplayName() + " has been eliminated!");
             }
             for (Team team : eliminatedTeams) {
                 teamsManager.teams.remove(team);
