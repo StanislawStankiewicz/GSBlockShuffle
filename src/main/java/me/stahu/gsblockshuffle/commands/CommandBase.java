@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CommandBase {
     protected List<String> filterCompletions(List<String> completions, String arg) {
-        return completions.stream().filter(completion -> completion.startsWith(arg)).toList();
+        return completions.stream().filter(completion -> completion.toLowerCase().startsWith(arg)).toList();
     }
     /**
      * Retrieves all online player names for tab completion.

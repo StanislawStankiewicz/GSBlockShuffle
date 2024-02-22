@@ -251,7 +251,7 @@ public void parseSubcommand(CommandSender sender, Command command, String label,
         if(args.length == 3){
             switch(args[1].toLowerCase()){
                 case "add", "invite", "tp" -> {
-                    return filterCompletions(playerList(), args[2]);
+                    return filterCompletions(playerList(), args[2].toLowerCase());
                 }
                 case "join", "remove" -> {
                     return filterCompletions(teamManager.teams.stream().map(Team::getName).toList(), args[2]);
