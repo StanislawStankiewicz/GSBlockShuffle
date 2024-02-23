@@ -24,7 +24,7 @@ public class GameStateManager {
     private int roundTickTask;
     private int roundBreakTickTask;
     private int roundStartTask;
-    private BossBarTimer bossBarTimer;
+    public BossBarTimer bossBarTimer;
     public Map<String, ArrayList<String>> playerBlockMap;
     public HashSet<Player> playersWithFoundBlock = new HashSet<>();
 
