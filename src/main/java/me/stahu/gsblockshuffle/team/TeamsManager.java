@@ -41,6 +41,7 @@ public class TeamsManager {
     private final HashMap<Object, Integer> tpUsageCounter = new HashMap<>();
     private final HashMap<Team, Integer> teamPointsMap = new HashMap<>();
     private boolean showScoreboard = false;
+    private Map<String, Team> playersThatLeft = new HashMap<>();
 
     public void setShowScoreboard(boolean showScoreboard) {
         this.showScoreboard = showScoreboard;
@@ -305,6 +306,19 @@ public class TeamsManager {
 
     public void removePlayerFromTeam(Player player, Team team) {
         team.removeEntry(player.getName());
+    }
+
+
+    public void removePlayerFromTeamAfterLeave(Player player) {
+        Team team = getTeam(player);
+        team.removeEntry(player.getName());
+        this.playersThatLeft.put(player.getName(), team);
+    }
+
+    public void reAddPlayerToTeamAfterLeave(Player player) {
+        System.out.println("Player that left: " + playersThatLeft);
+        this.playersThatLeft.get(player.getName()).addEntry(player.getName());
+        this.playersThatLeft.remove(player.getName());
     }
 
     /**

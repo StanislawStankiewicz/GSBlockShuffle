@@ -20,8 +20,6 @@ public class BossBarTimer {
      * Creates a new boss bar with a default message, color, and style.
      * The boss bar is initially green and solid, with the message "Something might've failed.".
      * The boss bar is then added to all players who are part of a team.
-     *
-     * @return The newly created boss bar.
      */
     public void createBossBar() {
         BossBar bossBar = Bukkit.createBossBar("Something might've failed.", BarColor.GREEN, BarStyle.SOLID);
@@ -29,6 +27,12 @@ public class BossBarTimer {
             bossBar.addPlayer(player);
         }
         this.bossBar = bossBar;
+    }
+
+    public void reAddPlayersToBossBar() {
+        for (Player player : teamsManager.getPlayersWithATeam()) {
+            bossBar.addPlayer(player);
+        }
     }
     /**
      * Updates the boss bar's progress, color, and title based on the remaining time in the round.

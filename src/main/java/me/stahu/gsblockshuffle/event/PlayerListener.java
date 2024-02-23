@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -17,12 +18,14 @@ public class PlayerListener implements Listener {
     private final TeamsManager teamsManager;
     private TeammateCompass teammateCompass;
     private YamlConfiguration settings;
+    private GSBlockShuffle plugin;
 
     public PlayerListener(YamlConfiguration settings, GSBlockShuffle plugin, GameStateManager gameStateManager, TeamsManager teamsManager, TeammateCompass teammateCompass) {
         this.gameStateManager = gameStateManager;
         this.teamsManager = teamsManager;
         this.teammateCompass = teammateCompass;
         this.settings = settings;
+        this.plugin = plugin;
     }
 
     @EventHandler
@@ -37,9 +40,21 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
-        // TODO allow the player to comeback midgame
         Player player = event.getPlayer();
-        teamsManager.removePlayerFromTeam(player, teamsManager.getTeam(player));
+        teamsManager.removePlayerFromTeamAfterLeave(player);
+    }
+    @EventHandler
+    public void onPlayerJoinEvent(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        teamsManager.reAddPlayerToTeamAfterLeave(player);
+        teamsManager.setScoreboard();
+        teamsManager.setShowScoreboard(true);
+        if (settings.getBoolean("showTeamCompass")) {
+            plugin.teammateCompass.createCompassBars();
+        } else {
+            plugin.teammateCompass.clearCompassBars();
+        }
+        gameStateManager.bossBarTimer.reAddPlayersToBossBar();
     }
 
     //Disable PvP

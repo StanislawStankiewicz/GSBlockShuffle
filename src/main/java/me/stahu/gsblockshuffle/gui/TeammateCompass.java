@@ -36,6 +36,9 @@ public class TeammateCompass {
                 compassBar.setProgress(0.5);
                 compassBar.setVisible(true);
             }
+            else {
+                compassBars.get(serverPlayer.getName()).addPlayer(serverPlayer);
+            }
         }
     }
 
@@ -73,9 +76,6 @@ public class TeammateCompass {
     private String placeTeammatesInCompass(Player player, String compassBarString) {
         boolean useFirstLetterOfTeammates = true;
         for (Team team : teamsManager.getSortedTeams()) {
-            System.out.println(team.getName()+": ");
-            System.out.println(team.getEntries());
-            System.out.println("compassbars: "+compassBars.keySet());
             if (team.hasEntry(player.getName())) {
                 if (team.getEntries().size() == 1) {
                     return compassBarString;
