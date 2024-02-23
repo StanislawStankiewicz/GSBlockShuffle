@@ -49,12 +49,13 @@ public class PlayerListener implements Listener {
         teamsManager.reAddPlayerToTeamAfterLeave(player);
         teamsManager.setScoreboard();
         teamsManager.setShowScoreboard(true);
+        gameStateManager.bossBarTimer.reAddPlayersToBossBar();
+
         if (settings.getBoolean("showTeamCompass")) {
             plugin.teammateCompass.createCompassBars();
         } else {
             plugin.teammateCompass.clearCompassBars();
         }
-        gameStateManager.bossBarTimer.reAddPlayersToBossBar();
     }
 
     //Disable PvP

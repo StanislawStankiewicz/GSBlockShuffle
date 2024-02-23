@@ -60,17 +60,17 @@ public class TeammateCompass {
         direction.normalize();
         //get the angle between the direction and the x-axis
         double angle = direction.angle(new Vector(1, 0, 0)) * direction.getZ() / Math.abs(direction.getZ()) + Math.PI;
-        compassBar.setTitle(addColors(getCompassString(player, angle+0.174532925)));
+        compassBar.setTitle(addColors(getCompassString(player, angle)));//+0.174532925
     }
 
     private int getCompassOffset(double angle) {
-        return (int) (compassBarString.length() * angle / (2 * Math.PI));
+        return (int) ((compassBarString.length() * angle / (2 * Math.PI)));
     }
 
     private String getCompassString(Player player, double angle) {
         int offset = getCompassOffset(angle);
         String compassBarStringWithTeammates = placeTeammatesInCompass(player, compassBarString);
-        return compassBarStringWithTeammates.substring(offset, compassBarStringWithTeammates.length()) + compassBarStringWithTeammates.substring(0, offset);
+        return (angle < Math.PI ? "" : "-") + compassBarStringWithTeammates.substring(offset, compassBarStringWithTeammates.length()) + compassBarStringWithTeammates.substring(0, offset)+ (angle < Math.PI ? "-" : "");
     }
 
     private String placeTeammatesInCompass(Player player, String compassBarString) {
@@ -91,9 +91,9 @@ public class TeammateCompass {
                             direction.normalize();
                             double angle = direction.angle(new Vector(1, 0, 0)) * direction.getZ() / Math.abs(direction.getZ());
                             int offset = getCompassOffset(angle);
-                            offset = (offset + compassBarString.length()-1) % compassBarString.length();
+                            offset = Math.floorMod((offset-1) ,compassBarString.length());
                             if (offset < compassBarString.length()) {
-                                compassBarString = compassBarString.substring(0, offset) + (useFirstLetterOfTeammates ? teammate.substring(0,1):"☻")  + compassBarString.substring(offset, compassBarString.length());
+                                compassBarString = insertCaracterAtPosition(compassBarString, offset,useFirstLetterOfTeammates ? teammate.charAt(0) : '☻');
                             }
                         }
                     }
@@ -101,6 +101,22 @@ public class TeammateCompass {
             }
         }
         return compassBarString;
+    }
+
+    private String insertCaracterAtPosition(String compassBarString, int position, char character) {
+//        //breadcast offset
+//        Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage("offset: "+ position));
+
+        StringBuilder newString = new StringBuilder();
+        for (int i = 0; i < compassBarString.length(); i++) {
+            if (i == position) {
+                newString.append(character);
+            }
+            else {
+                newString.append(compassBarString.charAt(i));
+            }
+        }
+        return newString.toString();
     }
 
     private String addColors(String compassBarString) {
