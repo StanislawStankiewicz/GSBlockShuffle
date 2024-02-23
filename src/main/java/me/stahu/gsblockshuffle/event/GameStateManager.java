@@ -3,6 +3,8 @@ package me.stahu.gsblockshuffle.event;
 import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.gui.BossBarTimer;
 import me.stahu.gsblockshuffle.team.TeamsManager;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -63,7 +65,6 @@ public class GameStateManager {
         // Adding players with no team to their own team
         teamsManager.handleRemainingPlayers();
 
-        teamsManager.setUpScoreboard();
         teamsManager.setScoreboard();
         teamsManager.setShowScoreboard(true);
 
@@ -100,6 +101,12 @@ public class GameStateManager {
         double progress = secondsLeft / (double) (settings.getInt("roundTime"));
 
         bossBarTimer.updateBossBar(progress, secondsLeft);
+        //display actionbar title for everyone with a block
+        for (Player player : teamsManager.getPlayersWithATeam()) {
+            if (playerBlockMap.get(player.getName()) != null) {
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GOLD + playerBlockMap.get(player.getName()).get(0).replace("_", " ")));
+            }
+        }
 
         if (secondsLeft < 61) {
             pingPlayers(secondsLeft);
