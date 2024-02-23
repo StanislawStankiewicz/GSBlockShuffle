@@ -75,7 +75,13 @@ public class SettingsGui extends GuiPage {
         this.slotArray[27] = new ItemSwitch(blockAssignmentModeSwitchArray, getIndexOfBlockAssignmentMode(settings.getString("blockAssignmentMode")));
 
         //teleport settings
-        this.slotArray[28] = new NavigationButton(GuiUtils.createGuiItem(Material.ENDER_PEARL, "Teleport Settings", "Set the teleport settings", "Change number of allowed teleports"), new TeleportSettingsGui("Teleport Settings", "Change teleport settings", this, settings, plugin));
+        ItemStack[] teleportModeSwitchArray = new ItemStack[4];
+        teleportModeSwitchArray[0] = GuiUtils.createGuiItem(Material.ENDER_PEARL, "Allowed Teleports Mode:", ChatColor.AQUA + "disabled");
+        teleportModeSwitchArray[1] = GuiUtils.createGuiItem(Material.ENDER_PEARL, "Allowed Teleports Mode:", ChatColor.AQUA + "amountPerTeam");
+        teleportModeSwitchArray[2] = GuiUtils.createGuiItem(Material.ENDER_PEARL, "Allowed Teleports Mode:", ChatColor.AQUA + "amountPerPlayer");
+        teleportModeSwitchArray[3] = GuiUtils.createGuiItem(Material.ENDER_PEARL, "Allowed Teleports Mode:", ChatColor.AQUA + "unlimited");
+        this.slotArray[28] = new ItemSwitch(teleportModeSwitchArray, getIndexOfTeleportMode(settings.getString("teleportMode")));
+        this.slotArray[29] = new NavigationButton(GuiUtils.createGuiItem(Material.ENDER_EYE, "Amount Of Teleports", "Change the number of allowed teleports"),new IntegerSettingsGui("Teleport Amount Per Round", "Change the amount of teleports", this, settings, "amountOfTeleportsPerRound", plugin));
 
         //icon that has the config file in lore
         this.settingsIcon = new Icon(GuiUtils.createGuiItem(Material.FILLED_MAP, "Config File", ""));
@@ -125,6 +131,7 @@ public class SettingsGui extends GuiPage {
         //save the changes to the config
         settings.set("difficulty", ((ItemSwitch) slotArray[18]).getState());
         settings.set("blockAssignmentMode", getBlockAssignmentMode(((ItemSwitch) slotArray[27]).getState()));
+        settings.set("teleportMode", getTeleportMode(((ItemSwitch) slotArray[28]).getState()));
         plugin.saveConfiguration();
 
         updateItems();
@@ -179,5 +186,31 @@ public class SettingsGui extends GuiPage {
             return "onePerRound";
         }
         return "onePerPlayer";
+    }
+
+    private int getIndexOfTeleportMode(String value) {
+        if (Objects.equals(value, "disabled")) {
+            return 0;
+        } else if (Objects.equals(value, "amountPerTeam")) {
+            return 1;
+        } else if (Objects.equals(value, "amountPerPlayer")) {
+            return 2;
+        } else if (Objects.equals(value, "unlimited")) {
+            return 3;
+        }
+        return -1;
+    }
+
+    private String getTeleportMode(int index) {
+        if (index == 0) {
+            return "disabled";
+        } else if (index == 1) {
+            return "amountPerTeam";
+        } else if (index == 2) {
+            return "amountPerPlayer";
+        } else if (index == 3) {
+            return "unlimited";
+        }
+        return "disabled";
     }
 }
