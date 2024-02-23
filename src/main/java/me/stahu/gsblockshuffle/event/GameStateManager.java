@@ -232,7 +232,7 @@ public class GameStateManager {
      * Note: The getTeamScore method is used to retrieve the score of each team.
      */
     private void sendEndGameMessageToAllPlayers() {
-        StringBuilder endMessage = new StringBuilder("Game ended!\n " + "Final scores:");
+        StringBuilder endMessage = new StringBuilder("Game ended!\n" + " Final scores:");
 
         ArrayList<Team> sortedTeams = teamsManager.getSortedTeams();
 
@@ -380,6 +380,13 @@ public class GameStateManager {
             }
             if(!teamFoundBlock){
                 teamsManager.incrementTeamScore(team);
+            }
+        }
+        // block found message
+        for (Team t : teamsManager.teams) {
+            for(String playerName : t.getEntries()){
+                Player p = Bukkit.getPlayer(playerName);
+                plugin.sendMessage(p, p.getDisplayName() + " has found their block! " + ChatColor.GOLD + playerBlockMap.get(playerName).get(0).replace("_", " "));
             }
         }
 

@@ -5,7 +5,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
@@ -275,11 +274,8 @@ public class TeamsManager {
 
             // send message to all players in the team
             for(String playerName : getTeam(tpRequester).getEntries()){
-                OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
-                if(player.isOnline()){
-                    plugin.sendMessage((Player) player, tpRequester.getName() + ChatColor.GRAY + " has used teleport!\n" +
-                            " Your team has " + ChatColor.WHITE + (amountOfTeleports - tpsUsed) + ChatColor.GRAY +" teleports left.");
-                }
+                plugin.sendMessage(Bukkit.getPlayer(playerName), tpRequester.getName() + ChatColor.GRAY + " has used teleport!\n" +
+                        " Your team has " + ChatColor.WHITE + (amountOfTeleports - tpsUsed) + ChatColor.GRAY +" teleports left.");
             }
 
             if(tpsUsed >= amountOfTeleports){
@@ -367,6 +363,7 @@ public class TeamsManager {
 
     public void incrementTeamScore(Team team) {
         setTeamScore(team, getTeamScore(team) + 1);
+        setScoreboard();
     }
 
     public Team getTeam(String teamName) {
@@ -406,6 +403,7 @@ public class TeamsManager {
         if(objective != null){
             objective.unregister();
         }
+        teamPointsMap.clear();
     }
 
     public ArrayList<Team> getSortedTeams() {
@@ -422,7 +420,13 @@ public class TeamsManager {
         }
         return null;
     }
-
+    /**
+     * Method handling leaving a team.
+     * If the team will remain empty, the team will be removed.
+     * If the captain leaves, another player will be made the captain.
+     *
+     * @param sender The player who is leaving the team.
+     */
     public void leaveTeam(Player sender) {
         Team team = getTeam(sender);
         if (team == null) {
@@ -432,6 +436,13 @@ public class TeamsManager {
         removePlayerFromTeam(sender, team);
         if(team.getEntries().isEmpty()){
             removeTeam(team);
+        }
+        if (teamCaptains.containsKey(sender)) {
+            teamCaptains.remove(sender);
+            // make another player the captain
+            Player newCaptain = Bukkit.getPlayer(team.getEntries().iterator().next());
+            teamCaptains.put(newCaptain, team);
+            newCaptain.sendMessage("You are now the captain of " + team.getDisplayName());
         }
         sender.sendMessage(ChatColor.GREEN + "You have left your team.");
     }
