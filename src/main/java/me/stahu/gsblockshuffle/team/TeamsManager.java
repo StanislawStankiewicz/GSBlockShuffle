@@ -1,6 +1,8 @@
 package me.stahu.gsblockshuffle.team;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -102,9 +104,16 @@ public class TeamsManager {
     }
 
     public void joinTeamRequest(Player player, Team team) {
-        plugin.sendMessage(player, "You have requested to join team " + team.getDisplayName());
-        plugin.sendMessage(getTeamCaptain(team), player.getName() + " has requested to join your team. To accept type: /gsblockshuffle team accept");
         teamRequests.put(getTeamCaptain(team), player);
+        plugin.sendMessage(player, "You have requested to join team " + team.getDisplayName());
+
+        //send message to team captain about the request
+        TextComponent message = new TextComponent(player.getName() + " has requested to join your team.");
+        TextComponent accept = new TextComponent(ChatColor.GREEN +""+ ChatColor.BOLD + " [Accept]");
+        accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gsblockshuffle team accept"));
+        message.addExtra(accept);
+
+        plugin.sendMessage(getTeamCaptain(team), message);
     }
 
     // TODO rename senders and targets

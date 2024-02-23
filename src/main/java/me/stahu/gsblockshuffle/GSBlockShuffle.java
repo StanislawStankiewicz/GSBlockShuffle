@@ -8,6 +8,7 @@ import me.stahu.gsblockshuffle.gui.TeammateCompass;
 import me.stahu.gsblockshuffle.gui.page.MainMenuGui;
 import me.stahu.gsblockshuffle.settings.CategoryTree;
 import me.stahu.gsblockshuffle.team.TeamsManager;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -145,5 +146,12 @@ public final class GSBlockShuffle extends JavaPlugin {
         String prefix = "[" + ChatColor.BLUE + "BlockShuffle" + ChatColor.WHITE + "] ";
 
         player.sendMessage(prefix + message);
+    }
+
+    public void sendMessage(Player player, TextComponent message) {
+        String prefix = "[" + ChatColor.BLUE + "BlockShuffle" + ChatColor.WHITE + "] ";
+        TextComponent finalMessage = new TextComponent(prefix);
+        finalMessage.addExtra(message);
+        player.spigot().sendMessage(finalMessage);
     }
 }
