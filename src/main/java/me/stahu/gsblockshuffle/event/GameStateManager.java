@@ -378,15 +378,15 @@ public class GameStateManager {
                     break;
                 }
             }
-            if(!teamFoundBlock){
+            if (!teamFoundBlock) {
                 teamsManager.incrementTeamScore(team);
             }
         }
         // block found message
         for (Team t : teamsManager.teams) {
-            for(String playerName : t.getEntries()){
+            for (String playerName : t.getEntries()) {
                 Player p = Bukkit.getPlayer(playerName);
-                plugin.sendMessage(p, p.getDisplayName() + " has found their block! " + ChatColor.GOLD + playerBlockMap.get(playerName).get(0).replace("_", " "));
+                plugin.sendMessage(p, player.getDisplayName() + " has found their block! " + ChatColor.GOLD + playerBlockMap.get(player.getName()).get(0).replace("_", " "));
             }
         }
 
