@@ -67,7 +67,7 @@ public void parseSubcommand(CommandSender sender, Command command, String label,
         }
 
         //check if player has permission to execute the subcommand
-        if (!sender.hasPermission("GSBlockShuffle.command.team." + args[0].toLowerCase())) {
+        if (!sender.hasPermission("BlockShuffle.command.team." + args[0].toLowerCase())) {
             sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
         }
 
@@ -281,7 +281,7 @@ public void parseSubcommand(CommandSender sender, Command command, String label,
         final List<String> suggestions = new LinkedList<>();
 
         completions.forEach(cmd -> {
-            if (sender.hasPermission("GSBlockShuffle.command.team." + cmd)) {
+            if (sender.hasPermission("BlockShuffle.command.team." + cmd)) {
                 suggestions.add(cmd);
             }
         });

@@ -3,65 +3,65 @@ version: '${version}'
 main: me.stahu.gsblockshuffle.GSBlockShuffle
 api-version: '1.20'
 commands:
-  gsblockshuffle:
+  blockshuffle:
     description: BlockShuffle command
     usage: /<command>
-    aliases: [ gsbs ]
+    aliases: [ bs ]
 permissions:
-  gsblockshuffle.admin:
-    description: Allows access to the GSBlockShuffle menu
+  blockshuffle.admin:
+    description: Allows access to the BlockShuffle menu
     default: op
-  gsblockshuffle.command.*:
-    description: Allows access to all GSBlockShuffle commands
+  blockshuffle.command.*:
+    description: Allows access to all BlockShuffle commands
     default: op
-  gsblockshuffle.command.debug:
-    description: Allows access to the GSBlockShuffle debug command
+  blockshuffle.command.debug:
+    description: Allows access to the BlockShuffle debug command
     default: op
-  gsblockshuffle.command.end:
-    description: Allows access to the GSBlockShuffle end command
+  blockshuffle.command.end:
+    description: Allows access to the BlockShuffle end command
     default: op
-  gsblockshuffle.command.start:
-    description: Allows access to the GSBlockShuffle start command
+  blockshuffle.command.start:
+    description: Allows access to the BlockShuffle start command
     default: op
-  gsblockshuffle.command.team:
-    description: Allows access to the GSBlockShuffle team command
+  blockshuffle.command.team:
+    description: Allows access to the BlockShuffle team command
     default: true
-  gsblockshuffle.command.team.*:
-    description: Allows access to all GSBlockShuffle team commands
+  blockshuffle.command.team.*:
+    description: Allows access to all BlockShuffle team commands
     default: op
-  gsblockshuffle.command.team.create:
-    description: Allows access to the GSBlockShuffle team create command
+  blockshuffle.command.team.create:
+    description: Allows access to the BlockShuffle team create command
     default: true
-  gsblockshuffle.command.team.color:
-    description: Allows access to the GSBlockShuffle team color command
+  blockshuffle.command.team.color:
+    description: Allows access to the BlockShuffle team color command
     default: true
-  gsblockshuffle.command.team.add:
-    description: Allows access to the GSBlockShuffle team add command
+  blockshuffle.command.team.add:
+    description: Allows access to the BlockShuffle team add command
     default: op
-  gsblockshuffle.command.team.remove:
-    description: Allows access to the GSBlockShuffle team remove command
+  blockshuffle.command.team.remove:
+    description: Allows access to the BlockShuffle team remove command
     default: op
-  gsblockshuffle.command.team.join:
-    description: Allows access to the GSBlockShuffle team join command
+  blockshuffle.command.team.join:
+    description: Allows access to the BlockShuffle team join command
     default: true
-  gsblockshuffle.command.team.invite:
-    description: Allows access to the GSBlockShuffle team invite command
+  blockshuffle.command.team.invite:
+    description: Allows access to the BlockShuffle team invite command
     default: true
-  gsblockshuffle.command.team.accept:
-    description: Allows access to the GSBlockShuffle team accept command
+  blockshuffle.command.team.accept:
+    description: Allows access to the BlockShuffle team accept command
     default: true
-  gsblockshuffle.command.team.leave:
-    description: Allows access to the GSBlockShuffle team leave command
+  blockshuffle.command.team.leave:
+    description: Allows access to the BlockShuffle team leave command
     default: true
-  gsblockshuffle.command.team.tp:
-    description: Allows access to the GSBlockShuffle team tp command
+  blockshuffle.command.team.tp:
+    description: Allows access to the BlockShuffle team tp command
     default: true
-  gsblockshuffle.command.team.tpaccept:
-    description: Allows access to the GSBlockShuffle team tpaccept command
+  blockshuffle.command.team.tpaccept:
+    description: Allows access to the BlockShuffle team tpaccept command
     default: true
-  gsblockshuffle.command.tp:
-    description: Allows access to the GSBlockShuffle tp command
+  blockshuffle.command.tp:
+    description: Allows access to the BlockShuffle tp command
     default: true
-  gsblockshuffle.command.tpaccept:
-    description: Allows access to the GSBlockShuffle tpaccept command
+  blockshuffle.command.tpaccept:
+    description: Allows access to the BlockShuffle tpaccept command
     default: true

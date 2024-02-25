@@ -29,7 +29,7 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
     }
 
     public void parseSubcommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("gsblockshuffle.command.debug")) {
+        if (!sender.hasPermission("blockshuffle.command.debug")) {
             sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
             return;
         }

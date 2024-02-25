@@ -41,7 +41,7 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equals("gsblockshuffle")) {
+        if (command.getName().equals("blockshuffle")) {
             if (!(sender instanceof Player player)) {
                 sender.sendMessage("You cannot execute this command from console.");
                 return true;
@@ -49,7 +49,7 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
 
             if (args.length == 0) {
                 //check if player has permission to open the main menu
-                if (!player.hasPermission("gsblockshuffle.admin")) {
+                if (!player.hasPermission("blockshuffle.admin")) {
                     player.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
                     return true;
                 }
@@ -58,7 +58,7 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
             }
 
             //check if player has permission to execute the subcommand
-            if (!sender.hasPermission("GSBlockShuffle.command." + args[0].toLowerCase())) {
+            if (!sender.hasPermission("BlockShuffle.command." + args[0].toLowerCase())) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
                 return true;
             }
@@ -70,7 +70,7 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
                 case "team" -> teamSubcommand.parseSubcommand(sender, command, label, args);
                 case "tp" -> parseTp(sender, args);
                 case "tpaccept" -> teamSubcommand.teamTeleportAccept(player);
-                default -> sender.sendMessage(ChatColor.RED + "Unknown GSBlockShuffle command.");
+                default -> sender.sendMessage(ChatColor.RED + "Unknown BlockShuffle command.");
             }
         }
         return true;
