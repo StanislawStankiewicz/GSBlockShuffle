@@ -63,7 +63,7 @@ public final class GSBlockShuffle extends JavaPlugin {
 
         BlockShuffleCommand blockShuffleCommand = new BlockShuffleCommand(mainMenuGui, gameStateManager, settings, this, teamsManager);
         //register commands
-        this.getCommand("gsblockshuffle").setExecutor(blockShuffleCommand);
+        this.getCommand("blockshuffle").setExecutor(blockShuffleCommand);
     }
 
     @Override
