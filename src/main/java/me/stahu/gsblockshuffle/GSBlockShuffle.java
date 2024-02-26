@@ -71,9 +71,6 @@ public final class GSBlockShuffle extends JavaPlugin {
         BlockShuffleCommand blockShuffleCommand = new BlockShuffleCommand(mainMenuGui, gameStateManager, settings, this, teamsManager);
         //register commands
         this.getCommand("blockshuffle").setExecutor(blockShuffleCommand);
-
-//        testBlocks();
-        setPreset("race");
     }
 
     @Override
@@ -82,7 +79,7 @@ public final class GSBlockShuffle extends JavaPlugin {
         teamsManager.clearScoreboards();
         bossBarTimer.clearBossBars();
         teammateCompass.clearCompassBars();
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for(Player player : Bukkit.getOnlinePlayers()) {
             player.setDisplayName(ChatColor.RESET + player.getName() + ChatColor.RESET);
             // reset color on tab
             player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
