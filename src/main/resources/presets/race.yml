@@ -2,7 +2,7 @@
 difficulty: 0
 increaseDifficulty: true
 increaseEveryNRounds: 1 # -1 if custom
-customIncrease: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] # increase at nth round
+customIncrease: [ ] # increase at nth round
 includeLowerDifficulties: false
 includeVariants: true
 treatAllAsIndividualBlocks: false
@@ -11,10 +11,10 @@ treatAllAsIndividualBlocks: false
 roundTime: 300 #seconds
 roundBreakTime: 10 #seconds
 roundsPerGame: 1 # -1 for infinite
-blockAssignmentMode: onePerPlayer # onePerPlayer | onePerTeam | onePerRound
+blockAssignmentMode: onePerRound # onePerPlayer | onePerTeam | onePerRound
 
 #win settings
-allPlayersRequiredForTeamWin: true
+allPlayersRequiredForTeamWin: false
 eliminateAfterRound: false
 firstToWin: true # the round ends when the first player/team finds their block if true
 teamScoreIncrementPerPlayer: false # team score increments for each player who found their block if false, otherwise only 1 point is awarded to the team that found their block
@@ -29,4 +29,4 @@ amountOfTeleportsPerRound: 1
 #displaySplashWinnerMessage: false
 showTeamCompass: true
 muteSounds: false
-disablePvP: true
+disablePvP: false

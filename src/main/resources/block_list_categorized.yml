@@ -821,7 +821,6 @@ cave:
       difficulty: 2
       elements:
         - [ TUFF ]
-        - [ POLISHED_TUFF ]
     deepslate:
       isIncluded: true
       difficulty: 1
@@ -1877,10 +1876,10 @@ excluded_blocks:
   difficulty: 30
   v1.21:
     isIncluded: false
-    difficulty: 2147483647
+    difficulty: 2147483646
     base:
       isIncluded: false
-      difficulty: 2147483647 #
+      difficulty: 2147483646 #
       elements:
         - [ CRAFTER ]
         - [ TRIAL_SPAWNER ]
@@ -1920,6 +1919,7 @@ excluded_blocks:
         - [ TUFF_SLAB ]
         - [ TUFF_STAIRS ]
         - [ TUFF_WALL ]
+        - [ POLISHED_TUFF ]
         - [ CHISELED_TUFF ]
         - [ POLISHED_TUFF_SLAB ]
         - [ POLISHED_TUFF_STAIRS ]

@@ -2,6 +2,7 @@ package me.stahu.gsblockshuffle.commands;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.commands.subcommands.DebugSubcommand;
+import me.stahu.gsblockshuffle.commands.subcommands.SettingsSubcommand;
 import me.stahu.gsblockshuffle.commands.subcommands.TeamSubcommand;
 import me.stahu.gsblockshuffle.event.GameStateManager;
 import me.stahu.gsblockshuffle.gui.page.GuiPage;
@@ -26,6 +27,7 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
     private final TeamsManager teamManager;
     private final DebugSubcommand debugSubcommand;
     private final TeamSubcommand teamSubcommand;
+    private final SettingsSubcommand settingsSubcommand;
 
     public BlockShuffleCommand(GuiPage mainMenuGui, GameStateManager gameStateManager, YamlConfiguration settings, GSBlockShuffle plugin, TeamsManager teamManager) {
         this.mainMenuGui = mainMenuGui;
@@ -35,6 +37,7 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
         this.teamManager = teamManager;
         this.debugSubcommand = new DebugSubcommand(plugin, gameStateManager, teamManager, settings);
         this.teamSubcommand = new TeamSubcommand(plugin, gameStateManager, settings, teamManager);
+        this.settingsSubcommand = new SettingsSubcommand(plugin, settings);
     }
 
 
@@ -70,6 +73,7 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
                 case "team" -> teamSubcommand.parseSubcommand(sender, command, label, args);
                 case "tp" -> parseTp(sender, args);
                 case "tpaccept" -> teamSubcommand.teamTeleportAccept(player);
+                case "settings" -> settingsSubcommand.parseSubcommand(sender, command, label, args);
                 default -> sender.sendMessage(ChatColor.RED + "Unknown BlockShuffle command.");
             }
         }
@@ -104,6 +108,7 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
     private final List<String> commandsToCheck = List.of(
             "debug",
             "end",
+            "settings",
             "start",
             "team",
             "tp",
@@ -123,6 +128,7 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
         } else {
             return switch (args[0].toLowerCase()) {
                 case "debug" -> debugSubcommand.parseTabCompletions(sender, command, label, args);
+                case "settings" -> settingsSubcommand.parseTabCompletions(sender, command, label, args);
                 case "team" -> teamSubcommand.parseTabCompletions(sender, command, label, args);
                 case "tp" -> filterCompletions(playerList(), args[args.length - 1]);
                 default -> Collections.emptyList();

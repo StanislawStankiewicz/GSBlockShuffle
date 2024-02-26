@@ -21,6 +21,7 @@ public class GameStateManager {
     private int roundsRemaining;
     public int secondsInRoundBreak;
     private int secondsLeft;
+    private int currentRound = 0;
     private int roundTickTask;
     private int roundBreakTickTask;
     private int roundStartTask;
@@ -165,6 +166,28 @@ public class GameStateManager {
             endGame();
             return;
         }
+
+        currentRound++;
+
+        // handle increasing difficulty
+        if (settings.getBoolean("increaseDifficulty")) {
+            if (settings.getInt("increaseEveryNRounds") != -1){
+                if(currentRound % settings.getInt("increaseEveryNRounds") == 0){
+                    settings.set("difficulty", settings.getInt("difficulty") + 1);
+                }
+            }
+            else {
+                //custom increase
+                List<Integer> customIncrease = settings.getIntegerList("customIncrease");
+                if(customIncrease.contains(currentRound)){
+                    settings.set("difficulty", settings.getInt("difficulty") + 1);
+                }
+            }
+        }
+        for(Player player : Bukkit.getOnlinePlayers()){
+            plugin.sendMessage(player, "Difficulty: " + settings.getInt("difficulty"));
+        }
+
         roundBreak();
     }
 
@@ -363,6 +386,9 @@ public class GameStateManager {
         boolean allPlayersRequiredForTeamWin = settings.getBoolean("allPlayersRequiredForTeamWin");
         boolean teamScoreIncrementPerPlayer = settings.getBoolean("teamScoreIncrementPerPlayer");
         boolean teamFoundBlock = false;
+
+        playersWithFoundBlock.add(player);
+
         Team team = teamsManager.getTeam(player);
         playBlockFoundSound(player, true);
 
@@ -386,7 +412,7 @@ public class GameStateManager {
         for (Team t : teamsManager.teams) {
             for (String playerName : t.getEntries()) {
                 Player p = Bukkit.getPlayer(playerName);
-                plugin.sendMessage(p, player.getDisplayName() + " has found their block! " + ChatColor.GOLD + playerBlockMap.get(player.getName()).get(0).replace("_", " "));
+                plugin.sendMessage(p, player.getDisplayName() + " has found their block! (" + ChatColor.GOLD + playerBlockMap.get(player.getName()).get(0).replace("_", " ") + ChatColor.RESET + ")");
             }
         }
 
@@ -589,7 +615,6 @@ public class GameStateManager {
         for (String blockName : playerBlockMap.get(playerName)) {
             Material playerBlock = Material.getMaterial(blockName);
             if (playerBlock == playerLocation.getBlock().getType() || playerBlock == playerLocation.getBlock().getRelative(0, -1, 0).getType()) {
-                player.sendRawMessage("You are standing on the right block");
                 playerFoundBlock(player);
             }
         }
