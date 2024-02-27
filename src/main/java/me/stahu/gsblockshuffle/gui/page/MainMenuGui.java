@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
  * The main menu GUI for the Block Shuffle plugin
  */
 public class MainMenuGui extends GuiPage implements Listener {
-    private final GuiItemSlot[] slotArray = new GuiItemSlot[9];
+    private final GuiItemSlot[] slotArray = new GuiItemSlot[18];
     private final GSBlockShuffle plugin;
 
     /**
@@ -31,7 +31,7 @@ public class MainMenuGui extends GuiPage implements Listener {
      * @param plugin     the plugin
      */
     public MainMenuGui(GuiPage parentPage, YamlConfiguration settings, GSBlockShuffle plugin) {
-        super("Main Menu", 1, parentPage);
+        super("Main Menu", 2, parentPage);
         this.plugin = plugin;
         //register event
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -49,8 +49,14 @@ public class MainMenuGui extends GuiPage implements Listener {
         //create back button
         this.slotArray[8] = new NavigationButton(GuiUtils.createGuiItem(Material.BARRIER, "Back", "Go back to the previous page"), parentPage);
 
-
+        placePresetButtons(plugin.getPresetNames().toArray(new String[0]), 9);
         updateItems();
+    }
+
+    private void placePresetButtons(String[] filenames, int index){
+        for (int i=0; i < filenames.length;i++){
+            slotArray[index+i] = new PresetButton(filenames[i], plugin);
+        }
     }
 
     /**

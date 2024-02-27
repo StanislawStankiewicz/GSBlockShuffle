@@ -10,11 +10,11 @@ treatAllAsIndividualBlocks: false
 #round settings
 roundTime: 300 #seconds
 roundBreakTime: 10 #seconds
-roundsPerGame: 1 # -1 for infinite
+roundsPerGame: 10 # -1 for infinite
 blockAssignmentMode: onePerRound # onePerPlayer | onePerTeam | onePerRound
 
 #win settings
-allPlayersRequiredForTeamWin: false
+allPlayersRequiredForTeamWin: true
 eliminateAfterRound: false
 firstToWin: true # the round ends when the first player/team finds their block if true
 teamScoreIncrementPerPlayer: false # team score increments for each player who found their block if false, otherwise only 1 point is awarded to the team that found their block
@@ -29,4 +29,4 @@ amountOfTeleportsPerRound: 1
 #displaySplashWinnerMessage: false
 showTeamCompass: true
 muteSounds: false
-disablePvP: false
+disablePvP: true
