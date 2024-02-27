@@ -158,6 +158,7 @@ public class GameStateManager {
 
         roundsRemaining--;
 
+        // endGame() conditions
         if (eliminateAfterRound && teamsManager.teams.size() == 1) {
             endGame();
             return;
@@ -169,16 +170,17 @@ public class GameStateManager {
         currentRound++;
 
         // handle increasing difficulty
-        if (settings.getBoolean("increaseDifficulty")) {
+        if (settings.getBoolean("increaseDifficulty")
+                && (settings.getInt("difficulty") < Math.min(settings.getInt("difficultyCap"), 1000))) {
             if (settings.getInt("increaseEveryNRounds") != -1) {
                 if (currentRound % settings.getInt("increaseEveryNRounds") == 0) {
-                    settings.set("difficulty", settings.getInt("difficulty") + 1);
+                    incrementDifficulty();
                 }
             } else {
                 //custom increase
                 List<Integer> customIncrease = settings.getIntegerList("customIncrease");
                 if (customIncrease.contains(currentRound)) {
-                    settings.set("difficulty", settings.getInt("difficulty") + 1);
+                    incrementDifficulty();
                 }
             }
         }
@@ -187,6 +189,24 @@ public class GameStateManager {
         }
 
         roundBreak();
+    }
+    // TODO optimize
+    private void incrementDifficulty() {
+        int previousDifficulty = settings.getInt("difficulty");
+
+        settings.set("difficulty", settings.getInt("difficulty") + 1);
+
+        ArrayList<ArrayList<ArrayList<String>>> blockList = plugin.categoryTree.getBlockList(settings);
+
+        while (blockList.isEmpty()
+                && (settings.getInt("difficulty") < Math.min(settings.getInt("difficultyCap"), 1000))) {
+            settings.set("difficulty", settings.getInt("difficulty") + 1);
+            blockList = plugin.categoryTree.getBlockList(settings);
+        }
+
+        if(blockList.isEmpty()){
+            settings.set("difficulty", previousDifficulty);
+        }
     }
 
     /**
@@ -288,10 +308,8 @@ public class GameStateManager {
         String blockAssignmentMode = settings.getString("blockAssignmentMode");
         ArrayList<String> blockNames = null;
         String blockName;
-        ArrayList<String> blockAssignmentModes = new ArrayList<>();
-        blockAssignmentModes.add("onePerPlayer");
-        blockAssignmentModes.add("onePerTeam");
-        blockAssignmentModes.add("onePerRound");
+        List<String> blockAssignmentModes;
+        blockAssignmentModes = List.of("onePerPlayer", "onePerTeam", "onePerRound");
 
         if (!blockAssignmentModes.contains(blockAssignmentMode)) {
             // TODO raise error
@@ -299,63 +317,45 @@ public class GameStateManager {
             endGame();
             return;
         }
-//        if (Objects.equals(blockAssignmentMode, "onePerPlayer")) {
-//            for (Team team : teams.values()) {
-//                for (String playerName : team.getEntries()) {
-//                    blockName = plugin.categoryTree.getRandomBlock(settings);
-//                    assignBlockToPlayer(playerName, blockName);
-//                    Player player = Bukkit.getPlayer(playerName);
-//                    player.sendRawMessage("Your block is: " + blockName);
-//                }
-//            }
-//            return;
-//        }
-//
-//        if (Objects.equals(blockAssignmentMode, "onePerTeam")) {
-//            for (Team team : teams.values()) {
-//                blockName = plugin.categoryTree.getRandomBlock(settings);
-//                for (String playerName : team.getEntries()) {
-//                    assignBlockToPlayer(playerName, blockName);
-//                    Player player = Bukkit.getPlayer(playerName);
-//                    player.sendRawMessage("Your teams block is: " + blockName);
-//                }
-//            }
-//            return;
-//        }
-//
-//        if (Objects.equals(blockAssignmentMode, "onePerRound")) {
-//            blockName = plugin.categoryTree.getRandomBlock(settings);
-//            for (Team team : teams.values()) {
-//                for (String playerName : team.getEntries()) {
-//                    assignBlockToPlayer(playerName, blockName);
-//                    Player player = Bukkit.getPlayer(playerName);
-//                    player.sendRawMessage("The block is: " + blockName);
-//                }
-//            }
-//            return;
-//        }
-        // TODO test
+
+        ArrayList<ArrayList<ArrayList<String>>> blockList = plugin.categoryTree.getBlockList(settings);
+
+        System.out.println("Difficulty: " + settings.getInt("difficulty"));
+        System.out.println("Block list: " + blockList);
+
         if (Objects.equals(blockAssignmentMode, "onePerRound")) {
-            blockNames = plugin.categoryTree.getRandomBlock(settings);
+            blockNames = getRandomBlock(blockList);
         }
         for (Team team : teamsManager.teams) {
             if (Objects.equals(blockAssignmentMode, "onePerTeam")) {
-                blockNames = plugin.categoryTree.getRandomBlock(settings);
+                blockNames = getRandomBlock(blockList);
             }
             for (String playerName : team.getEntries()) {
                 if (Objects.equals(blockAssignmentMode, "onePerPlayer")) {
-                    blockNames = plugin.categoryTree.getRandomBlock(settings);
+                    blockNames = getRandomBlock(blockList);
                 }
                 assignBlockToPlayer(playerName, blockNames);
                 Player player = Bukkit.getPlayer(playerName);
                 assert blockNames != null;
                 blockName = blockNames.get(0);
                 blockName = blockName.replaceAll("_", " ");
-                // TODO capitalize first letter of each word
                 assert player != null;
                 plugin.sendMessage(player, "Your block is: " + ChatColor.GOLD + blockName);
             }
         }
+    }
+
+    public ArrayList<String> getRandomBlock(ArrayList<ArrayList<ArrayList<String>>> blockList) {
+        Random random = new Random();
+
+        if (blockList.isEmpty()) {
+            throw new IllegalArgumentException("Block list is empty");
+        }
+
+        ArrayList<ArrayList<String>> block = blockList.get(random.nextInt(blockList.size()));
+
+        // Return random variant of the block
+        return block.get(random.nextInt(block.size()));
     }
 
     /**

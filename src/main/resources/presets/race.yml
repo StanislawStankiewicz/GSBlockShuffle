@@ -1,5 +1,6 @@
 #block settings
 difficulty: 0
+difficultyCap: 10
 increaseDifficulty: true
 increaseEveryNRounds: 1 # -1 if custom
 customIncrease: [ ] # increase at nth round
