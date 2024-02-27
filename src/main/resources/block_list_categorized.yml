@@ -13,9 +13,6 @@ air:
       - [ VOID_AIR ]
       - [ CAVE_AIR ]
 
-plants:
-  isIncluded: true
-  difficulty: 0
   plants:
     isIncluded: true
     difficulty: 0
@@ -145,7 +142,6 @@ plants:
       difficulty: 2
       elements:
         - [ PINK_PETALS ]
-
   farm:
     isIncluded: true
     difficulty: 2
@@ -177,6 +173,7 @@ plants:
         elements:
           - [ ATTACHED_PUMPKIN_STEM ]
           - [ ATTACHED_MELON_STEM ]
+
 mushroom:
   isIncluded: true
   difficulty: 1
@@ -1018,14 +1015,17 @@ cave:
         block:
           isIncluded: true
           difficulty: 5
-          elements:
-            - [ AMETHYST_BLOCK ]
-            - [ BUDDING_AMETHYST ]
-            - [ SMALL_AMETHYST_BUD ]
-            - [ MEDIUM_AMETHYST_BUD ]
-            - [ LARGE_AMETHYST_BUD ]
-            - [ AMETHYST_CLUSTER ]
-            - [ CALCITE ]
+          base:
+            isIncluded: true
+            difficulty: 5
+            elements:
+              - [ AMETHYST_BLOCK ]
+              - [ BUDDING_AMETHYST ]
+              - [ SMALL_AMETHYST_BUD ]
+              - [ MEDIUM_AMETHYST_BUD ]
+              - [ LARGE_AMETHYST_BUD ]
+              - [ AMETHYST_CLUSTER ]
+              - [ CALCITE ]
         craftable:
           isIncluded: true
           difficulty: 5
@@ -1712,26 +1712,29 @@ sea:
       - [ KELP ]
       - [ KELP_PLANT ]
       - [ TALL_SEAGRASS ]
+      - [ SEA_PICKLE ]
   coral:
     isIncluded: true
     difficulty: 5
-    elements:
-      - [ TUBE_CORAL_BLOCK ]
-      - [ BRAIN_CORAL_BLOCK ]
-      - [ BUBBLE_CORAL_BLOCK ]
-      - [ FIRE_CORAL_BLOCK ]
-      - [ HORN_CORAL_BLOCK ]
-      - [ TUBE_CORAL ]
-      - [ BRAIN_CORAL ]
-      - [ BUBBLE_CORAL ]
-      - [ FIRE_CORAL ]
-      - [ HORN_CORAL ]
-      - [ TUBE_CORAL_FAN, TUBE_CORAL_WALL_FAN ]
-      - [ BRAIN_CORAL_FAN, BRAIN_CORAL_WALL_FAN ]
-      - [ BUBBLE_CORAL_FAN, BUBBLE_CORAL_WALL_FAN ]
-      - [ FIRE_CORAL_FAN, FIRE_CORAL_WALL_FAN ]
-      - [ HORN_CORAL_FAN, HORN_CORAL_WALL_FAN ]
-      - [ SEA_PICKLE ]
+    base:
+      isIncluded: true
+      difficulty: 5
+      elements:
+        - [ TUBE_CORAL_BLOCK ]
+        - [ BRAIN_CORAL_BLOCK ]
+        - [ BUBBLE_CORAL_BLOCK ]
+        - [ FIRE_CORAL_BLOCK ]
+        - [ HORN_CORAL_BLOCK ]
+        - [ TUBE_CORAL ]
+        - [ BRAIN_CORAL ]
+        - [ BUBBLE_CORAL ]
+        - [ FIRE_CORAL ]
+        - [ HORN_CORAL ]
+        - [ TUBE_CORAL_FAN, TUBE_CORAL_WALL_FAN ]
+        - [ BRAIN_CORAL_FAN, BRAIN_CORAL_WALL_FAN ]
+        - [ BUBBLE_CORAL_FAN, BUBBLE_CORAL_WALL_FAN ]
+        - [ FIRE_CORAL_FAN, FIRE_CORAL_WALL_FAN ]
+        - [ HORN_CORAL_FAN, HORN_CORAL_WALL_FAN ]
   prismarine:
     isIncluded: true
     difficulty: 4
