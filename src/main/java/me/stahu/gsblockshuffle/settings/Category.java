@@ -3,6 +3,7 @@ package me.stahu.gsblockshuffle.settings;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -30,7 +31,6 @@ public class Category {
         boolean includeLowerDifficulties = settings.getBoolean("includeLowerDifficulties");
         boolean treatAllAsIndividualBlocks = settings.getBoolean("treatAllAsIndividualBlocks");
 
-        if (!isIncluded || !checkDifficulty(settings)) {
         if (!isIncluded || !checkDifficulty(settings, true)) {
             return null;
         }
@@ -167,6 +167,22 @@ public class Category {
             return this.difficulty <= gameDifficulty;
         }
         return this.difficulty == gameDifficulty;
+    }
+
+    public Collection<String> getAllBlocks() {
+        ArrayList<String> blocks = new ArrayList<>();
+
+        if (elements != null) {
+            for (ArrayList<String> element : elements) {
+                blocks.addAll(element);
+            }
+        } else {
+            for (Category subcategory : subCategories) {
+                blocks.addAll(subcategory.getAllBlocks());
+            }
+        }
+
+        return blocks;
     }
 }
 

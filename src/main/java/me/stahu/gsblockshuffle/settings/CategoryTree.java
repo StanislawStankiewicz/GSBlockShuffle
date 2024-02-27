@@ -77,7 +77,9 @@ public class CategoryTree {
             e.printStackTrace();
         }
     }
-
+    /*
+    * Returns a list of blocks that are included and match the difficulty setting
+     */
     public ArrayList<ArrayList<ArrayList<String>>> getBlockList(YamlConfiguration settings) {
         ArrayList<ArrayList<ArrayList<String>>> blocks = new ArrayList<>();
 
@@ -88,6 +90,16 @@ public class CategoryTree {
                     blocks.addAll(blockList);
                 }
             }
+        }
+
+        return blocks;
+    }
+
+    public ArrayList<String> getAllBlocks() {
+        ArrayList<String> blocks = new ArrayList<>();
+
+        for (Category category : categories) {
+            blocks.addAll(category.getAllBlocks());
         }
 
         return blocks;
