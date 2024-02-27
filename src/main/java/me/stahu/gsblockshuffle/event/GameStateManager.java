@@ -161,8 +161,7 @@ public class GameStateManager {
         if (eliminateAfterRound && teamsManager.teams.size() == 1) {
             endGame();
             return;
-        }
-        if (roundsRemaining == 0) {
+        } else if (roundsRemaining == 0) {
             endGame();
             return;
         }
@@ -171,20 +170,19 @@ public class GameStateManager {
 
         // handle increasing difficulty
         if (settings.getBoolean("increaseDifficulty")) {
-            if (settings.getInt("increaseEveryNRounds") != -1){
-                if(currentRound % settings.getInt("increaseEveryNRounds") == 0){
+            if (settings.getInt("increaseEveryNRounds") != -1) {
+                if (currentRound % settings.getInt("increaseEveryNRounds") == 0) {
                     settings.set("difficulty", settings.getInt("difficulty") + 1);
                 }
-            }
-            else {
+            } else {
                 //custom increase
                 List<Integer> customIncrease = settings.getIntegerList("customIncrease");
-                if(customIncrease.contains(currentRound)){
+                if (customIncrease.contains(currentRound)) {
                     settings.set("difficulty", settings.getInt("difficulty") + 1);
                 }
             }
         }
-        for(Player player : Bukkit.getOnlinePlayers()){
+        for (Player player : Bukkit.getOnlinePlayers()) {
             plugin.sendMessage(player, "Difficulty: " + settings.getInt("difficulty"));
         }
 
@@ -241,11 +239,10 @@ public class GameStateManager {
 
         //remove compass
         plugin.teammateCompass.clearCompassBars();
-
         bossBarTimer.clearBossBars();
         teamsManager.clearScoreboards();
 
-        setGameState(0);
+        this.gameState = 0;
     }
 
     /**
@@ -387,8 +384,6 @@ public class GameStateManager {
         boolean teamScoreIncrementPerPlayer = settings.getBoolean("teamScoreIncrementPerPlayer");
         boolean teamFoundBlock = false;
 
-        playersWithFoundBlock.add(player);
-
         Team team = teamsManager.getTeam(player);
         playBlockFoundSound(player, true);
 
@@ -408,11 +403,15 @@ public class GameStateManager {
                 teamsManager.incrementTeamScore(team);
             }
         }
+
+        playersWithFoundBlock.add(player);
+
         // block found message
         for (Team t : teamsManager.teams) {
             for (String playerName : t.getEntries()) {
                 Player p = Bukkit.getPlayer(playerName);
-                plugin.sendMessage(p, player.getDisplayName() + " has found their block! (" + ChatColor.GOLD + playerBlockMap.get(player.getName()).get(0).replace("_", " ") + ChatColor.RESET + ")");
+                plugin.sendMessage(p, player.getDisplayName() + " has found their block! (" + ChatColor.GOLD
+                        + playerBlockMap.get(player.getName()).get(0).replace("_", " ") + ChatColor.RESET + ")");
             }
         }
 
@@ -465,7 +464,6 @@ public class GameStateManager {
             eliminatedTeam.unregister();
         }
     }
-
 
 
     /**

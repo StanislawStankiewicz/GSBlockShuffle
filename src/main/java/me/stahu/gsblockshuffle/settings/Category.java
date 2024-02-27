@@ -27,9 +27,11 @@ public class Category {
     // TODO refine code
     public ArrayList<ArrayList<ArrayList<String>>> getBlockSet(YamlConfiguration settings) {
         ArrayList<ArrayList<ArrayList<String>>> blocks = new ArrayList<>();
+        boolean includeLowerDifficulties = settings.getBoolean("includeLowerDifficulties");
         boolean treatAllAsIndividualBlocks = settings.getBoolean("treatAllAsIndividualBlocks");
 
         if (!isIncluded || !checkDifficulty(settings)) {
+        if (!isIncluded || !checkDifficulty(settings, true)) {
             return null;
         }
 
@@ -48,42 +50,37 @@ public class Category {
                     }
                 }
             }
+            return blocks;
         }
         // Group blocks into packs like variants of wool, conrete, etc.
-        else {
-            if (elements != null) {
-                blocks.add(elements);
-            }
-            // Handle variants
-            if (subCategories != null) {
-                // This pack is used to group all "base" and "variant" subcategories to a group that will be treated as a single block
-                ArrayList<ArrayList<String>> pack = new ArrayList<>();
-                for (Category subcategory : subCategories) {
-                    // Only add "base" and "variant" subcategories + check difficulty and isIncluded
-                    if ((subcategory.name.equals("base") || subcategory.name.equals("variant")) && subcategory.isIncluded && subcategory.checkDifficulty(settings)) {
-                        pack.addAll(subcategory.elements);
-                    } else {
-                        ArrayList<ArrayList<ArrayList<String>>> blockSet = subcategory.getBlockSet(settings);
-                        if (blockSet != null) {
-                            blocks.addAll(blockSet);
-                        }
-                        //
-                        if (subcategory.elements != null && subcategory.isIncluded && subcategory.checkDifficulty(settings)) {
-                            for (ArrayList<String> element : subcategory.elements) {
-                                ArrayList<ArrayList<String>> wrap = new ArrayList<>();
-                                wrap.add(element);
-                                blocks.add(wrap);
-                            }
+        // Handle variants
+        if (subCategories != null) {
+            // This pack is used to group all "base" and "variant" subcategories to a group that will be treated as a single block
+            ArrayList<ArrayList<String>> pack = new ArrayList<>();
+            for (Category subcategory : subCategories) {
+                // Only add "base" and "variant" subcategories + check difficulty and isIncluded
+                if ((subcategory.name.equals("base") || subcategory.name.equals("variant")) && subcategory.isIncluded
+                        && subcategory.checkDifficulty(settings, includeLowerDifficulties)) {
+                    pack.addAll(subcategory.elements);
+                } else {
+                    ArrayList<ArrayList<ArrayList<String>>> blockSet = subcategory.getBlockSet(settings);
+                    if (blockSet != null) {
+                        blocks.addAll(blockSet);
+                    }
+                    if (subcategory.elements != null && subcategory.isIncluded
+                            && subcategory.checkDifficulty(settings, includeLowerDifficulties)) {
+                        for (ArrayList<String> element : subcategory.elements) {
+                            ArrayList<ArrayList<String>> wrap = new ArrayList<>();
+                            wrap.add(element);
+                            blocks.add(wrap);
                         }
                     }
                 }
-                if (!pack.isEmpty()) {
-                    blocks.add(pack);
-                }
+            }
+            if (!pack.isEmpty()) {
+                blocks.add(pack);
             }
         }
-
-
         return blocks;
     }
 
@@ -159,8 +156,7 @@ public class Category {
         this.isIncluded = included;
     }
 
-    private boolean checkDifficulty(YamlConfiguration settings) {
-        boolean includeLowerDifficulties = settings.getBoolean("includeLowerDifficulties");
+    private boolean checkDifficulty(YamlConfiguration settings, boolean includeLowerDifficulties) {
         int gameDifficulty = settings.getInt("difficulty");
 
         if (gameDifficulty == -1) {
