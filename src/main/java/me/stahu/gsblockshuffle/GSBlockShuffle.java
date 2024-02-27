@@ -11,12 +11,13 @@ import me.stahu.gsblockshuffle.team.TeamsManager;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.ArrayList;
@@ -220,36 +221,6 @@ public final class GSBlockShuffle extends JavaPlugin {
         TextComponent finalMessage = new TextComponent(prefix);
         finalMessage.addExtra(message);
         player.spigot().sendMessage(finalMessage);
-    }
-
-    //check for duplicates and missing blocks
-    private void testBlocks() {
-        ArrayList<String> materials = new ArrayList<>();
-        for (Material material : Material.values()) {
-            if (material.isBlock()) {
-                materials.add(material.name());
-            }
-        }
-        ArrayList<String> ourMaterials = categoryTree.getAllBlocks();
-
-        for (String material : ourMaterials) {
-            if (!materials.contains(material)) {
-                System.out.println("Extra block: " + material);
-            }
-        }
-        for (String material : materials) {
-            if (!ourMaterials.contains(material)) {
-                System.out.println("Missing block: " + material);
-            }
-        }
-        // check for doubles
-        for (int i = 0; i < ourMaterials.size(); i++) {
-            for (int j = i + 1; j < ourMaterials.size(); j++) {
-                if (ourMaterials.get(i).equals(ourMaterials.get(j))) {
-                    System.out.println("Duplicate block: " + ourMaterials.get(i));
-                }
-            }
-        }
     }
 
     /**
