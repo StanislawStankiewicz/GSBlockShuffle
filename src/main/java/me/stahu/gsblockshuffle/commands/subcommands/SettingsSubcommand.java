@@ -29,7 +29,7 @@ public class SettingsSubcommand extends CommandBase implements Subcommand {
             return;
         }
 
-        switch (args[1].toLowerCase()) {
+        switch (args[1]) {
             case "save" -> plugin.saveConfiguration();
             case "load" -> plugin.loadConfiguration();
             case "preset" -> preset(sender, args);
@@ -64,11 +64,9 @@ public class SettingsSubcommand extends CommandBase implements Subcommand {
             return filterCompletions(completions, args[1]);
         }
 
-        switch (args[1].toLowerCase()) {
-            case "preset" -> {
-                if (args.length == 3) {
-                    return filterCompletions(plugin.getPresetNames(), args[2]);
-                }
+        if (args[1].equals("preset")) {
+            if (args.length == 3) {
+                return filterCompletions(plugin.getPresetNames(), args[2]);
             }
         }
 

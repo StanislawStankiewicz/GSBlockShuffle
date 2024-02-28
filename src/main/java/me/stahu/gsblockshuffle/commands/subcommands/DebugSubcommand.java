@@ -44,7 +44,7 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
             return;
         }
 
-        switch (args[1].toLowerCase()) {
+        switch (args[1]) {
             case "startgame" -> startGame(sender);
             case "newround" -> newRound(sender);
             case "endround" -> endRound(sender);
@@ -150,7 +150,7 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
         }
 
         List<String> settingKeysList = settings.getKeys(false).stream().toList();
-        switch (args[1].toLowerCase()) {
+        switch (args[1]) {
             case "get", "set" -> {
                 if (args.length == 3) {
                     return filterCompletions(settingKeysList, args[2]);

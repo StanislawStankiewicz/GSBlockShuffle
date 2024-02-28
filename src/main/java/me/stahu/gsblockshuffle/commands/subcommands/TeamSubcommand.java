@@ -2,13 +2,11 @@ package me.stahu.gsblockshuffle.commands.subcommands;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.commands.CommandBase;
-import me.stahu.gsblockshuffle.event.GameStateManager;
 import me.stahu.gsblockshuffle.team.TeamsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 
@@ -16,15 +14,11 @@ import java.util.*;
 
 public class TeamSubcommand extends CommandBase implements Subcommand {
     private final GSBlockShuffle plugin;
-    private final GameStateManager gameStateManager;
-    private final YamlConfiguration settings;
     private final TeamsManager teamManager;
     private final Map<String, ChatColor> stringToColorMap = new HashMap<>();
 
-    public TeamSubcommand(GSBlockShuffle plugin, GameStateManager gameStateManager, YamlConfiguration settings, TeamsManager teamManager) {
+    public TeamSubcommand(GSBlockShuffle plugin, TeamsManager teamManager) {
         this.plugin = plugin;
-        this.gameStateManager = gameStateManager;
-        this.settings = settings;
         this.teamManager = teamManager;
 
         stringToColorMap.put("dark_red", ChatColor.DARK_RED);
@@ -67,19 +61,20 @@ public void parseSubcommand(CommandSender sender, Command command, String label,
         }
 
         //check if player has permission to execute the subcommand
-        if (!sender.hasPermission("BlockShuffle.command.team." + args[0].toLowerCase())) {
+        if (!sender.hasPermission("BlockShuffle.command.team." + args[0])) {
             sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
         }
 
-        switch (args[1].toLowerCase()) {
-            case "create" -> createTeam(sender, args);
-            case "color" -> changeTeamColor(sender, args);
+        switch (args[1]) {
+            // keep alphabetical order
+            case "accept" -> teamAccept(sender);
             case "add" -> teamAdd(sender, args);
-            case "remove" -> teamRemove(sender, args);
-            case "join" -> joinTeamRequest(sender, args);
+            case "color" -> changeTeamColor(sender, args);
+            case "create" -> createTeam(sender, args);
             case "invite" -> teamInviteRequest(sender, args);
-            case "accept" -> teamAccept(sender, args);
+            case "join" -> joinTeamRequest(sender, args);
             case "leave" -> leaveTeam(sender);
+            case "remove" -> teamRemove(sender, args);
             case "tp" -> teamTeleportRequest(sender, args);
             case "tpaccept" -> teamTeleportAccept(sender);
         }
@@ -156,6 +151,7 @@ public void parseSubcommand(CommandSender sender, Command command, String label,
         sender.sendMessage(ChatColor.GREEN + "Team " + ChatColor.DARK_AQUA + team.getDisplayName() + ChatColor.GREEN + " has been successfully removed.");
         for(String playerName : team.getEntries()){
             Player player = Bukkit.getPlayer(playerName);
+            assert player != null;
             plugin.sendMessage(player, "Your team has been removed.");
         }
         teamManager.removeTeam(team);
@@ -194,9 +190,8 @@ public void parseSubcommand(CommandSender sender, Command command, String label,
      * This method is used to handle the acceptance of team invitations or join requests.
      *
      * @param sender The sender of the command, usually a player.
-     * @param args The arguments provided with the command.
      */
-    private void teamAccept(CommandSender sender, String[] args) {
+    private void teamAccept(CommandSender sender) {
         if (teamManager.teamCaptains.containsKey((Player) sender)) {
             if (!teamManager.joinTeamRequestAccept((Player) sender)) {
                 sender.sendMessage(ChatColor.RED + "You do not have any pending team requests.");
@@ -205,7 +200,7 @@ public void parseSubcommand(CommandSender sender, Command command, String label,
             return;
         }
         // accept invite
-        // sender should have no team
+        // sender should have no team if this method was called
         if (!teamManager.teamInviteRequestAccept((Player) sender)) {
             sender.sendMessage(ChatColor.RED + "You do not have any pending team invites.");
         }
@@ -249,9 +244,9 @@ public void parseSubcommand(CommandSender sender, Command command, String label,
         System.out.println(filterCompletions(teamManager.teams.stream().map(Team::getName).toList(), args[2]));
         System.out.println(filterCompletions(playerList(), args[2]));
         if(args.length == 3){
-            switch(args[1].toLowerCase()){
+            switch(args[1]){
                 case "add", "invite", "tp" -> {
-                    return filterCompletions(playerList(), args[2].toLowerCase());
+                    return filterCompletions(playerList(), args[2]);
                 }
                 case "join", "remove" -> {
                     return filterCompletions(teamManager.teams.stream().map(Team::getName).toList(), args[2]);

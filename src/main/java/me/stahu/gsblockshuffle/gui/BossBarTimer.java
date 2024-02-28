@@ -9,9 +9,8 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 public class BossBarTimer {
-    private TeamsManager teamsManager;
+    private final TeamsManager teamsManager;
     private BossBar bossBar;
-
 
     public BossBarTimer(TeamsManager teamsManager) {
         this.teamsManager = teamsManager;
@@ -36,9 +35,9 @@ public class BossBarTimer {
     }
     /**
      * Updates the boss bar's progress, color, and title based on the remaining time in the round.
-     * The progress of the boss bar is set to the provided progress value.
-     * The color of the boss bar changes from green to red as the time decreases.
-     * The title of the boss bar displays the remaining time in seconds.
+     * The progress is set to the provided progress value.
+     * The color changes from green to red as the time decreases.
+     * The title displays the remaining time in seconds.
      *
      * @param progress The progress of the boss bar, represented as a double value between 0 and 1.
      */
@@ -63,14 +62,11 @@ public class BossBarTimer {
             bossBar.setColor(BarColor.GREEN);
         }
         this.bossBar.setProgress(progress);
-        this.bossBar.setTitle(ChatColor.WHITE + "Time left: "+ timerColor + String.format("%02d", secondsLeft / 60) + ChatColor.WHITE + ":" + timerColor + String.format("%02d", secondsLeft % 60));
+        this.bossBar.setTitle(ChatColor.WHITE + "Time left: " + timerColor + String.format("%02d", secondsLeft / 60) + ChatColor.WHITE + ":" + timerColor + String.format("%02d", secondsLeft % 60));
     }
-
     /**
      * Updates the boss bar during the break between rounds.
      * The progress of the boss bar is set to the provided progress value.
-     * The color of the boss bar is set to blue.
-     * The title of the boss bar is set to display the time left until the new block is assigned.
      *
      * @param progress The progress of the boss bar, represented as a double value between 0 and 1.
      */

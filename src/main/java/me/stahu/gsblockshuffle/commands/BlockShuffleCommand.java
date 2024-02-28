@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -22,9 +23,6 @@ import java.util.List;
 public class BlockShuffleCommand extends CommandBase implements CommandExecutor, TabCompleter {
     private final GuiPage mainMenuGui;
     private final GameStateManager gameStateManager;
-    private final YamlConfiguration settings;
-    private final GSBlockShuffle plugin;
-    private final TeamsManager teamManager;
     private final DebugSubcommand debugSubcommand;
     private final TeamSubcommand teamSubcommand;
     private final SettingsSubcommand settingsSubcommand;
@@ -32,18 +30,14 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
     public BlockShuffleCommand(GuiPage mainMenuGui, GameStateManager gameStateManager, YamlConfiguration settings, GSBlockShuffle plugin, TeamsManager teamManager) {
         this.mainMenuGui = mainMenuGui;
         this.gameStateManager = gameStateManager;
-        this.settings = settings;
-        this.plugin = plugin;
-        this.teamManager = teamManager;
         this.debugSubcommand = new DebugSubcommand(plugin, gameStateManager, teamManager, settings);
-        this.teamSubcommand = new TeamSubcommand(plugin, gameStateManager, settings, teamManager);
+        this.teamSubcommand = new TeamSubcommand(plugin, teamManager);
         this.settingsSubcommand = new SettingsSubcommand(plugin, settings);
     }
 
 
-
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (command.getName().equals("blockshuffle")) {
             if (!(sender instanceof Player player)) {
                 sender.sendMessage("You cannot execute this command from console.");
@@ -60,13 +54,17 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
                 return true;
             }
 
+            for (int i = 0; i < args.length; i++) {
+                args[i] = args[i].toLowerCase();
+            }
+
             //check if player has permission to execute the subcommand
-            if (!sender.hasPermission("BlockShuffle.command." + args[0].toLowerCase())) {
+            if (!sender.hasPermission("BlockShuffle.command." + args[0])) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
                 return true;
             }
             //execute subcommand
-            switch (args[0].toLowerCase()) {
+            switch (args[0]) {
                 case "debug" -> debugSubcommand.parseSubcommand(sender, command, label, args);
                 case "end" -> endGame(player);
                 case "start" -> startGame(player);
@@ -94,15 +92,24 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
         }
     }
 
-    // /gsbs tp <team> <player>
-    private void teamTeleportRequest(CommandSender sender, String[] args) {
-        // insert "team" subcommand to ensure correct indexes
+    /**
+     * This method is used to parse the teleport command by masking it as "/gsbs team tp"
+     * and return the tab completions for it.
+     *
+     * @param sender The sender of the command, usually a player.
+     * @param args   The arguments provided with the command.
+     */
+    private void parseTp(CommandSender sender, String[] args) {
+        if (args.length == 1) {
+            sender.sendMessage(ChatColor.RED + "You must specify a player to teleport to.");
+            return;
+        }
+
         String[] newArgs = new String[args.length + 1];
         newArgs[0] = "team";
         newArgs[1] = args[0];
         newArgs[2] = args[1];
-        System.out.println("newArgs: " + newArgs[0] + " " + newArgs[1] + " " + newArgs[2]);
-        teamSubcommand.teamTeleportRequest(sender, newArgs);
+        teamSubcommand.parseSubcommand(sender, null, null, newArgs);
     }
 
     private final List<String> commandsToCheck = List.of(
@@ -113,8 +120,13 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
             "team",
             "tp",
             "tpaccept");
+
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        for (int i = 0; i < args.length; i++) {
+            args[i] = args[i].toLowerCase();
+        }
+
         if (args.length == 1) {
             final List<String> suggestions = new LinkedList<>();
 
@@ -126,7 +138,7 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
 
             return filterCompletions(suggestions, args[0]);
         } else {
-            return switch (args[0].toLowerCase()) {
+            return switch (args[0]) {
                 case "debug" -> debugSubcommand.parseTabCompletions(sender, command, label, args);
                 case "settings" -> settingsSubcommand.parseTabCompletions(sender, command, label, args);
                 case "team" -> teamSubcommand.parseTabCompletions(sender, command, label, args);
@@ -134,20 +146,5 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
                 default -> Collections.emptyList();
             };
         }
-    }
-
-    /**
-     * This method is used to parse the teleport command by masking it as "/gsbs team tp"
-     * and return the tab completions for it.
-     *
-     * @param sender The sender of the command, usually a player.
-     * @param args   The arguments provided with the command.
-     * @return A list of strings representing the possible completions for the teleport command.
-     */
-    private List<String> parseTp(CommandSender sender, String[] args) {
-        String[] newArgs = new String[args.length + 1];
-        newArgs[0] = "team";
-        newArgs[1] = args[0];
-        return teamSubcommand.parseTabCompletions(sender, null, null, newArgs);
     }
 }
