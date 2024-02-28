@@ -12,7 +12,7 @@ import org.bukkit.scoreboard.*;
 import java.util.*;
 
 public class TeamsManager {
-    public final HashSet<Team> teams= new HashSet<>();
+    public final HashSet<Team> teams = new HashSet<>();
     public final HashMap<Player, Team> teamCaptains = new HashMap<>();
     /**
      * A HashMap that stores team join requests in the game.
@@ -24,7 +24,6 @@ public class TeamsManager {
      * The key is the player (Player) who sent the request, and the value is the player who received the request.
      */
     public final HashMap<Player, Player> teleportRequests = new HashMap<>();
-    private final ScoreboardManager scoreboardManager;
     private final Scoreboard scoreboard;
     private final YamlConfiguration settings;
     private final GSBlockShuffle plugin;
@@ -37,16 +36,16 @@ public class TeamsManager {
      */
     public final Set<Player> playerTpUsed = new HashSet<>();
     /**
-    * A HashMap that stores the amount of times a player or a team has teleported.
+     * A HashMap that stores the amount of times a player or a team has teleported.
      */
     private final HashMap<Object, Integer> tpUsageCounter = new HashMap<>();
     private final HashMap<Team, Integer> teamPointsMap = new HashMap<>();
     private boolean showScoreboard = false;
-    private Map<String, Team> playersThatLeft = new HashMap<>();
+    private final Map<String, Team> playersThatLeft = new HashMap<>();
 
     public void setShowScoreboard(boolean showScoreboard) {
         this.showScoreboard = showScoreboard;
-        if(showScoreboard){
+        if (showScoreboard) {
             showScoreboard();
         } else {
             hideScoreboard();
@@ -54,7 +53,7 @@ public class TeamsManager {
     }
 
     public TeamsManager(YamlConfiguration settings, GSBlockShuffle plugin) {
-        this.scoreboardManager = Bukkit.getScoreboardManager();
+        ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
         assert scoreboardManager != null;
         this.scoreboard = scoreboardManager.getNewScoreboard();
         this.settings = settings;
@@ -92,9 +91,9 @@ public class TeamsManager {
     }
 
     public void addPlayerToTeam(Player player, Team team, boolean messagePlayer) {
-        if(team.getEntries().isEmpty()) {
+        if (team.getEntries().isEmpty()) {
             teamCaptains.put(player, team);
-            if(messagePlayer){
+            if (messagePlayer) {
                 plugin.sendMessage(player, "You are the captain of team " + team.getDisplayName());
             }
         }
@@ -108,17 +107,16 @@ public class TeamsManager {
 
         //send message to team captain about the request
         TextComponent message = new TextComponent(player.getName() + " has requested to join your team.");
-        TextComponent accept = new TextComponent(ChatColor.GREEN +""+ ChatColor.BOLD + " [Accept]");
+        TextComponent accept = new TextComponent(ChatColor.GREEN + "" + ChatColor.BOLD + " [Accept]");
         accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gsblockshuffle team accept"));
         message.addExtra(accept);
 
         plugin.sendMessage(getTeamCaptain(team), message);
     }
 
-    // TODO rename senders and targets
-    public boolean joinTeamRequestAccept(Player captain){
+    public boolean joinTeamRequestAccept(Player captain) {
         Player player = teamRequests.get(captain);
-        if(player == null || teamCaptains.get(captain) == null){
+        if (player == null || teamCaptains.get(captain) == null) {
             return false;
         }
         Team team = teamCaptains.get(captain);
@@ -130,49 +128,55 @@ public class TeamsManager {
 
         return true;
     }
+
     /**
-     * Sends a team invite from the sender (captain) to the target player.
-     * If the target player is already in a team or the sender is not a team captain, the method returns false.
+     * Sends a team invite from the senderCaptain (captain) to the targetPlayer player.
+     * If the targetPlayer player is already in a team or the senderCaptain is not a team captain, the method returns false.
      * If the invite is successfully sent, the method returns true.
      *
-     * @param sender The player who is sending the invite.
-     * @param target The player who is receiving the invite.
+     * @param senderCaptain The player who is sending the invite.
+     * @param targetPlayer  The player who is receiving the invite.
      * @return boolean Returns true if the invite is successfully sent, false otherwise.
      */
-    public boolean teamInviteRequest(Player sender, Player target) {
-        if (getTeam(target) != null){
+    public boolean teamInviteRequest(Player senderCaptain, Player targetPlayer) {
+        if (getTeam(targetPlayer) != null) {
             return false;
         }
-        if(!teamCaptains.containsKey(sender)){
+        if (!teamCaptains.containsKey(senderCaptain)) {
             return false;
         }
-        plugin.sendMessage(sender, "You have invited " + target.getName() + " to your team.");
-        plugin.sendMessage(target, "You have received an invite from " + sender.getName() + " to join their team. To accept type: /gsblockshuffle team accept");
-        teamRequests.put(target, sender);
+        plugin.sendMessage(senderCaptain, "You have invited " + targetPlayer.getName() + " to your team.");
+
+        TextComponent message = new TextComponent("You have received an invite from " + senderCaptain.getName() + " to join their team.");
+        TextComponent accept = new TextComponent(ChatColor.GREEN + "" + ChatColor.BOLD + " [Accept]");
+        accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gsblockshuffle team accept"));
+        message.addExtra(accept);
+
+        plugin.sendMessage(targetPlayer, message);
+        teamRequests.put(targetPlayer, senderCaptain);
         return true;
     }
 
     /**
-     * Accepts a pending team invite for the sender (player).
-     * If the sender does not have any pending team invites, the method returns false.
-     * If the invite is successfully accepted, the sender is added to the team and the invite is removed from the pending invites.
+     * Accepts a pending team invite for the senderPlayer (player).
+     * If the senderPlayer does not have any pending team invites, the method returns false.
+     * If the invite is successfully accepted, the senderPlayer is added to the team, and the invite is removed from the pending invites.
      *
-     * @param sender The player who is accepting the invite.
+     * @param senderPlayer The player who is accepting the invite.
      * @return boolean Returns true if the invite is successfully accepted, false otherwise.
      */
-    public boolean teamInviteRequestAccept(Player sender) {
-        if (teamRequests.containsKey(sender)) {
-            Player captain = teamRequests.get(sender);
+    public boolean teamInviteRequestAccept(Player senderPlayer) {
+        if (teamRequests.containsKey(senderPlayer)) {
+            Player captain = teamRequests.get(senderPlayer);
             Team team = getTeam(captain);
-            addPlayerToTeam(sender, team, true);
-            teamRequests.remove(sender);
-            plugin.sendMessage(sender, "You have been added to team " + team.getDisplayName());
+            addPlayerToTeam(senderPlayer, team, true);
+            teamRequests.remove(senderPlayer);
+            plugin.sendMessage(senderPlayer, "You have been added to team " + team.getDisplayName());
             return true;
         }
         return false;
     }
 
-    // TODO refactor the return value
     /**
      * This method handles the teleport request between two players in the same team.
      * The tpRequester is the player who initiates the teleport request, and the tpTarget is the player who receives the request.
@@ -180,52 +184,57 @@ public class TeamsManager {
      * If the teleport request is successfully sent, the method will return true.
      *
      * @param tpRequester The player who is sending the teleport request.
-     * @param tpTarget The player who is receiving the teleport request.
-     * @return boolean Returns true if the teleport request is successfully sent, false otherwise.
+     * @param tpTarget    The player who is receiving the teleport request.
+     * @return boolean – True if the teleport returns true if the request passed or an error message was sent to a player, false otherwise.
      */
-    public boolean teamTeleportRequest(Player tpRequester, Player tpTarget){
+    public boolean teamTeleportRequest(Player tpRequester, Player tpTarget) {
         Team senderTeam = getTeam(tpRequester);
         Team targetTeam = getTeam(tpTarget);
 
-        String teleportMode = settings.getString("teleportMode").toLowerCase();
+        String teleportMode = settings.getString("teleportMode");
 
         boolean teleportModeDisabled = Objects.equals(teleportMode, "disabled");
         boolean requesterAndTargetAreTheSame = tpRequester == tpTarget;
         boolean eitherTeamIsNull = senderTeam == null || targetTeam == null;
 
-        if(teleportModeDisabled) {
+        if (teleportModeDisabled) {
             tpRequester.sendMessage(ChatColor.RED + "Teleporting is disabled.");
             return true;
         }
-
-        if(requesterAndTargetAreTheSame){
+        if (requesterAndTargetAreTheSame) {
             tpRequester.sendMessage(ChatColor.RED + "You cannot teleport to yourself.");
             return true;
         }
-
-        if(eitherTeamIsNull){
+        if (eitherTeamIsNull) {
             tpRequester.sendMessage(ChatColor.RED + "You or the target are not in a team.");
             return true;
         }
 
-        if(Objects.equals(teleportMode, "amountperteam")){
+        if (Objects.equals(teleportMode, "amountPerTeam")) {
             // if team used up their teleports cancel the tp
-            if(teamTpUsed.contains(getTeam(tpRequester))){
+            if (teamTpUsed.contains(getTeam(tpRequester))) {
                 tpRequester.sendMessage(ChatColor.RED + "Your team has 0 teleports left.");
                 return true;
             }
         }
-        if(Objects.equals(teleportMode, "amountperplayer")){
+        if (Objects.equals(teleportMode, "amountPerPlayer")) {
             // if team used up their teleports cancel the tp
-            if(teamTpUsed.contains(getTeam(tpRequester))){
+            if (playerTpUsed.contains(tpRequester)) {
                 tpRequester.sendMessage(ChatColor.RED + "You have 0 teleports left.");
                 return true;
             }
         }
 
-        if(senderTeam.equals(targetTeam)){
+        if (senderTeam.equals(targetTeam)) {
             tpRequester.sendMessage(ChatColor.GREEN + "Teleport request sent to: " + tpTarget.getName());
-            tpTarget.sendMessage( ChatColor.GREEN + "You have received a teleport request from: " + tpRequester.getName() + ". Type /gsblockshuffle tpaccept to accept.");
+
+            TextComponent message = new TextComponent("You have received a teleport request from: " + tpRequester.getName());
+            TextComponent accept = new TextComponent(ChatColor.GREEN + "" + ChatColor.BOLD + " [Accept]");
+            accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gsblockshuffle tpaccept"));
+            message.addExtra(accept);
+
+            plugin.sendMessage(tpTarget, message);
+
             teleportRequests.put(tpTarget, tpRequester);
             return true;
         }
@@ -241,30 +250,34 @@ public class TeamsManager {
      * @param tpTarget The player who is accepting the teleport request.
      * @return boolean Returns true if the teleport request is successfully accepted, false otherwise.
      */
-    public boolean teamTeleportAccept(Player tpTarget){
+    public boolean teamTeleportAccept(Player tpTarget) {
         if (teleportRequests.containsKey(tpTarget)) {
             Player tpRequester = teleportRequests.get(tpTarget);
-            tpTarget.sendMessage(ChatColor.GREEN + "Teleport request accepted.");
-            tpRequester.sendMessage(ChatColor.GREEN + "Teleport request accepted.");
+
+            String message = ChatColor.GREEN + "Teleport request accepted.";
+
+            tpTarget.sendMessage(message);
+            tpRequester.sendMessage(message);
+
             handleTeamTeleport(tpRequester, tpTarget);
             teleportRequests.remove(tpTarget);
+
             return true;
         }
         return false;
     }
 
-    // TODO manage error messages and manage duplicated code
-    public void handleTeamTeleport(Player tpRequester, Player tpTarget){
-        String teleportMode = settings.getString("teleportMode").toLowerCase();
+    public void handleTeamTeleport(Player tpRequester, Player tpTarget) {
+        String teleportMode = settings.getString("teleportMode");
         int amountOfTeleports = settings.getInt("amountOfTeleports");
 
-        if(Objects.equals(teleportMode, "disabled")){
+        if (Objects.equals(teleportMode, "disabled")) {
             return;
         }
-        if(Objects.equals(teleportMode, "amountperteam")){
+        if (Objects.equals(teleportMode, "amountPerTeam")) {
             tpRequester.teleport(tpTarget);
             // if team not already in usage counter - add it
-            if(!tpUsageCounter.containsKey(getTeam(tpRequester))){
+            if (!tpUsageCounter.containsKey(getTeam(tpRequester))) {
                 tpUsageCounter.put(getTeam(tpRequester), 0);
             }
             // increment usage counter
@@ -273,35 +286,36 @@ public class TeamsManager {
             tpUsageCounter.put(getTeam(tpRequester), tpsUsed + 1);
 
             // send message to all players in the team
-            for(String playerName : getTeam(tpRequester).getEntries()){
-                plugin.sendMessage(Bukkit.getPlayer(playerName), tpRequester.getName() + ChatColor.GRAY + " has used teleport!\n" +
-                        " Your team has " + ChatColor.WHITE + (amountOfTeleports - tpsUsed) + ChatColor.GRAY +" teleports left.");
+            for (String playerName : getTeam(tpRequester).getEntries()) {
+                plugin.sendMessage(Objects.requireNonNull(Bukkit.getPlayer(playerName)),
+                        tpRequester.getName() + ChatColor.GRAY + " has used teleport!\n" +
+                                " Your team has " + ChatColor.WHITE + (amountOfTeleports - tpsUsed) + ChatColor.GRAY + " teleports left.");
             }
 
-            if(tpsUsed >= amountOfTeleports){
+            if (tpsUsed >= amountOfTeleports) {
                 teamTpUsed.add(getTeam(tpRequester));
             }
             return;
         }
-        if(Objects.equals(teleportMode, "amountperplayer")){
+        if (Objects.equals(teleportMode, "amountPerPlayer")) {
             tpRequester.teleport(tpTarget);
             // if team not already in usage counter - add it
-            if(!tpUsageCounter.containsKey(tpRequester)){
+            if (!tpUsageCounter.containsKey(tpRequester)) {
                 tpUsageCounter.put(tpRequester, 0);
             }
             // increment usage counter
             int tpsUsed = tpUsageCounter.get(tpRequester);
             // increment tp counter and check if team reached their limit
             tpsUsed++;
-            plugin.sendMessage(tpRequester, ChatColor.GRAY + "You have " + ChatColor.WHITE + (amountOfTeleports - tpsUsed) + ChatColor.GRAY +" teleports left.");
+            plugin.sendMessage(tpRequester, ChatColor.GRAY + "You have " + ChatColor.WHITE + (amountOfTeleports - tpsUsed) + ChatColor.GRAY + " teleports left.");
             tpUsageCounter.put(tpRequester, tpsUsed);
-            if(tpsUsed >= amountOfTeleports){
+            if (tpsUsed >= amountOfTeleports) {
                 playerTpUsed.add(tpRequester);
             }
 
             return;
         }
-        if(Objects.equals(teleportMode, "unlimited")){
+        if (Objects.equals(teleportMode, "unlimited")) {
             tpRequester.teleport(tpTarget);
             return;
         }
@@ -321,7 +335,7 @@ public class TeamsManager {
     }
 
     public void reAddPlayerToTeamAfterLeave(Player player) {
-        System.out.println("Player that left: " + playersThatLeft);
+        System.out.println("Adding player back to team: " + playersThatLeft);
         this.playersThatLeft.get(player.getName()).addEntry(player.getName());
         this.playersThatLeft.remove(player.getName());
     }
@@ -340,12 +354,6 @@ public class TeamsManager {
         team.unregister();
     }
 
-    public boolean isPlayerInTeam(Player player, String teamName) {
-        Team team = scoreboard.getTeam(teamName);
-        assert team != null;
-        return team.hasEntry(player.getName());
-    }
-
     public boolean isPlayerInNoTeam(Player player) {
         for (Team team : teams) {
             if (team.hasEntry(player.getName())) {
@@ -357,8 +365,6 @@ public class TeamsManager {
 
     private void setTeamScore(Team team, int score) {
         teamPointsMap.put(team, score);
-
-        System.out.println(scoreboard.getTeams());
     }
 
     public void incrementTeamScore(Team team) {
@@ -381,6 +387,7 @@ public class TeamsManager {
 
     public void setScoreboard() {
         scoreboard.getObjectives().forEach(Objective::unregister);
+
         Objective objective = scoreboard.registerNewObjective("Score", "dummy", "Score");
 
         for (Team team : teams) {
@@ -395,12 +402,12 @@ public class TeamsManager {
     }
 
     public int getTeamScore(Team team) {
-        return scoreboard.getObjective("Score").getScore(team.getDisplayName()).getScore();
+        return Objects.requireNonNull(scoreboard.getObjective("Score")).getScore(team.getDisplayName()).getScore();
     }
 
     public void clearScoreboards() {
         Objective objective = scoreboard.getObjective("Score");
-        if(objective != null){
+        if (objective != null) {
             objective.unregister();
         }
         teamPointsMap.clear();
@@ -412,14 +419,15 @@ public class TeamsManager {
         return sortedTeams;
     }
 
-    public Player getTeamCaptain(Team teamToSearch){
-        for(Player captain : teamCaptains.keySet()){
-            if(teamCaptains.get(captain).equals(teamToSearch)){
+    public Player getTeamCaptain(Team teamToSearch) {
+        for (Player captain : teamCaptains.keySet()) {
+            if (teamCaptains.get(captain).equals(teamToSearch)) {
                 return captain;
             }
         }
         return null;
     }
+
     /**
      * Method handling leaving a team.
      * If the team will remain empty, the team will be removed.
@@ -434,7 +442,7 @@ public class TeamsManager {
             return;
         }
         removePlayerFromTeam(sender, team);
-        if(team.getEntries().isEmpty()){
+        if (team.getEntries().isEmpty()) {
             removeTeam(team);
         }
         if (teamCaptains.containsKey(sender)) {
@@ -442,6 +450,7 @@ public class TeamsManager {
             // make another player the captain
             Player newCaptain = Bukkit.getPlayer(team.getEntries().iterator().next());
             teamCaptains.put(newCaptain, team);
+            assert newCaptain != null;
             newCaptain.sendMessage("You are now the captain of " + team.getDisplayName());
         }
         sender.sendMessage(ChatColor.GREEN + "You have left your team.");
@@ -471,11 +480,11 @@ public class TeamsManager {
         setScoreboard();
     }
 
-    public void showScoreboard(){
-        scoreboard.getObjective("Score").setDisplaySlot(DisplaySlot.SIDEBAR);
+    public void showScoreboard() {
+        Objects.requireNonNull(scoreboard.getObjective("Score")).setDisplaySlot(DisplaySlot.SIDEBAR);
     }
 
-    private void hideScoreboard(){
-        scoreboard.getObjective("Score").setDisplaySlot(null);
+    private void hideScoreboard() {
+        Objects.requireNonNull(scoreboard.getObjective("Score")).setDisplaySlot(null);
     }
 }

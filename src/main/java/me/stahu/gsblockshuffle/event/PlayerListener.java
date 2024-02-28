@@ -16,9 +16,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerListener implements Listener {
     private final GameStateManager gameStateManager;
     private final TeamsManager teamsManager;
-    private TeammateCompass teammateCompass;
-    private YamlConfiguration settings;
-    private GSBlockShuffle plugin;
+    private final TeammateCompass teammateCompass;
+    private final YamlConfiguration settings;
+    private final GSBlockShuffle plugin;
 
     public PlayerListener(YamlConfiguration settings, GSBlockShuffle plugin, GameStateManager gameStateManager, TeamsManager teamsManager, TeammateCompass teammateCompass) {
         this.gameStateManager = gameStateManager;
