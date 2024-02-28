@@ -47,3 +47,7 @@ processResources {
         expand props
     }
 }
+
+dependencies {
+    implementation 'org.jetbrains:annotations:21.0.1'
+}
