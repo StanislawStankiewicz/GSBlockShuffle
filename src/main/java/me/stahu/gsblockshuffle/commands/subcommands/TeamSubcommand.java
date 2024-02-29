@@ -65,7 +65,7 @@ public void parseSubcommand(CommandSender sender, Command command, String label,
             sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
         }
 
-        switch (args[1]) {
+        switch (args[1].toLowerCase()) {
             // keep alphabetical order
             case "accept" -> teamAccept(sender);
             case "add" -> teamAdd(sender, args);
@@ -244,7 +244,7 @@ public void parseSubcommand(CommandSender sender, Command command, String label,
         System.out.println(filterCompletions(teamManager.teams.stream().map(Team::getName).toList(), args[2]));
         System.out.println(filterCompletions(playerList(), args[2]));
         if(args.length == 3){
-            switch(args[1]){
+            switch(args[1].toLowerCase()){
                 case "add", "invite", "tp" -> {
                     return filterCompletions(playerList(), args[2]);
                 }

@@ -54,17 +54,13 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
                 return true;
             }
 
-            for (int i = 0; i < args.length; i++) {
-                args[i] = args[i].toLowerCase();
-            }
-
             //check if player has permission to execute the subcommand
             if (!sender.hasPermission("BlockShuffle.command." + args[0])) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
                 return true;
             }
             //execute subcommand
-            switch (args[0]) {
+            switch (args[0].toLowerCase()) {
                 case "debug" -> debugSubcommand.parseSubcommand(sender, command, label, args);
                 case "end" -> endGame(player);
                 case "start" -> startGame(player);
@@ -123,10 +119,6 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        for (int i = 0; i < args.length; i++) {
-            args[i] = args[i].toLowerCase();
-        }
-
         if (args.length == 1) {
             final List<String> suggestions = new LinkedList<>();
 
@@ -136,9 +128,9 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
                 }
             });
 
-            return filterCompletions(suggestions, args[0]);
+            return filterCompletions(suggestions, args[0].toLowerCase());
         } else {
-            return switch (args[0]) {
+            return switch (args[0].toLowerCase()) {
                 case "debug" -> debugSubcommand.parseTabCompletions(sender, command, label, args);
                 case "settings" -> settingsSubcommand.parseTabCompletions(sender, command, label, args);
                 case "team" -> teamSubcommand.parseTabCompletions(sender, command, label, args);
