@@ -327,7 +327,6 @@ public class TeamsManager {
         team.removeEntry(player.getName());
     }
 
-
     public void removePlayerFromTeamAfterLeave(Player player) {
         Team team = getTeam(player);
         team.removeEntry(player.getName());
@@ -413,10 +412,33 @@ public class TeamsManager {
         teamPointsMap.clear();
     }
 
-    public ArrayList<Team> getSortedTeams() {
-        ArrayList<Team> sortedTeams = new ArrayList<>(teams);
-        sortedTeams.sort(Comparator.comparingInt(this::getTeamScore).reversed());
-        return sortedTeams;
+    public List<Map.Entry<Team, Integer>> getTeamScoreList() {
+        List<Map.Entry<Team, Integer>> list = new ArrayList<>(teamPointsMap.entrySet());
+
+        System.out.println(teamPointsMap);
+
+        list.sort(Map.Entry.comparingByValue(Collections.reverseOrder()));
+
+        return list;
+    }
+
+    public List<Map.Entry<Team, Integer>> getTeamPlaceList() {
+        List<Map.Entry<Team, Integer>> sortedTeams = getTeamScoreList();
+        List<Map.Entry<Team, Integer>> teamPlaceList = new ArrayList<>();
+
+        int rank = 1;
+        int prevScore = -1;
+
+        for (int i = 0; i < sortedTeams.size(); i++) {
+            int currentScore = sortedTeams.get(i).getValue();
+            if (currentScore != prevScore) {
+                rank = i + 1;
+            }
+            teamPlaceList.add(new AbstractMap.SimpleEntry<>(sortedTeams.get(i).getKey(), rank));
+            prevScore = currentScore;
+        }
+
+        return teamPlaceList;
     }
 
     public Player getTeamCaptain(Team teamToSearch) {
@@ -486,5 +508,11 @@ public class TeamsManager {
 
     private void hideScoreboard() {
         Objects.requireNonNull(scoreboard.getObjective("Score")).setDisplaySlot(null);
+    }
+
+    public void initializeTeamPointsMap() {
+        for (Team team : teams) {
+            teamPointsMap.put(team, 0);
+        }
     }
 }

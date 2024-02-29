@@ -2,6 +2,7 @@ package me.stahu.gsblockshuffle.event;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.gui.BossBarTimer;
+import me.stahu.gsblockshuffle.gui.WinnerSplashTitle;
 import me.stahu.gsblockshuffle.team.TeamsManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -68,6 +69,7 @@ public class GameStateManager {
 
         teamsManager.setScoreboard();
         teamsManager.setShowScoreboard(true);
+        teamsManager.initializeTeamPointsMap();
 
         roundsRemaining = settings.getInt("roundsPerGame");
 
@@ -255,7 +257,19 @@ public class GameStateManager {
         Bukkit.getScheduler().cancelTask(this.roundBreakTickTask);
         Bukkit.getScheduler().cancelTask(this.roundTickTask);
 
-        sendEndGameMessageToAllPlayers();
+        List<Map.Entry<Team, Integer>> teamPlaceList = teamsManager.getTeamPlaceList();
+
+        // send winner splash title to all 1st places
+        for (Map.Entry<Team, Integer> entry : teamPlaceList) {
+            if (entry.getValue() != 1) {
+                break;
+            }
+            for (String playerName : entry.getKey().getEntries()) {
+                Player player = Bukkit.getPlayer(playerName);
+                WinnerSplashTitle.showWinnerSplashTitle(plugin, settings, player);
+            }
+        }
+        sendEndGameMessageToAllPlayers(teamPlaceList);
 
         //remove compass
         plugin.teammateCompass.clearCompassBars();
@@ -266,28 +280,28 @@ public class GameStateManager {
     }
 
     /**
-     * Sends an end game message to all players.
-     * This method constructs a message indicating the end of the game and the final scores of each team.
-     * The message is then sent to all online players.
-     * Note: The getTeamScore method is used to retrieve the score of each team.
+     * Sends the final team leaderboard to all players.
+     * The positions in the leaderboard follow the ex aequo rule, which means that teams with the same score get the same place.
+     * If two or more teams share a place, the next rank(s) is/are skipped.
+     *
+     * @param teamPlaceList A list of teams and their final scores, sorted by score in descending order.
      */
-    private void sendEndGameMessageToAllPlayers() {
+    private void sendEndGameMessageToAllPlayers(List<Map.Entry<Team, Integer>> teamPlaceList) {
         StringBuilder endMessage = new StringBuilder("Game ended!\n" + " Final scores:");
 
-        ArrayList<Team> sortedTeams = teamsManager.getSortedTeams();
+        for (Map.Entry<Team, Integer> entry : teamPlaceList) {
+            Team team = entry.getKey();
+            int rank = entry.getValue();
+            int currentScore = teamsManager.getTeamScore(team);
 
-        for (int i = 0; (i < sortedTeams.size()) && i < 3; i++) {
-            if (i == 0) {
-                endMessage.append("\n ").append(ChatColor.GOLD).append(i + 1).append(ChatColor.WHITE).append(". ").append(sortedTeams.get(i).getDisplayName()).append(": ").append(teamsManager.getTeamScore(sortedTeams.get(i)));
-            } else if (i == 1) {
-                endMessage.append("\n ").append(ChatColor.GRAY).append(i + 1).append(ChatColor.WHITE).append(". ").append(sortedTeams.get(i).getDisplayName()).append(": ").append(teamsManager.getTeamScore(sortedTeams.get(i)));
-            } else if (i == 2) {
-                endMessage.append("\n ").append(ChatColor.RED).append(i + 1).append(ChatColor.WHITE).append(". ").append(sortedTeams.get(i).getDisplayName()).append(": ").append(teamsManager.getTeamScore(sortedTeams.get(i)));
-            }
-        }
-
-        for (int i = 3; i < sortedTeams.size(); i++) {
-            endMessage.append("\n ").append(ChatColor.DARK_GRAY).append(i + 1).append(ChatColor.WHITE).append(". ").append(sortedTeams.get(i).getDisplayName()).append(": ").append(teamsManager.getTeamScore(sortedTeams.get(i)));
+            ChatColor rankColor = switch (rank) {
+                case 1 -> ChatColor.GOLD;
+                case 2 -> ChatColor.GRAY;
+                case 3 -> ChatColor.RED;
+                default -> ChatColor.DARK_GRAY;
+            };
+//            "\n i. TeamName: score"
+            endMessage.append("\n ").append(rankColor).append(rank).append(ChatColor.WHITE).append(". ").append(team.getDisplayName()).append(": ").append(currentScore);
         }
 
         for (Player player : Bukkit.getOnlinePlayers()) {

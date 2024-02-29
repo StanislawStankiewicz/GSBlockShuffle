@@ -17,9 +17,9 @@ public class TeammateCompass {
 
     public Map<String, BossBar> compassBars = new HashMap<>();
 
-    private static String compassBarString = "--------.--------<--------^-------->";
+    private static final String compassBarString = "--------.--------<--------^-------->";
 
-    private TeamsManager teamsManager;
+    private final TeamsManager teamsManager;
 
     public TeammateCompass(TeamsManager teamsManager) {
         this.teamsManager = teamsManager;
@@ -75,7 +75,7 @@ public class TeammateCompass {
 
     private String placeTeammatesInCompass(Player player, String compassBarString) {
         boolean useFirstLetterOfTeammates = true;
-        for (Team team : teamsManager.getSortedTeams()) {
+        for (Team team : teamsManager.teams) {
             if (team.hasEntry(player.getName())) {
                 if (team.getEntries().size() == 1) {
                     return compassBarString;
