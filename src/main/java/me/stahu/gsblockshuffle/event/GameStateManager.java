@@ -428,12 +428,21 @@ public class GameStateManager {
                 endRound();
                 return;
             }
+            for (String playerName : team.getEntries()) {
+                if (!playersWithFoundBlock.contains(Bukkit.getPlayer(playerName))) {
+                    return;
+                }
+            }
             endRound();
-        }// if no players left - endRound
-        else if (playerBlockMap.isEmpty()) {
+            return;
+        }
+        // if no players left - endRound
+        if (playerBlockMap.isEmpty()) {
             endRound();
-        }// if allPlayersRequiredForTeamWin - check if all players have found block, if so endRound
-        else if (allPlayersRequiredForTeamWin) {
+            return;
+        }
+        // if allPlayersRequiredForTeamWin - check if all players have found block, if so endRound
+        if (allPlayersRequiredForTeamWin) {
             for (String playerName : team.getEntries()) {
                 if (!playersWithFoundBlock.contains(Bukkit.getPlayer(playerName))) {
                     return;
