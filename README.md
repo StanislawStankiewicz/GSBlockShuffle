@@ -28,7 +28,7 @@ All commands start with: /blockshuffle or /bs (Commands in *italics* are OP-only
   - */blockshuffle team add \<player\>* - Adds a player to your team without asking.
   - /blockshuffle team invite \<player\> - Invites a player to your team
   - /blockshuffle team join \<team\> - Requests to join the team
-  - /blockshuffle team accept - Accepts an invite/join request.
+  - /blockshuffle team accept - Accepts an invite/join request
   - /blockshuffle team tp \<player\> - Sends a tp request
   - /blockshuffle team tpaccept - Accepts a tp request
 - /blockshuffle tp \<player\> - Same as team tp
@@ -40,6 +40,7 @@ All commands start with: /blockshuffle or /bs (Commands in *italics* are OP-only
 - */blockshuffle debug \<args\>* - Commands for debugging
 
 ## Options
+
 ### Block settings
 - difficulty: \<integer\> - Current difficulty of the round
 - difficultyCap: \<integer\> - Maximum value of difficulty used for incrementation
@@ -110,8 +111,6 @@ If includeVariants = true "base" and "variants" are joined together. After this 
 ## Contribution
 If you want to contribute to the development of GSBlockShuffle, please...
 
-Developers: stahu, [MRocin](https://github.com/MRcoin2) 
+Developers: [stahu](https://github.com/stahuOfficial), [MRocin](https://github.com/MRcoin2)
 
-Sound Deisgn Assistant:
-
-Testing: 
+Testers: 

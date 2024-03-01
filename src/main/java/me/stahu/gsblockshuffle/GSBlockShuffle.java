@@ -11,6 +11,7 @@ import me.stahu.gsblockshuffle.team.TeamsManager;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +23,9 @@ import java.net.URL;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -35,9 +39,13 @@ public final class GSBlockShuffle extends JavaPlugin {
     public TeammateCompass teammateCompass;
     private BossBarTimer bossBarTimer;
 
+    public static Logger LOGGER;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
+        LOGGER = getLogger();
+
         this.settingsFile = this.getDataFolder().toPath().resolve("settings.yml").toFile();
         this.createSettingsFile();
 
@@ -53,7 +61,7 @@ public final class GSBlockShuffle extends JavaPlugin {
         try {
             categoryTree.parseYaml(includedBlocksFile.getPath());
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error parsing includedBlocksFile", e);
         }
 
         //create gui
@@ -71,7 +79,7 @@ public final class GSBlockShuffle extends JavaPlugin {
 
         BlockShuffleCommand blockShuffleCommand = new BlockShuffleCommand(mainMenuGui, gameStateManager, settings, this, teamsManager);
         //register commands
-        this.getCommand("blockshuffle").setExecutor(blockShuffleCommand);
+        Objects.requireNonNull(this.getCommand("blockshuffle")).setExecutor(blockShuffleCommand);
     }
 
     @Override
@@ -83,7 +91,7 @@ public final class GSBlockShuffle extends JavaPlugin {
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.setDisplayName(ChatColor.RESET + player.getName() + ChatColor.RESET);
             // reset color on tab
-            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+            player.setScoreboard(Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard());
         }
     }
 
@@ -99,8 +107,8 @@ public final class GSBlockShuffle extends JavaPlugin {
                 this.saveResource("block_list_categorized.yml", false);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             // Handle the error here
+            LOGGER.log(Level.SEVERE, "Error creating includedBlocksFile", e);
         }
     }
 
@@ -134,7 +142,7 @@ public final class GSBlockShuffle extends JavaPlugin {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, "Error getting preset files", e);
         }
 
         return filenames;
@@ -146,7 +154,7 @@ public final class GSBlockShuffle extends JavaPlugin {
         if (!folder.exists()) {
             folder.mkdir();
         }
-        for (File file : folder.listFiles()) {
+        for (File file : Objects.requireNonNull(folder.listFiles())) {
             if (file.isFile()) {
                 presetNames.add(file.getName().replace(".yml", ""));
             }
@@ -166,11 +174,17 @@ public final class GSBlockShuffle extends JavaPlugin {
     }
 
     public void loadConfiguration() {
-        this.settings = YamlConfiguration.loadConfiguration(this.settingsFile);
+        System.out.println("previous difficultyCap: " + settings.get("difficultyCap"));
+        try {
+            this.settings.load(this.settingsFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("after difficultyCap: " + settings.get("difficultyCap"));
         try {
             this.categoryTree.parseYaml(includedBlocksFile.getPath());
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error parsing includedBlocksFile", e);
         }
     }
 
