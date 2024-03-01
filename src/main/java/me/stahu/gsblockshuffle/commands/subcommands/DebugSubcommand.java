@@ -40,7 +40,7 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
         }
 
         if (args.length == 1) {
-            showOptions(sender);
+            sender.sendMessage(ChatColor.RED + "You must specify a command.");
             return;
         }
 
@@ -53,12 +53,6 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
             case "get" -> getSetting(sender, args);
             case "set" -> setSetting(sender, args);
             case "tp" -> teleportToPlayer(sender, args);
-        }
-    }
-
-    private void showOptions(CommandSender sender) {
-        for (String key : settings.getKeys(false)) {
-            sender.sendMessage(ChatColor.DARK_AQUA + key + ChatColor.WHITE + ": " + ChatColor.DARK_GREEN + settings.get(key));
         }
     }
 

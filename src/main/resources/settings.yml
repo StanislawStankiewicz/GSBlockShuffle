@@ -16,10 +16,10 @@ blockAssignmentMode: onePerPlayer # onePerPlayer | onePerTeam | onePerRound
 
 #win settings
 allPlayersRequiredForTeamWin: true
+teamScoreIncrementPerPlayer: false # team score increments for each player who found their block if false, otherwise only 1 point is awarded to the team that found their block
 eliminateAfterRound: false
 endGameIfOneTeamRemaining: true
 firstToWin: true # the round ends when the first player/team finds their block if true
-teamScoreIncrementPerPlayer: false # team score increments for each player who found their block if false, otherwise only 1 point is awarded to the team that found their block
 #teamWinBy: score # score | time
 #winScore: 5
 

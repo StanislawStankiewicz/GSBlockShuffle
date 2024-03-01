@@ -20,12 +20,13 @@ public class SettingsSubcommand extends CommandBase implements Subcommand {
 
     @Override
     public void parseSubcommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("blockshuffle.command.settings")) {
-            sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
+        if (args.length == 1) {
+            showOptions(sender);
             return;
         }
 
-        if (args.length == 1) {
+        if (!sender.hasPermission("blockshuffle.command.settings")) {
+            sender.sendMessage(ChatColor.RED + "You do not have permission to execute this command.");
             return;
         }
 
@@ -33,6 +34,12 @@ public class SettingsSubcommand extends CommandBase implements Subcommand {
             case "save" -> plugin.saveConfiguration();
             case "load" -> plugin.loadConfiguration();
             case "preset" -> preset(sender, args);
+        }
+    }
+
+    private void showOptions(CommandSender sender) {
+        for (String key : settings.getKeys(false)) {
+            sender.sendMessage(ChatColor.DARK_AQUA + key + ChatColor.WHITE + ": " + ChatColor.DARK_GREEN + settings.get(key));
         }
     }
 
