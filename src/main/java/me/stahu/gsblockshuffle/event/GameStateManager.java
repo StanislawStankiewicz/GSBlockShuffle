@@ -13,6 +13,8 @@ import org.bukkit.scoreboard.*;
 
 import java.util.*;
 
+import static me.stahu.gsblockshuffle.sound.Sounds.*;
+
 
 public class GameStateManager {
     private final GSBlockShuffle plugin;
@@ -73,7 +75,7 @@ public class GameStateManager {
 
         roundsRemaining = settings.getInt("roundsPerGame");
 
-        playRoundCountdownSound();
+        playRoundCountdownSound(plugin, settings, teamsManager);
 
         roundStartTask = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this::newRound, 40);
     }
@@ -117,7 +119,7 @@ public class GameStateManager {
             }
         }
         if (secondsLeft < 61) {
-            pingPlayers(secondsLeft);
+            pingPlayers(plugin, settings, secondsLeft);
         }
     }
 
@@ -130,7 +132,7 @@ public class GameStateManager {
                 Player player = Bukkit.getPlayer(playerName);
                 if (!playersWithFoundBlock.contains(player) && !isGameEnding(false)
                         && !settings.getBoolean("eliminateAfterRound")) {
-                    playBlockFoundSound(player, false);
+                    playBlockFoundSound(plugin, settings, player, false);
                 }
             }
         }
@@ -139,7 +141,7 @@ public class GameStateManager {
             if (!(isGameEnding(false) && teamsManager.isTeamWinning(team))) {
                 for (String playerName : team.getEntries()) {
                     Player player = Bukkit.getPlayer(playerName);
-                    playEliminationSound(player);
+                    playEliminationSound(plugin, settings, player);
                 }
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     plugin.sendMessage(player, team.getDisplayName() + " has been eliminated!");
@@ -158,26 +160,6 @@ public class GameStateManager {
         increaseDifficulty();
 
         roundBreak();
-    }
-
-    private void increaseDifficulty() {
-        if (settings.getBoolean("increaseDifficulty")
-                && (settings.getInt("difficulty") < Math.min(settings.getInt("difficultyCap"), 1000))) {
-            if (settings.getInt("increaseEveryNRounds") != -1) {
-                if (currentRound % settings.getInt("increaseEveryNRounds") == 0) {
-                    incrementDifficulty();
-                }
-            } else {
-                //custom increase
-                List<Integer> customIncrease = settings.getIntegerList("customIncrease");
-                if (customIncrease.contains(currentRound)) {
-                    incrementDifficulty();
-                }
-            }
-        }
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            plugin.sendMessage(player, "Difficulty: " + settings.getInt("difficulty"));
-        }
     }
 
     /**
@@ -209,7 +191,7 @@ public class GameStateManager {
         }
 
         if (secondsLeft == 1) {
-            playRoundCountdownSound();
+            playRoundCountdownSound(plugin, settings, teamsManager);
         }
 
         double progress = secondsLeft / (double) (secondsInRoundBreak);
@@ -217,7 +199,7 @@ public class GameStateManager {
     }
 
     /**
-     * Sends an end game message to all players.
+     * Ends the game and sends a message to all online players.
      * This method constructs a message indicating the end of the game and the final scores of each team.
      * The message is then sent to all online players.
      * Note: The getTeamScore method is used to retrieve the score of each team.
@@ -357,7 +339,6 @@ public class GameStateManager {
      *
      * @param player The player who has found a block.
      */
-// TODO refactor
     public void playerFoundBlock(Player player) {
         boolean firstToWin = settings.getBoolean("firstToWin");
         boolean allPlayersRequiredForTeamWin = settings.getBoolean("allPlayersRequiredForTeamWin");
@@ -365,8 +346,6 @@ public class GameStateManager {
         boolean teamFoundBlock = false;
 
         Team team = teamsManager.getTeam(player);
-
-        System.out.println(playersWithFoundBlock);
 
         // if true just increment the teams score
         if (teamScoreIncrementPerPlayer) {
@@ -381,7 +360,6 @@ public class GameStateManager {
                 }
             }
             if (!teamFoundBlock) {
-                System.out.println("Incrementing team score");
                 teamsManager.incrementTeamScore(team);
             }
         }
@@ -389,18 +367,16 @@ public class GameStateManager {
         playersWithFoundBlock.add(player);
 
         // block found message
-        for (Team t : teamsManager.teams) {
-            for (String playerName : t.getEntries()) {
-                Player p = Bukkit.getPlayer(playerName);
-                plugin.sendMessage(p, player.getDisplayName() + " has found their block! (" + ChatColor.GOLD
-                        + playerBlockMap.get(player.getName()).get(0).replace("_", " ") + ChatColor.RESET + ")");
-            }
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            plugin.sendMessage(p, player.getDisplayName() + " has found their block! (" + ChatColor.GOLD
+                    + playerBlockMap.get(player.getName()).get(0).replace("_", " ") + ChatColor.RESET + ")");
         }
 
         playerBlockMap.remove(player.getName());
 
-        if (!isGameEnding(false)) {
-            playBlockFoundSound(player, true);
+        // avoid sound collision with win sound if player is in winning team
+        if (teamsManager.isTeamWinning(team) && !isGameEnding(false)) {
+            playBlockFoundSound(plugin, settings, player, true);
         }
 
         // if firstToWin endRound
@@ -428,26 +404,6 @@ public class GameStateManager {
         }
     }
 
-    private boolean isGameEnding(boolean teamsEliminated) {
-        boolean endGameIfOneTeamRemaining = settings.getBoolean("endGameIfOneTeamRemaining");
-        int teamsSizeAfterElimination = teamsManager.teams.size();
-
-        System.out.println("Teams eliminated: " + teamsEliminated);
-        System.out.println("Teams to eliminate: " + getTeamsToEliminate().size());
-
-        if (!teamsEliminated) {
-            teamsSizeAfterElimination -= getTeamsToEliminate().size();
-        }
-        System.out.println("Teams size: " + teamsSizeAfterElimination);
-
-        if (teamsSizeAfterElimination == 0) {
-            return true;
-        }
-        if (endGameIfOneTeamRemaining && teamsSizeAfterElimination == 1) {
-            return true;
-        } else return roundsRemaining == 0;
-    }
-
     private HashSet<Team> getTeamsToEliminate() {
         int membersWithoutBlock;
         HashSet<Team> eliminatedTeams = new HashSet<>();
@@ -473,151 +429,24 @@ public class GameStateManager {
         return eliminatedTeams;
     }
 
-    /**
-     * Sends a ping sound to all online players based on the remaining seconds in the round.
-     * The ping sound is played at 60, 30, and 10 seconds remaining, given that rounds are longer than 120, 60, and 30 seconds, respectively.
-     * Additionaly a clock ticking sound is played when there are less than 10 seconds remaining.
-     * If the muteSounds setting is enabled, no sound will be played.
-     *
-     * @param secondsLeft The number of seconds remaining in the round.
-     */
-    private void pingPlayers(int secondsLeft) {
-        boolean muteSounds = settings.getBoolean("muteSounds");
-        int secondsInRound = settings.getInt("roundTime");
-
-        if (muteSounds) {
-            return;
-        }
-        if (secondsLeft == 60 && secondsInRound > 120) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                pingPlayerNTimes(player, 1, 4);
-            }
-        } else if (secondsLeft == 30 && secondsInRound > 60) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                pingPlayerNTimes(player, 2, 4);
-            }
-        } else if (secondsLeft == 10 && secondsInRound > 30) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                pingPlayerNTimes(player, 3, 4);
-            }
-        } else if (secondsLeft < 10 && secondsInRound > 30) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_FAIL, 0.5F, 1.2F);
+    private void increaseDifficulty() {
+        if (settings.getBoolean("increaseDifficulty")
+                && (settings.getInt("difficulty") < Math.min(settings.getInt("difficultyCap"), 1000))) {
+            if (settings.getInt("increaseEveryNRounds") != -1) {
+                if (currentRound % settings.getInt("increaseEveryNRounds") == 0) {
+                    incrementDifficulty();
+                }
+            } else {
+                //custom increase
+                List<Integer> customIncrease = settings.getIntegerList("customIncrease");
+                if (customIncrease.contains(currentRound)) {
+                    incrementDifficulty();
+                }
             }
         }
-    }
-
-    /**
-     * Plays a ping sound to a specific player a given number of times with a delay between each ping.
-     * The ping sound is played 'n' times, where 'n' is provided as an argument.
-     * The delay between each ping is also provided as an argument.
-     * If the muteSounds setting is enabled, no sound will be played.
-     *
-     * @param player The player to whom the sound will be played.
-     * @param n      The number of times the ping sound will be played.
-     * @param delay  The delay (in ticks) between each ping sound.
-     */
-    private void pingPlayerNTimes(Player player, int n, long delay) {
-        boolean muteSounds = settings.getBoolean("muteSounds");
-        if (muteSounds) {
-            return;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            plugin.sendMessage(player, "Difficulty: " + settings.getInt("difficulty"));
         }
-
-        for (int i = 0; i < n; i++) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> playPingSound(player), i * delay);
-        }
-    }
-
-    /**
-     * Plays a ping sound to a specific player in the game.
-     * The ping sound consists of two notes, an octave apart from each other.
-     * If the muteSounds setting is enabled, no sound will be played.
-     *
-     * @param player The player to whom the sound will be played.
-     */
-    private void playPingSound(Player player) {
-        boolean muteSounds = settings.getBoolean("muteSounds");
-        if (muteSounds) {
-            return;
-        }
-
-        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 0.5F);
-        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 1F);
-    }
-
-    /**
-     * Plays a sound to indicate that a player has found a block.
-     * The sound played depends on whether the block was found or not.
-     * If the muteSounds setting is enabled, no sound will be played.
-     *
-     * @param player     The player to whom the sound will be played.
-     * @param blockFound A boolean indicating whether the block was found or not.
-     */
-    private void playBlockFoundSound(Player player, boolean blockFound) {
-        boolean muteSounds = settings.getBoolean("muteSounds");
-        if (muteSounds) {
-            return;
-        }
-
-        if (blockFound) {
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1.189207F);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1.781797F), 3);
-        } else {
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1.781797F);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1.059463F), 3);
-        }
-    }
-
-    /**
-     * Plays a countdown sound to all players in the game.
-     * The countdown sound is played in three steps with a delay between each step.
-     * If the muteSounds setting is enabled, no sound will be played.
-     */
-    private void playRoundCountdownSound() {
-        boolean muteSounds = settings.getBoolean("muteSounds");
-        if (muteSounds) {
-            return;
-        }
-        playSoundToAllPlayers(Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1, 0.629961F);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> playSoundToAllPlayers(Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1, 0.629961F), 20);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> playSoundToAllPlayers(Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1, 1.259921F), 40);
-    }
-
-    /**
-     * Plays a specific sound to all players in the game, given the sound, volume, and pitch.
-     * If the muteSounds setting is enabled, no sound will be played.
-     *
-     * @param sound  The sound to be played.
-     * @param volume The volume of the sound.
-     * @param pitch  The pitch of the sound.
-     */
-    private void playSoundToAllPlayers(Sound sound, int volume, float pitch) {
-        boolean muteSounds = settings.getBoolean("muteSounds");
-        if (muteSounds) {
-            return;
-        }
-
-        for (Player player : teamsManager.getPlayersWithATeam()) {
-            player.playSound(player.getLocation(), sound, volume, pitch);
-        }
-    }
-
-    private void playEliminationSound(Player player) {
-        boolean muteSounds = settings.getBoolean("muteSounds");
-        if (muteSounds) {
-            return;
-        }
-
-        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1.059463f);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 0.840896f);
-        }, 4);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 0.707107f);
-        }, 8);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 0.529732f);
-        }, 12);
     }
 
     public void handlePlayerMove(Player player) {
@@ -660,6 +489,26 @@ public class GameStateManager {
         if (blockList.isEmpty()) {
             settings.set("difficulty", previousDifficulty);
         }
+    }
+
+    private boolean isGameEnding(boolean teamsEliminated) {
+        boolean endGameIfOneTeamRemaining = settings.getBoolean("endGameIfOneTeamRemaining");
+        int teamsSizeAfterElimination = teamsManager.teams.size();
+
+        System.out.println("Teams eliminated: " + teamsEliminated);
+        System.out.println("Teams to eliminate: " + getTeamsToEliminate().size());
+
+        if (!teamsEliminated) {
+            teamsSizeAfterElimination -= getTeamsToEliminate().size();
+        }
+        System.out.println("Teams size: " + teamsSizeAfterElimination);
+
+        if (teamsSizeAfterElimination == 0) {
+            return true;
+        }
+        if (endGameIfOneTeamRemaining && teamsSizeAfterElimination == 1) {
+            return true;
+        } else return roundsRemaining == 0;
     }
 }
 
