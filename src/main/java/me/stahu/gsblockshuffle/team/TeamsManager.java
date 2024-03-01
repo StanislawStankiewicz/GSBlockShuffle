@@ -13,6 +13,7 @@ import java.util.*;
 
 public class TeamsManager {
     public final HashSet<Team> teams = new HashSet<>();
+    public final HashSet<Team> eliminatedTeams = new HashSet<>();
     public final HashMap<Player, Team> teamCaptains = new HashMap<>();
     /**
      * A HashMap that stores team join requests in the game.
@@ -41,7 +42,7 @@ public class TeamsManager {
     private final HashMap<Object, Integer> tpUsageCounter = new HashMap<>();
     private final HashMap<Team, Integer> teamPointsMap = new HashMap<>();
     private boolean showScoreboard = false;
-    private final Map<String, Team> playersThatLeft = new HashMap<>();
+    public final Map<String, Team> playersThatLeft = new HashMap<>();
 
     public void setShowScoreboard(boolean showScoreboard) {
         this.showScoreboard = showScoreboard;
@@ -353,6 +354,11 @@ public class TeamsManager {
         team.unregister();
     }
 
+    public void eliminateTeam(Team team) {
+        teams.remove(team);
+        eliminatedTeams.add(team);
+    }
+
     public boolean isPlayerInNoTeam(Player player) {
         for (Team team : teams) {
             if (team.hasEntry(player.getName())) {
@@ -414,9 +420,6 @@ public class TeamsManager {
 
     public List<Map.Entry<Team, Integer>> getTeamScoreList() {
         List<Map.Entry<Team, Integer>> list = new ArrayList<>(teamPointsMap.entrySet());
-
-        System.out.println(teamPointsMap);
-
         list.sort(Map.Entry.comparingByValue(Collections.reverseOrder()));
 
         return list;
@@ -514,5 +517,21 @@ public class TeamsManager {
         for (Team team : teams) {
             teamPointsMap.put(team, 0);
         }
+    }
+
+    public void resetEliminatedTeams() {
+        teams.addAll(eliminatedTeams);
+
+        eliminatedTeams.clear();
+    }
+
+    public boolean isTeamWinning(Team team) {
+        int highestScore = 0;
+        for (Map.Entry<Team, Integer> entry : teamPointsMap.entrySet()) {
+            if (entry.getValue() > highestScore) {
+                highestScore = entry.getValue();
+            }
+        }
+        return teamPointsMap.get(team) == highestScore;
     }
 }

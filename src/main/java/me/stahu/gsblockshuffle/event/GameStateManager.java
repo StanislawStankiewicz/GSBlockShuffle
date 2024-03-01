@@ -20,9 +20,9 @@ public class GameStateManager {
     private final TeamsManager teamsManager;
     private int gameState; // 0 - not started, 1 - started
     private int roundsRemaining;
+    private int currentRound = 0;
     public int secondsInRoundBreak;
     private int secondsLeft;
-    private int currentRound = 0;
     private int roundTickTask;
     private int roundBreakTickTask;
     private int roundStartTask;
@@ -80,8 +80,13 @@ public class GameStateManager {
 
     public void newRound() {
         Bukkit.getScheduler().cancelTask(this.roundBreakTickTask);
+        playerBlockMap.clear();
+        playersWithFoundBlock.clear();
+        teamsManager.playerTpUsed.clear();
+        teamsManager.teamTpUsed.clear();
+        bossBarTimer.clearBossBars();
 
-        //create compass based on setings.get("showTeamCompass")
+        //create compass based on seting "showTeamCompass"
         if (settings.getBoolean("showTeamCompass")) {
             plugin.teammateCompass.createCompassBars();
         } else {
@@ -90,6 +95,8 @@ public class GameStateManager {
 
         assignRandomBlocks();
 
+        currentRound++;
+        roundsRemaining--;
         bossBarTimer.createBossBar();
         secondsLeft = settings.getInt("roundTime");
         roundTickTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::roundTick, 0, 20);
@@ -100,7 +107,6 @@ public class GameStateManager {
             endRound();
             return;
         }
-
         double progress = secondsLeft / (double) (settings.getInt("roundTime"));
 
         bossBarTimer.updateBossBar(progress, secondsLeft);
@@ -110,7 +116,6 @@ public class GameStateManager {
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GOLD + playerBlockMap.get(player.getName()).get(0).replace("_", " ")));
             }
         }
-
         if (secondsLeft < 61) {
             pingPlayers(secondsLeft);
         }
@@ -118,60 +123,44 @@ public class GameStateManager {
 
     public void endRound() {
         Bukkit.getScheduler().cancelTask(this.roundTickTask);
-        int membersWithoutBlock;
-        HashSet<Team> eliminatedTeams = new HashSet<>();
-        boolean eliminateAfterRound = settings.getBoolean("eliminateAfterRound");
-        boolean allPlayersRequiredForTeamWin = settings.getBoolean("allPlayersRequiredForTeamWin");
+        HashSet<Team> teamsToEliminate = getTeamsToEliminate();
 
-        // this part of code checks if players have found their blocks and eliminates teams if necessary
         for (Team team : teamsManager.teams) {
-            membersWithoutBlock = 0;
             for (String playerName : team.getEntries()) {
                 Player player = Bukkit.getPlayer(playerName);
-                if (!playersWithFoundBlock.contains(player)) {
-                    // you did not find your block
-                    if (eliminateAfterRound) {
-                        membersWithoutBlock++;
-                        eliminatedTeams.add(team);
-                    }
+                if (!playersWithFoundBlock.contains(player) && !isGameEnding(false)
+                        && !settings.getBoolean("eliminateAfterRound")) {
+                    playBlockFoundSound(player, false);
                 }
             }
-            if (allPlayersRequiredForTeamWin && membersWithoutBlock > 0) {
+        }
+
+        for (Team team : teamsToEliminate) {
+            if (!(isGameEnding(false) && teamsManager.isTeamWinning(team))) {
+                for (String playerName : team.getEntries()) {
+                    Player player = Bukkit.getPlayer(playerName);
+                    playEliminationSound(player);
+                }
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    player.sendRawMessage(team.getDisplayName() + " eliminated!");
+                    plugin.sendMessage(player, team.getDisplayName() + " has been eliminated!");
                 }
-                eliminatedTeams.add(team);
             }
-        }
-        // Play loss sound to players who didn't find their block
-        for (Player player : teamsManager.getPlayersWithATeam()) {
-            if (!playersWithFoundBlock.contains(player)) {
-                playBlockFoundSound(player, false);
-            }
+
+            teamsManager.eliminateTeam(team);
         }
 
-        // Cleanup
-        playersWithFoundBlock.clear();
-        playerBlockMap.clear();
-        bossBarTimer.clearBossBars();
-        this.eliminateTeams(eliminatedTeams);
-        teamsManager.playerTpUsed.clear();
-        teamsManager.teamTpUsed.clear();
-
-        roundsRemaining--;
-
-        // endGame() conditions
-        if (eliminateAfterRound && teamsManager.teams.size() == 1) {
-            endGame();
-            return;
-        } else if (roundsRemaining == 0) {
-            endGame();
+        System.out.println("isGameEnding: " + isGameEnding(true));
+        if (isGameEnding(true)) {
+            setGameState(0);
             return;
         }
 
-        currentRound++;
+        increaseDifficulty();
 
-        // handle increasing difficulty
+        roundBreak();
+    }
+
+    private void increaseDifficulty() {
         if (settings.getBoolean("increaseDifficulty")
                 && (settings.getInt("difficulty") < Math.min(settings.getInt("difficultyCap"), 1000))) {
             if (settings.getInt("increaseEveryNRounds") != -1) {
@@ -189,26 +178,6 @@ public class GameStateManager {
         for (Player player : Bukkit.getOnlinePlayers()) {
             plugin.sendMessage(player, "Difficulty: " + settings.getInt("difficulty"));
         }
-
-        roundBreak();
-    }
-    // TODO optimize
-    private void incrementDifficulty() {
-        int previousDifficulty = settings.getInt("difficulty");
-
-        settings.set("difficulty", settings.getInt("difficulty") + 1);
-
-        ArrayList<ArrayList<ArrayList<String>>> blockList = plugin.categoryTree.getBlockList(settings);
-
-        while (blockList.isEmpty()
-                && (settings.getInt("difficulty") < Math.min(settings.getInt("difficultyCap"), 1000))) {
-            settings.set("difficulty", settings.getInt("difficulty") + 1);
-            blockList = plugin.categoryTree.getBlockList(settings);
-        }
-
-        if(blockList.isEmpty()){
-            settings.set("difficulty", previousDifficulty);
-        }
     }
 
     /**
@@ -219,6 +188,7 @@ public class GameStateManager {
     public void roundBreak() {
         secondsInRoundBreak = settings.getInt("roundBreakTime");
         secondsLeft = secondsInRoundBreak;
+        bossBarTimer.clearBossBars();
         bossBarTimer.createBossBar();
 
         roundBreakTickTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::roundBreakTick, 0, 20);
@@ -262,21 +232,20 @@ public class GameStateManager {
         // send winner splash title to all 1st places
         for (Map.Entry<Team, Integer> entry : teamPlaceList) {
             if (entry.getValue() != 1) {
-                break;
+                continue;
             }
             for (String playerName : entry.getKey().getEntries()) {
                 Player player = Bukkit.getPlayer(playerName);
                 WinnerSplashTitle.showWinnerSplashTitle(plugin, settings, player);
             }
         }
+        // TODO separate sounds from all classes
         sendEndGameMessageToAllPlayers(teamPlaceList);
 
-        //remove compass
         plugin.teammateCompass.clearCompassBars();
         bossBarTimer.clearBossBars();
         teamsManager.clearScoreboards();
-
-        this.gameState = 0;
+        teamsManager.resetEliminatedTeams();
     }
 
     /**
@@ -328,14 +297,11 @@ public class GameStateManager {
         if (!blockAssignmentModes.contains(blockAssignmentMode)) {
             // TODO raise error
             System.out.println("Error: blockAssignmentMode incorrectly set to: " + blockAssignmentMode);
-            endGame();
+            setGameState(0);
             return;
         }
 
         ArrayList<ArrayList<ArrayList<String>>> blockList = plugin.categoryTree.getBlockList(settings);
-
-        System.out.println("Difficulty: " + settings.getInt("difficulty"));
-        System.out.println("Block list: " + blockList);
 
         if (Objects.equals(blockAssignmentMode, "onePerRound")) {
             blockNames = getRandomBlock(blockList);
@@ -399,7 +365,8 @@ public class GameStateManager {
         boolean teamFoundBlock = false;
 
         Team team = teamsManager.getTeam(player);
-        playBlockFoundSound(player, true);
+
+        System.out.println(playersWithFoundBlock);
 
         // if true just increment the teams score
         if (teamScoreIncrementPerPlayer) {
@@ -414,6 +381,7 @@ public class GameStateManager {
                 }
             }
             if (!teamFoundBlock) {
+                System.out.println("Incrementing team score");
                 teamsManager.incrementTeamScore(team);
             }
         }
@@ -430,6 +398,10 @@ public class GameStateManager {
         }
 
         playerBlockMap.remove(player.getName());
+
+        if (!isGameEnding(false)) {
+            playBlockFoundSound(player, true);
+        }
 
         // if firstToWin endRound
         if (firstToWin) {
@@ -453,41 +425,53 @@ public class GameStateManager {
         // if no players left - endRound
         if (playerBlockMap.isEmpty()) {
             endRound();
-            return;
         }
-        // if allPlayersRequiredForTeamWin - check if all players have found block, if so endRound
-        if (allPlayersRequiredForTeamWin) {
+    }
+
+    private boolean isGameEnding(boolean teamsEliminated) {
+        boolean endGameIfOneTeamRemaining = settings.getBoolean("endGameIfOneTeamRemaining");
+        int teamsSizeAfterElimination = teamsManager.teams.size();
+
+        System.out.println("Teams eliminated: " + teamsEliminated);
+        System.out.println("Teams to eliminate: " + getTeamsToEliminate().size());
+
+        if (!teamsEliminated) {
+            teamsSizeAfterElimination -= getTeamsToEliminate().size();
+        }
+        System.out.println("Teams size: " + teamsSizeAfterElimination);
+
+        if (teamsSizeAfterElimination == 0) {
+            return true;
+        }
+        if (endGameIfOneTeamRemaining && teamsSizeAfterElimination == 1) {
+            return true;
+        } else return roundsRemaining == 0;
+    }
+
+    private HashSet<Team> getTeamsToEliminate() {
+        int membersWithoutBlock;
+        HashSet<Team> eliminatedTeams = new HashSet<>();
+        boolean eliminateAfterRound = settings.getBoolean("eliminateAfterRound");
+        boolean allPlayersRequiredForTeamWin = settings.getBoolean("allPlayersRequiredForTeamWin");
+
+        for (Team team : teamsManager.teams) {
+            membersWithoutBlock = 0;
             for (String playerName : team.getEntries()) {
-                if (!playersWithFoundBlock.contains(Bukkit.getPlayer(playerName))) {
-                    return;
+                Player player = Bukkit.getPlayer(playerName);
+                if (!playersWithFoundBlock.contains(player)) {
+                    // you did not find your block
+                    if (eliminateAfterRound) {
+                        membersWithoutBlock++;
+                        eliminatedTeams.add(team);
+                    }
                 }
             }
-            for (String playerName : team.getEntries()) {
-                playersWithFoundBlock.remove(Bukkit.getPlayer(playerName));
-                playerBlockMap.remove(playerName);
+            if (allPlayersRequiredForTeamWin && membersWithoutBlock > 0) {
+                eliminatedTeams.add(team);
             }
         }
+        return eliminatedTeams;
     }
-
-    /**
-     * Eliminates the specified teams from the game.
-     * This method sends a message to all online players notifying them of each eliminated team.
-     * It also removes the eliminated teams from the list of active teams and unregisters them from the scoreboard.
-     *
-     * @param eliminatedTeams A HashSet of teams to be eliminated.
-     */
-    private void eliminateTeams(HashSet<Team> eliminatedTeams) {
-        for (Team eliminatedTeam : eliminatedTeams) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                plugin.sendMessage(player, eliminatedTeam.getDisplayName() + " has been eliminated!");
-            }
-            for (Team team : eliminatedTeams) {
-                teamsManager.teams.remove(team);
-            }
-            eliminatedTeam.unregister();
-        }
-    }
-
 
     /**
      * Sends a ping sound to all online players based on the remaining seconds in the round.
@@ -618,6 +602,24 @@ public class GameStateManager {
         }
     }
 
+    private void playEliminationSound(Player player) {
+        boolean muteSounds = settings.getBoolean("muteSounds");
+        if (muteSounds) {
+            return;
+        }
+
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1.059463f);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 0.840896f);
+        }, 4);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 0.707107f);
+        }, 8);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 0.529732f);
+        }, 12);
+    }
+
     public void handlePlayerMove(Player player) {
         if (gameState == 0) {
             return;
@@ -638,6 +640,25 @@ public class GameStateManager {
             if (playerBlock == playerLocation.getBlock().getType() || playerBlock == playerLocation.getBlock().getRelative(0, -1, 0).getType()) {
                 playerFoundBlock(player);
             }
+        }
+    }
+
+    // TODO optimize
+    private void incrementDifficulty() {
+        int previousDifficulty = settings.getInt("difficulty");
+
+        settings.set("difficulty", settings.getInt("difficulty") + 1);
+
+        ArrayList<ArrayList<ArrayList<String>>> blockList = plugin.categoryTree.getBlockList(settings);
+
+        while (blockList.isEmpty()
+                && (settings.getInt("difficulty") < Math.min(settings.getInt("difficultyCap"), 1000))) {
+            settings.set("difficulty", settings.getInt("difficulty") + 1);
+            blockList = plugin.categoryTree.getBlockList(settings);
+        }
+
+        if (blockList.isEmpty()) {
+            settings.set("difficulty", previousDifficulty);
         }
     }
 }
