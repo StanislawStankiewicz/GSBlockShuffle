@@ -43,7 +43,7 @@ public class SettingsSubcommand extends CommandBase implements Subcommand {
         }
 
         String presetName = args[2];
-        if (settings.getConfigurationSection("presets." + presetName) == null) {
+        if (!plugin.getPresetNames().contains(presetName)) {
             sender.sendMessage(ChatColor.RED + "Preset " + presetName + " does not exist.");
             return;
         }
