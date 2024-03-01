@@ -110,7 +110,7 @@ If includeVariants = true "base" and "variants" are joined together. After this 
 ## Contribution
 If you want to contribute to the development of GSBlockShuffle, please...
 
-Developers: stahu, MRocin
+Developers: stahu, [MRocin](https://github.com/MRcoin2) 
 
 Sound Deisgn Assistant:
 
