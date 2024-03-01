@@ -20,17 +20,17 @@ For technical reasons, when the game starts, each player without a team is assig
 3. Reload the plugins/Restart the server.
 
 ## Commands
-All commands start with: `/blockshuffle` or `/bs` (Commands in *italics* are OP-only by default)
-- *`/blockshuffle`* - Opens configuration GUI
-- *`/blockshuffle start`* - Starts the game with current settings
-- *`/blockshuffle end`* - Ends the game
+All commands start with: `/blockshuffle` or `/bs` (commands marked with <span style="color:red">*</span> are OP-only by default)
+- `/blockshuffle` - Opens configuration GUI<span style="color:red">*</span>
+- `/blockshuffle start` - Starts the game with current settings<span style="color:red">*</span>
+- `/blockshuffle end` - Ends the game<span style="color:red">*</span>
 - `/blockshuffle team` - Shows current team
   - `/blockshuffle team create <teamName>` - Creates a team with the specified name
   - `/blockshuffle team remove` - Removes your current team (You must be the team captain to do this)
-  - *`/blockshuffle team remove <teamName>`* - Removes specified team
+  - `/blockshuffle team remove <teamName>` - Removes specified team<span style="color:red">*</span>
   - `/blockshuffle team leave` - Leaves the current team
   - `/blockshuffle team color <color>` - Changes the color of the team and team members names
-  - *`/blockshuffle team add <player>`* - Adds a player to your team without asking.
+  - `/blockshuffle team add <player>` - Adds a player to your team without asking.<span style="color:red">*</span>
   - `/blockshuffle team invite <player>` - Invites a player to your team
   - `/blockshuffle team join <team>` - Requests to join the team
   - `/blockshuffle team accept` - Accepts an invite/join request.
@@ -39,10 +39,10 @@ All commands start with: `/blockshuffle` or `/bs` (Commands in *italics* are OP-
 - `/blockshuffle tp <player>` - Same as team tp
 - `/blockshuffle tpaccept` - Same as team tpaccept
 - `/blockshuffle settings` - Shows the current options
-  - *`/blockshuffle settings preset <preset>`* - loads a preset
-  - *`/blockshuffle settings load`* - Loads settings from settings.yml
-  - *`/blockshuffle settings save`* - Saves settings to settings.yml
-- *`/blockshuffle debug <args>`* - Commands for debugging
+  - `/blockshuffle settings preset <preset>` - loads a preset<span style="color:red">*</span>
+  - `/blockshuffle settings load` - Loads settings from settings.yml<span style="color:red">*</span>
+  - `/blockshuffle settings save` - Saves settings to settings.yml<span style="color:red">*</span>
+- `/blockshuffle debug <args>` - Commands for debugging<span style="color:red">*</span>
 
 ## Configuration
 Configuration can be done through the [GUI](#commands) or by editing the [settings.yml](src/main/resources/settings.yml) file: `plugins/GSBlockShuffle/settings.yml`.
@@ -97,7 +97,7 @@ Make sure to follow the files structure so everything works properly.
   - `base`
     - `isIncluded`
     - `difficulty`
-    - `elements` - If treatAllAsIndividualBlocks = false, all blocks, from this category, will be treated as a single block in the process of randomly getting a block. If this category is chosen a block from it will be randomly selected
+    - `elements` - If `treatAllAsIndividualBlocks = false`, all blocks, from this category, will be treated as a single block in the process of randomly getting a block. If this category is chosen a block from it will be randomly selected
   - `variant`
     - `isIncluded`
     - `difficulty`
