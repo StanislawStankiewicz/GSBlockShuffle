@@ -157,6 +157,7 @@ public class GameStateManager {
             return;
         }
 
+        playerBlockMap.clear();
         increaseDifficulty();
 
         roundBreak();
@@ -198,6 +199,7 @@ public class GameStateManager {
         bossBarTimer.updateBreakBossBar(progress, secondsLeft);
     }
 
+    // TODO delete temporary teams after game ends
     /**
      * Ends the game and sends a message to all online players.
      * This method constructs a message indicating the end of the game and the final scores of each team.
@@ -511,4 +513,3 @@ public class GameStateManager {
         } else return roundsRemaining == 0;
     }
 }
-
