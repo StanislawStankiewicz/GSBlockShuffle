@@ -2,7 +2,6 @@ package me.stahu.gsblockshuffle.event;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.gui.BossBarTimer;
-import me.stahu.gsblockshuffle.gui.WinnerSplashTitle;
 import me.stahu.gsblockshuffle.team.TeamsManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -14,6 +13,7 @@ import org.bukkit.scoreboard.*;
 import java.util.*;
 
 import static me.stahu.gsblockshuffle.sound.Sounds.*;
+import static me.stahu.gsblockshuffle.gui.SplashTitle.*;
 
 
 public class GameStateManager {
@@ -127,6 +127,7 @@ public class GameStateManager {
         Bukkit.getScheduler().cancelTask(this.roundTickTask);
         HashSet<Team> teamsToEliminate = getTeamsToEliminate();
 
+        // block not found sound
         for (Team team : teamsManager.teams) {
             for (String playerName : team.getEntries()) {
                 Player player = Bukkit.getPlayer(playerName);
@@ -137,10 +138,12 @@ public class GameStateManager {
             }
         }
 
+        // eliminate teams
         for (Team team : teamsToEliminate) {
             if (!(isGameEnding(false) && teamsManager.isTeamWinning(team))) {
                 for (String playerName : team.getEntries()) {
                     Player player = Bukkit.getPlayer(playerName);
+                    showEliminatedTitle(settings, player);
                     playEliminationSound(plugin, settings, player);
                 }
                 for (Player player : Bukkit.getOnlinePlayers()) {
@@ -151,7 +154,6 @@ public class GameStateManager {
             teamsManager.eliminateTeam(team);
         }
 
-        System.out.println("isGameEnding: " + isGameEnding(true));
         if (isGameEnding(true)) {
             setGameState(0);
             return;
@@ -212,20 +214,36 @@ public class GameStateManager {
         Bukkit.getScheduler().cancelTask(this.roundTickTask);
 
         List<Map.Entry<Team, Integer>> teamPlaceList = teamsManager.getTeamPlaceList();
+        List<String> winningTeamNames = new ArrayList<>();
 
-        // send winner splash title to all 1st places
-        for (Map.Entry<Team, Integer> entry : teamPlaceList) {
+        // get winning teams
+        for(Map.Entry<Team, Integer> entry : teamPlaceList) {
             if (entry.getValue() != 1) {
-                continue;
+                break;
             }
-            for (String playerName : entry.getKey().getEntries()) {
-                Player player = Bukkit.getPlayer(playerName);
-                WinnerSplashTitle.showWinnerSplashTitle(plugin, settings, player);
+            winningTeamNames.add(entry.getKey().getDisplayName());
+        }
+
+        // TODO resolve block not found and elimination sound conflict
+        // show splash titles
+        for (Map.Entry<Team, Integer> entry : teamPlaceList) {
+            if (entry.getValue() == 1) {
+                for (String playerName : entry.getKey().getEntries()) {
+                    Player player = Bukkit.getPlayer(playerName);
+                    showYouWonTitle(settings, player);
+                    playWinnerSound(plugin, settings, player);
+                }
+            } else {
+                for (String playerName : entry.getKey().getEntries()) {
+                    Player player = Bukkit.getPlayer(playerName);
+                    showPlayerWonTitle(settings, player, winningTeamNames);
+                }
             }
         }
-        // TODO separate sounds from all classes
+
         sendEndGameMessageToAllPlayers(teamPlaceList);
 
+        playerBlockMap.clear();
         plugin.teammateCompass.clearCompassBars();
         bossBarTimer.clearBossBars();
         teamsManager.clearScoreboards();
@@ -497,13 +515,13 @@ public class GameStateManager {
         boolean endGameIfOneTeamRemaining = settings.getBoolean("endGameIfOneTeamRemaining");
         int teamsSizeAfterElimination = teamsManager.teams.size();
 
-        System.out.println("Teams eliminated: " + teamsEliminated);
-        System.out.println("Teams to eliminate: " + getTeamsToEliminate().size());
+//        System.out.println("Teams eliminated: " + teamsEliminated);
+//        System.out.println("Teams to eliminate: " + getTeamsToEliminate().size());
 
         if (!teamsEliminated) {
             teamsSizeAfterElimination -= getTeamsToEliminate().size();
         }
-        System.out.println("Teams size: " + teamsSizeAfterElimination);
+//        System.out.println("Teams size: " + teamsSizeAfterElimination);
 
         if (teamsSizeAfterElimination == 0) {
             return true;

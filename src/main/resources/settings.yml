@@ -28,7 +28,7 @@ teleportMode: amountPerTeam # disabled | amountPerPlayer | amountPerTeam | unlim
 amountOfTeleportsPerRound: 1
 
 #miscelanous
-displaySplashWinnerTitle: false
+displaySplashTitle: true
 showTeamCompass: false
 muteSounds: false
 disablePvP: true
