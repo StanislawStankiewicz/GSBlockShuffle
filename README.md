@@ -97,11 +97,11 @@ Make sure to follow the files structure so everything works properly.
   - `base`
     - `isIncluded`
     - `difficulty`
-    - `elements` - If `treatAllAsIndividualBlocks = false`, all blocks, from this category, will be treated as a single block in the process of randomly getting a block. If this category is chosen a block from it will be randomly selected
+    - `elements` - If `treatAllAsIndividualBlocks = false`, all blocks from this category will be treated as a single block in the process of randomly getting a block. If this category is chosen a block from it will be randomly selected
   - `variant`
     - `isIncluded`
     - `difficulty`
-    - `elements` - these elements will be joined with the base elements if includeVariants = true
+    - `elements` - these elements will be joined with the base elements if `includeVariants = true`
 
 ## Contribution
 If you want to contribute to the development of GSBlockShuffle, please do :)
