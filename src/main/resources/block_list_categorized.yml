@@ -1712,10 +1712,11 @@ sea:
       - [ KELP ]
       - [ KELP_PLANT ]
       - [ TALL_SEAGRASS ]
-      - [ SEA_PICKLE ]
   coral:
     isIncluded: true
     difficulty: 5
+    elements:
+      - [ SEA_PICKLE ]
     base:
       isIncluded: true
       difficulty: 5
@@ -1807,29 +1808,26 @@ playermade:
   other:
     isIncluded: true
     difficulty: 7
-    base:
-      isIncluded: true
-      difficulty: 7
-      elements:
-        - [ STICKY_PISTON ]
-        - [ CONDUIT ]
-        - [ BOOKSHELF ]
-        - [ ENCHANTING_TABLE ]
-        - [ LODESTONE ]
-        - [ RESPAWN_ANCHOR ]
-        - [ HONEYCOMB_BLOCK ]
-        - [ CAKE ]
-        - [ FROGSPAWN ]
-        - [ ENDER_CHEST ]
-        - [ FROSTED_ICE ]
-        - [ TURTLE_EGG ]
-        - [ HONEY_BLOCK ]
-        - [ SLIME_BLOCK ]
-        - [ BEACON ]
-        - [ WITHER_SKELETON_SKULL, WITHER_SKELETON_WALL_SKULL ]
-        - [ POTTED_WITHER_ROSE ]
-        - [ WITHER_ROSE ]
-        - [ DECORATED_POT ]
+    elements:
+      - [ STICKY_PISTON ]
+      - [ CONDUIT ]
+      - [ BOOKSHELF ]
+      - [ ENCHANTING_TABLE ]
+      - [ LODESTONE ]
+      - [ RESPAWN_ANCHOR ]
+      - [ HONEYCOMB_BLOCK ]
+      - [ CAKE ]
+      - [ FROGSPAWN ]
+      - [ ENDER_CHEST ]
+      - [ FROSTED_ICE ]
+      - [ TURTLE_EGG ]
+      - [ HONEY_BLOCK ]
+      - [ SLIME_BLOCK ]
+      - [ BEACON ]
+      - [ WITHER_SKELETON_SKULL, WITHER_SKELETON_WALL_SKULL ]
+      - [ POTTED_WITHER_ROSE ]
+      - [ WITHER_ROSE ]
+      - [ DECORATED_POT ]
   candle:
     isIncluded: true
     difficulty: 6
@@ -1950,7 +1948,7 @@ excluded_blocks:
         - [ JIGSAW ]
     other:
       isIncluded: false
-      difficulty: 0
+      difficulty: 1000000
       heads:
         isIncluded: false
         difficulty: 1000000
