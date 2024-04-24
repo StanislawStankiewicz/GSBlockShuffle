@@ -1,5 +1,6 @@
 package me.stahu.gsblockshuffle.gui;
 
+import me.stahu.gsblockshuffle.team.BSTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -7,7 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class SplashTitle {
-    public static void showYouWonTitle(YamlConfiguration settings, Player player) {
+    public static void showWinnerTitle(YamlConfiguration settings, Player player) {
         if (!settings.getBoolean("displaySplashTitle")) {
             return;
         }
@@ -15,14 +16,15 @@ public class SplashTitle {
                 10, 70, 20);
     }
 
-    public static void showPlayerWonTitle(YamlConfiguration settings, Player player, List<String> winnerNames) {
+    public static void showPlayerWonTitle(YamlConfiguration settings, Player player, List<BSTeam> winnerTeams) {
         if (!settings.getBoolean("displaySplashTitle")) {
             return;
         }
 
         StringBuilder winners = new StringBuilder();
-        for (String winner : winnerNames) {
-            winners.append(winner).append(", ");
+        for (BSTeam winnerTeam : winnerTeams) {
+            String winnerName = winnerTeam.getName();
+            winners.append(winnerName).append(", ");
         }
         winners.deleteCharAt(winners.length() - 2);
 

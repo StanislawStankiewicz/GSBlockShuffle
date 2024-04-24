@@ -1,6 +1,7 @@
 package me.stahu.gsblockshuffle.sound;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
+import me.stahu.gsblockshuffle.team.BSTeam;
 import me.stahu.gsblockshuffle.team.TeamsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -9,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class Sounds {
     public static void playWinnerSound(GSBlockShuffle plugin, YamlConfiguration settings, Player player) {
-        if(settings.getBoolean("muteSounds")) {
+        if (settings.getBoolean("muteSounds")) {
             return;
         }
 
@@ -23,12 +24,14 @@ public class Sounds {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> playWinChord(player), 13);
     }
-    private static void playWinChord(Player player){
+
+    private static void playWinChord(Player player) {
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, 1, 0.529732f);
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, 1, 0.707107f);
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, 1, 0.890899f);
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, 1, 1.059463f);
     }
+
     public static void playEliminationSound(GSBlockShuffle plugin, YamlConfiguration settings, Player player) {
         boolean muteSounds = settings.getBoolean("muteSounds");
         if (muteSounds) {
@@ -55,6 +58,7 @@ public class Sounds {
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1.059463F), 3);
         }
     }
+
     public static void pingPlayers(GSBlockShuffle plugin, YamlConfiguration settings, int secondsLeft) {
         int secondsInRound = settings.getInt("roundTime");
 
@@ -79,6 +83,7 @@ public class Sounds {
             }
         }
     }
+
     public static void pingPlayerNTimes(GSBlockShuffle plugin, YamlConfiguration settings, Player player, int n, long delay) {
         if (settings.getBoolean("muteSounds")) {
             return;
@@ -88,6 +93,7 @@ public class Sounds {
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> playPingSound(settings, player), i * delay);
         }
     }
+
     private static void playPingSound(YamlConfiguration settings, Player player) {
         if (settings.getBoolean("muteSounds")) {
             return;
@@ -96,6 +102,7 @@ public class Sounds {
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 0.5F);
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 1F);
     }
+
     public static void playRoundCountdownSound(GSBlockShuffle plugin, YamlConfiguration settings, TeamsManager teamsManager) {
         boolean muteSounds = settings.getBoolean("muteSounds");
         if (muteSounds) {
@@ -105,14 +112,17 @@ public class Sounds {
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> playSoundToAllPlayers(settings, teamsManager, 0.629961F), 20);
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> playSoundToAllPlayers(settings, teamsManager, 1.259921F), 40);
     }
+
+    // TODO rename
     private static void playSoundToAllPlayers(YamlConfiguration settings, TeamsManager teamsManager, float pitch) {
         boolean muteSounds = settings.getBoolean("muteSounds");
         if (muteSounds) {
             return;
         }
-
-        for (Player player : teamsManager.getPlayersWithATeam()) {
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1, pitch);
+        for (BSTeam team : teamsManager.getTeams()) {
+            for (Player player : team.getPlayers()) {
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1, pitch);
+            }
         }
     }
 

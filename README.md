@@ -56,9 +56,9 @@ Configuration can be done through the [GUI](#commands) or by editing the [settin
 - `includeVariants <true | false>` - Should variants like colors and non-important derivatives (like stairs/slabs etc.) be included
 - `treatAllAsIndividualBlocks <true | false>` - If true, all blocks and their variants are treated as distinct blocks with an equal chance to be chosen. (i.e. different kinds of wool)
 ### Round settings
-- `roundsPerGame <integer>` - How many rounds should each game have. Set to -1 for no limit
-- `roundTime <integer>` - How long should a round last in seconds
-- `roundBreakTime <integer>` - How long should a break between rounds last in seconds
+- `totalRounds <integer>` - How many rounds should each game have. Set to -1 for no limit
+- `roundTimeSeconds <integer>` - How long should a round last in seconds
+- `roundBreakSeconds <integer>` - How long should a break between rounds last in seconds
 - `blockAssignmentMode <onePerPlayer | onePerTeam | onePerGame>`
   - `onePerPlayer` - Each player gets a different block
   - `onePerTeam` - Everyone in the same team gets the same block
@@ -104,8 +104,9 @@ Make sure to follow the files structure so everything works properly.
     - `elements` - these elements will be joined with the base elements if `includeVariants = true`
 
 ## Contribution
-If you want to contribute to the development of GSBlockShuffle, please do :)
+Contribution
+Contributions to the development of GSBlockShuffle, including code contributions, bug reports, and questions, are welcomed. Feel free to reach out to me on Discord (`kievitz`) for any inquiries.
 
-Developers: [stahu](https://github.com/stahuOfficial), [MRcoin](https://github.com/MRcoin2)
+Developers: [stahu](https://github.com/StanislawStankiewicz), [MRcoin](https://github.com/MRcoin2)
 
 Testers: 

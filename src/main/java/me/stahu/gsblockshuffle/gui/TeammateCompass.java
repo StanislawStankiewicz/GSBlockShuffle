@@ -1,5 +1,6 @@
 package me.stahu.gsblockshuffle.gui;
 
+import me.stahu.gsblockshuffle.team.BSTeam;
 import me.stahu.gsblockshuffle.team.TeamsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -7,7 +8,6 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -75,26 +75,23 @@ public class TeammateCompass {
 
     private String placeTeammatesInCompass(Player player, String compassBarString) {
         boolean useFirstLetterOfTeammates = true;
-        for (Team team : teamsManager.teams) {
-            if (team.hasEntry(player.getName())) {
-                if (team.getEntries().size() == 1) {
+        for (BSTeam team : teamsManager.getTeams()) {
+            if (team.getPlayers().contains(player)) {
+                if (team.getPlayers().size() == 1) {
                     return compassBarString;
-                }else if (team.getEntries().size()==2){
+                }else if (team.getPlayers().size()==2){
                     useFirstLetterOfTeammates = false;
                 }
-                for (String teammate : team.getEntries()) {
-                    if (!teammate.equals(player.getName())) {
-                        Player teammatePlayer = Bukkit.getPlayer(teammate);
-                        if (teammatePlayer != null) {
-                            Vector direction = teammatePlayer.getLocation().toVector().subtract(player.getLocation().toVector());
-                            direction.setY(0);
-                            direction.normalize();
-                            double angle = direction.angle(new Vector(1, 0, 0)) * direction.getZ() / Math.abs(direction.getZ());
-                            int offset = getCompassOffset(angle);
-                            offset = Math.floorMod((offset-1) ,compassBarString.length());
-                            if (offset < compassBarString.length()) {
-                                compassBarString = insertCaracterAtPosition(compassBarString, offset,useFirstLetterOfTeammates ? teammate.charAt(0) : '☻');
-                            }
+                for (Player teammate : team.getPlayers()) {
+                    if (!teammate.equals(player)) {
+                        Vector direction = teammate.getLocation().toVector().subtract(player.getLocation().toVector());
+                        direction.setY(0);
+                        direction.normalize();
+                        double angle = direction.angle(new Vector(1, 0, 0)) * direction.getZ() / Math.abs(direction.getZ());
+                        int offset = getCompassOffset(angle);
+                        offset = Math.floorMod((offset-1) ,compassBarString.length());
+                        if (offset < compassBarString.length()) {
+                            compassBarString = insertCaracterAtPosition(compassBarString, offset,useFirstLetterOfTeammates ? teammate.getName().charAt(0) : '☻');
                         }
                     }
                 }

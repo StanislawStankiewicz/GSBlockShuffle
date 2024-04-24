@@ -38,18 +38,20 @@ public class PlayerListener implements Listener {
         }
     }
 
+    // TODO Handle leaving players
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        teamsManager.removePlayerFromTeamAfterLeave(player);
+//        teamsManager.removePlayerFromTeamAfterLeave(player);
     }
+
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        teamsManager.reAddPlayerToTeamAfterLeave(player);
+//        teamsManager.reAddPlayerToTeamAfterLeave(player);
         teamsManager.setScoreboard();
         teamsManager.setShowScoreboard(true);
-        gameStateManager.bossBarTimer.reAddPlayersToBossBar();
+        gameStateManager.bossBarTimer.AddPlayersToBossBar();
 
         if (settings.getBoolean("showTeamCompass")) {
             plugin.teammateCompass.createCompassBars();
@@ -61,7 +63,9 @@ public class PlayerListener implements Listener {
     //Disable PvP
     @EventHandler
     public void onTestEntityDamage(EntityDamageByEntityEvent event) {
-        if (!settings.getBoolean("disablePvP")){return;}
+        if (!settings.getBoolean("disablePvP")) {
+            return;
+        }
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             event.setCancelled(true);
         }

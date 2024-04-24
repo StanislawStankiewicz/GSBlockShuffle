@@ -2,13 +2,13 @@ package me.stahu.gsblockshuffle.commands.subcommands;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.commands.CommandBase;
+import me.stahu.gsblockshuffle.team.BSTeam;
 import me.stahu.gsblockshuffle.team.TeamsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Team;
 
 import java.util.*;
 
@@ -42,18 +42,18 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
     public void parseSubcommand(CommandSender sender, Command command, String label, String[] args) {
         // tell player his team and team members
         if (args.length == 1) {
-            Team team = teamManager.getTeam((Player) sender);
+            BSTeam team = teamManager.getTeam((Player) sender);
             if (team == null) {
                 sender.sendMessage(ChatColor.RED + "You are not on a team.");
                 return;
             }
             sender.sendMessage(ChatColor.GRAY + "Team " + team.getDisplayName() + ChatColor.GRAY + " members:");
-            for (String entry : team.getEntries()) {
+            for (Player player : team.getPlayers()) {
                 String message = " ● ";
-                if (teamManager.teamCaptains.containsKey(Bukkit.getPlayer(entry))) {
-                    message += ChatColor.AQUA + entry;
+                if (team.captain.equals(player)) {
+                    message += ChatColor.AQUA + player.getName();
                 } else {
-                    message += entry;
+                    message += player.getName();
                 }
                 sender.sendMessage(message);
             }
@@ -72,7 +72,7 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
             case "color" -> changeTeamColor(sender, args);
             case "create" -> createTeam(sender, args);
             case "invite" -> teamInviteRequest(sender, args);
-            case "join" -> joinTeamRequest(sender, args);
+            case "join" -> teamJoinRequest(sender, args);
             case "leave" -> leaveTeam(sender);
             case "remove" -> teamRemove(sender, args);
             case "tp" -> teamTeleportRequest(sender, args);
@@ -86,20 +86,21 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
             return;
         }
         // check if team already exists
-        Team team = teamManager.getTeam(args[2]);
+        BSTeam team = teamManager.getTeam(args[2]);
 
-        if (teamManager.teams.contains(team)) {
+        if (team != null) {
             sender.sendMessage(ChatColor.RED + "Team " + ChatColor.DARK_AQUA + team.getDisplayName() + ChatColor.RED + " already exists.");
             return;
         }
-        team = teamManager.addTeam(args[2], ChatColor.WHITE);
-        teamManager.addPlayerToTeam((Player) sender, teamManager.getTeam(args[2]), false);
+        team = teamManager.createTeam(args[2], ChatColor.WHITE);
+        team.addPlayer((Player) sender);
         sender.sendMessage(ChatColor.GREEN + "Team " + ChatColor.RESET + team.getDisplayName() + ChatColor.GREEN + " has been created.");
     }
 
     private void changeTeamColor(CommandSender sender, String[] args) {
+        BSTeam team = teamManager.getTeam((Player) sender);
         //check if sender is the captain of his team "You must be a captain of a team to change it's color"
-        if (!teamManager.teamCaptains.containsKey((Player) sender)) {
+        if (team == null || team.captain.equals(sender)) {
             sender.sendMessage(ChatColor.RED + "You must be a captain of a team to change it's color.");
             return;
         }
@@ -114,10 +115,12 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
         }
 
         ChatColor color = stringToColorMap.get(args[2]);
-        teamManager.setTeamColor((Player) sender, color);
+        team.setColor(color);
+
         sender.sendMessage(ChatColor.GREEN + "Team color has been changed to " + color + args[2] + ChatColor.GREEN + ".");
     }
 
+    // TODO refactor getTeam calls
     private void teamAdd(CommandSender sender, String[] args) {
         if (args.length == 2) {
             sender.sendMessage(ChatColor.RED + "You must specify a player to add to your team.");
@@ -136,13 +139,14 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
             sender.sendMessage(ChatColor.RED + "Player is already in another team.");
             return;
         }
-        teamManager.addPlayerToTeam(target, teamManager.getTeam((Player) sender), true);
+        teamManager.getTeam((Player) sender).addPlayer(target);
         sender.sendMessage(ChatColor.GREEN + "Player " + ChatColor.DARK_AQUA + target.getName() + ChatColor.GREEN + " has been added to your team.");
         target.sendMessage(ChatColor.GREEN + "You have been added to team " + ChatColor.DARK_AQUA + teamManager.getTeam((Player) sender).getDisplayName());
     }
 
     private void teamRemove(CommandSender sender, String[] args) {
-        if (teamManager.teamCaptains.containsKey((Player) sender) && args.length == 2) {
+        BSTeam senderTeam = teamManager.getTeam((Player) sender);
+        if (senderTeam.captain.equals(sender) && args.length == 2) {
             sender.sendMessage(ChatColor.RED + "You are not the captain of your team.");
             return;
         } else if (args.length == 2 && !sender.hasPermission("BlockShuffle.command.team.remove")) {
@@ -158,7 +162,7 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
             sender.sendMessage(ChatColor.RED + "You must specify a team to remove.");
             return;
         }
-        Team team = teamManager.getTeam(args[2]);
+        BSTeam team = teamManager.getTeam(args[2]);
         if (team == null) {
             sender.sendMessage(ChatColor.RED + "Team " + ChatColor.DARK_AQUA + args[2] + ChatColor.RED + " does not exist.");
             return;
@@ -168,28 +172,34 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
         teamManager.removeTeam(team);
     }
 
-    private void sendTeamRemoveMessage(Team team) {
-        for (String playerName : team.getEntries()) {
-            Player player = Bukkit.getPlayer(playerName);
-            assert player != null;
+    private void sendTeamRemoveMessage(BSTeam team) {
+        for (Player player : team.getPlayers()) {
             plugin.sendMessage(player, "Your team has been removed.");
         }
     }
 
-    private void joinTeamRequest(CommandSender sender, String[] args) {
+    private void teamJoinRequest(CommandSender sender, String[] args) {
         if (args.length == 2) {
             sender.sendMessage(ChatColor.RED + "You must specify a team to join.");
             return;
         }
-        Team team = teamManager.getTeam(args[2]);
+        BSTeam team = teamManager.getTeam(args[2]);
         if (team == null) {
             sender.sendMessage(ChatColor.RED + "Team " + ChatColor.DARK_AQUA + args[2] + ChatColor.RED + " does not exist.");
             return;
         }
-        teamManager.joinTeamRequest((Player) sender, team);
+        teamManager.teamJoinRequest((Player) sender, team);
     }
 
     private void teamInviteRequest(CommandSender sender, String[] args) {
+        if (teamManager.getTeam((Player) sender) == null) {
+            sender.sendMessage(ChatColor.RED + "You must be in a team to invite players.");
+            return;
+        }
+        if(teamManager.getTeam((Player) sender).captain.equals(sender)) {
+            sender.sendMessage(ChatColor.RED + "You must be a captain of a team to invite players.");
+            return;
+        }
         if (args.length == 2) {
             sender.sendMessage(ChatColor.RED + "You must specify a player to invite.");
             return;
@@ -199,13 +209,11 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
             sender.sendMessage(ChatColor.RED + "Player " + ChatColor.DARK_AQUA + args[2] + ChatColor.RED + " is not online.");
             return;
         }
-        if (teamManager.getTeam((Player) sender) == teamManager.getTeam(target)) {
-            sender.sendMessage(ChatColor.RED + "Player is already in your team.");
+        if (teamManager.getTeam(target) != null) {
+            sender.sendMessage(ChatColor.RED + "Player is already in a team.");
             return;
         }
-        if (!teamManager.teamInviteRequest((Player) sender, target)) {
-            sender.sendMessage(ChatColor.RED + "Player already in another team.");
-        }
+        teamManager.teamInvite((Player) sender, target);
     }
 
     /**
@@ -214,8 +222,9 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
      * @param sender The sender of the command, usually a player.
      */
     private void teamAccept(CommandSender sender) {
-        if (teamManager.teamCaptains.containsKey((Player) sender)) {
-            if (!teamManager.joinTeamRequestAccept((Player) sender)) {
+        BSTeam senderTeam = teamManager.getTeam((Player) sender);
+        if (senderTeam.captain.equals(sender)) {
+            if (!teamManager.teamJoinAccept((Player) sender)) {
                 sender.sendMessage(ChatColor.RED + "You do not have any pending team requests.");
                 return;
             }
@@ -223,13 +232,13 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
         }
         // accept invite
         // sender should have no team if this method was called
-        if (!teamManager.teamInviteRequestAccept((Player) sender)) {
+        if (!teamManager.teamInviteAccept((Player) sender)) {
             sender.sendMessage(ChatColor.RED + "You do not have any pending team invites.");
         }
     }
 
     private void leaveTeam(CommandSender sender) {
-        Team team = teamManager.getTeam((Player) sender);
+        BSTeam team = teamManager.getTeam((Player) sender);
         if (team == null) {
             sender.sendMessage(ChatColor.RED + "You are not on a team.");
             return;
@@ -247,9 +256,7 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
             sender.sendMessage(ChatColor.RED + "Player " + ChatColor.DARK_AQUA + args[2] + ChatColor.RED + " is not online.");
             return;
         }
-        if (!teamManager.teamTeleportRequest((Player) sender, target)) {
-            sender.sendMessage(ChatColor.RED + "You cannot teleport to that player.");
-        }
+        teamManager.teamTeleportRequest((Player) sender, target);
     }
 
     public void teamTeleportAccept(CommandSender sender) {
@@ -265,16 +272,13 @@ public class TeamSubcommand extends CommandBase implements Subcommand {
 
             return filterCompletions(suggestions, args[1]);
         }
-        System.out.println("args[1]: " + args[1]);
-        System.out.println(filterCompletions(teamManager.teams.stream().map(Team::getName).toList(), args[2]));
-        System.out.println(filterCompletions(playerList(), args[2]));
         if (args.length == 3) {
             switch (args[1].toLowerCase()) {
                 case "add", "invite", "tp" -> {
                     return filterCompletions(playerList(), args[2]);
                 }
                 case "join", "remove" -> {
-                    return filterCompletions(teamManager.teams.stream().map(Team::getName).toList(), args[2]);
+                    return filterCompletions(teamManager.getTeams().stream().map(BSTeam::getName).toList(), args[2]);
                 }
                 case "color" -> {           // convert set to list
                     return filterCompletions(new ArrayList<>(stringToColorMap.keySet()), args[2]);

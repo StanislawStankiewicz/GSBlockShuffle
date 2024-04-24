@@ -1,5 +1,6 @@
 package me.stahu.gsblockshuffle.gui;
 
+import me.stahu.gsblockshuffle.team.BSTeam;
 import me.stahu.gsblockshuffle.team.TeamsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,24 +16,25 @@ public class BossBarTimer {
     public BossBarTimer(TeamsManager teamsManager) {
         this.teamsManager = teamsManager;
     }
+
     /**
      * Creates a new boss bar with a default message, color, and style.
      * The boss bar is initially green and solid, with the message "Something might've failed.".
      * The boss bar is then added to all players who are part of a team.
      */
     public void createBossBar() {
-        BossBar bossBar = Bukkit.createBossBar("Something might've failed.", BarColor.GREEN, BarStyle.SOLID);
-        for (Player player : teamsManager.getPlayersWithATeam()) {
-            bossBar.addPlayer(player);
-        }
-        this.bossBar = bossBar;
+        this.bossBar = Bukkit.createBossBar("Something went wrong.", BarColor.GREEN, BarStyle.SOLID);
+        AddPlayersToBossBar();
     }
 
-    public void reAddPlayersToBossBar() {
-        for (Player player : teamsManager.getPlayersWithATeam()) {
-            bossBar.addPlayer(player);
+    public void AddPlayersToBossBar() {
+        for (BSTeam team : teamsManager.getTeams()) {
+            for (Player player : team.getPlayers()) {
+                bossBar.addPlayer(player);
+            }
         }
     }
+
     /**
      * Updates the boss bar's progress, color, and title based on the remaining time in the round.
      * The progress is set to the provided progress value.
@@ -64,6 +66,7 @@ public class BossBarTimer {
         this.bossBar.setProgress(progress);
         this.bossBar.setTitle(ChatColor.WHITE + "Time left: " + timerColor + String.format("%02d", secondsLeft / 60) + ChatColor.WHITE + ":" + timerColor + String.format("%02d", secondsLeft % 60));
     }
+
     /**
      * Updates the boss bar during the break between rounds.
      * The progress of the boss bar is set to the provided progress value.
