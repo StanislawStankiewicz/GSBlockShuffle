@@ -109,4 +109,4 @@ Contributions to the development of GSBlockShuffle, including code contributions
 
 Developers: [stahu](https://github.com/StanislawStankiewicz), [MRcoin](https://github.com/MRcoin2)
 
-Testers: 
+Testers: asiulk4, c4ssp3r, Cwany, kubman, maxeloo_
