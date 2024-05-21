@@ -127,9 +127,6 @@ public class GameStateManager {
             return;
         }
         double progress = secondsLeft / (double) (settings.getInt("roundTimeSeconds"));
-        System.out.println(secondsLeft);
-        System.out.println(settings.getInt("roundTimeSeconds"));
-        System.out.println(progress);
         bossBarTimer.updateBossBar(progress, secondsLeft);
         //display actionbar title for everyone with a block
         for (BSTeam team : teamsManager.getTeams()) {
@@ -139,7 +136,6 @@ public class GameStateManager {
                             + playerBlockMap.get(player).get(0).replace("_", " ")));
                 }
             }
-
         }
         if (secondsLeft <= 60) {
             pingPlayers(plugin, settings, secondsLeft);
@@ -189,7 +185,7 @@ public class GameStateManager {
     public void roundBreak() {
         bossBarTimer.clearBossBars();
         bossBarTimer.createBossBar();
-        breakTimeSeconds = settings.getInt("roundBreakTime");
+        breakTimeSeconds = settings.getInt("roundBreakSeconds");
         secondsLeft = breakTimeSeconds;
 
         roundBreakTickTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::roundBreakTick, 0, 20);

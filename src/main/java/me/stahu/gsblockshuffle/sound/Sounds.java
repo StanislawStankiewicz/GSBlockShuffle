@@ -60,7 +60,7 @@ public class Sounds {
     }
 
     public static void pingPlayers(GSBlockShuffle plugin, YamlConfiguration settings, int secondsLeft) {
-        int secondsInRound = settings.getInt("roundTime");
+        int secondsInRound = settings.getInt("roundTimeSeconds");
 
         if (settings.getBoolean("muteSounds")) {
             return;
