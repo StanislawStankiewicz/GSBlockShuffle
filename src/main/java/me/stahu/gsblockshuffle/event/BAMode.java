@@ -1,6 +1,6 @@
 package me.stahu.gsblockshuffle.event;
 
-// TODO consider chanching name to BAMode
+
 public enum BAMode {
     ONE_PER_PLAYER, ONE_PER_TEAM, ONE_PER_ROUND;
 

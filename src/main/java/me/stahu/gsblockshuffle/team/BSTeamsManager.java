@@ -330,4 +330,17 @@ public class BSTeamsManager implements TeamsManager {
         // update scoreboard as it is not updated automatically
         setScoreboard();
     }
+
+    public ArrayList<BSTeam> getWinningTeams() {
+        ArrayList<BSTeam> winningTeams = new ArrayList<>();
+
+        for (BSTeam team : getTeams()) {
+            if (winningTeams.isEmpty() && !team.isEliminated) {
+                winningTeams.add(team);
+            } else if (team.getScore() == winningTeams.get(0).getScore() && !team.isEliminated) {
+                winningTeams.add(team);
+            }
+        }
+        return winningTeams;
+    }
 }

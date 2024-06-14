@@ -3,6 +3,7 @@ package me.stahu.gsblockshuffle.team;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.TreeSet;
 
 public interface TeamsManager {
@@ -45,4 +46,6 @@ public interface TeamsManager {
     void clearScoreboards();
 
     void incrementTeamScore(BSTeam team);
+
+    ArrayList<BSTeam> getWinningTeams();
 }

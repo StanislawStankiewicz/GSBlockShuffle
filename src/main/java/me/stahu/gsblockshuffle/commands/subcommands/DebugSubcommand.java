@@ -102,7 +102,7 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
 
         plugin.changeSetting(settings, key, value);
 
-        sender.sendMessage(ChatColor.GREEN + "Successfully set " + ChatColor.DARK_AQUA + key + " to " + ChatColor.DARK_GREEN + value);
+        sender.sendMessage(ChatColor.GREEN + "Successfully set " + ChatColor.DARK_AQUA + key + ChatColor.GREEN + " to " + ChatColor.DARK_GREEN + value);
     }
 
     private void teleportToPlayer(CommandSender sender, String[] args) {

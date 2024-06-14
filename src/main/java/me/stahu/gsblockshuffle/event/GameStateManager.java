@@ -148,33 +148,33 @@ public class GameStateManager {
 
         // TODO REFACTOR SOUNDS!!!
         // block not found sound
-//        for (BSTeam team : teamsManager.getTeams()) {
-//            for (Player player: team.getPlayers()) {
-//                if (!playersWhoFoundBlock.contains(player) && !isGameEnding(false)
-//                        && !settings.getBoolean("eliminateAfterRound")) {
-//                    playBlockFoundSound(plugin, settings, player, false);
-//                }
-//            }
-//        }
-
+        for (BSTeam team : teamsManager.getTeams()) {
+            for (Player player: team.getPlayers()) {
+                if (!playersWhoFoundBlock.contains(player) && !isGameEnding(false)
+                        && !settings.getBoolean("eliminateAfterRound")) {
+                    playBlockFoundSound(plugin, settings, player, false);
+                }
+            }
+        }
         // eliminate teams
-//        for (BSTeam team : teamsToEliminate) {
-//            if (!(isGameEnding(false) && teamsManager.isTeamWinning(team))) {
-//                for (Player player: team.getPlayers()) {
-//                    showEliminatedTitle(settings, player);
-//                    playEliminationSound(plugin, settings, player);
-//                }
-//                for (Player player : Bukkit.getOnlinePlayers()) {
-//                    plugin.sendMessage(player, team.getDisplayName() + " has been eliminated!");
-//                }
-//            }
-//            team.isEliminated = true;
-//        }
-//
-//        if (isGameEnding(true)) {
-//            setGameState(GameState.IDLE);
-//            return;
-//        }
+        ArrayList<BSTeam> winningTeams = teamsManager.getWinningTeams();
+        for (BSTeam team : teamsToEliminate) {
+            if (!(isGameEnding(false) && winningTeams.contains(team))) {
+                for (Player player: team.getPlayers()) {
+                    showEliminatedTitle(settings, player);
+                    playEliminationSound(plugin, settings, player);
+                }
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    plugin.sendMessage(player, team.getDisplayName() + " has been eliminated!");
+                }
+            }
+            team.isEliminated = true;
+        }
+
+        if (isGameEnding(true)) {
+            setGameState(GameState.IDLE);
+            return;
+        }
 
         playerBlockMap.clear();
         increaseDifficulty();
@@ -211,15 +211,7 @@ public class GameStateManager {
         Bukkit.getScheduler().cancelTask(this.roundTickTask);
         Bukkit.getScheduler().cancelTask(this.roundBreakTickTask);
 
-        ArrayList<BSTeam> winningTeams = new ArrayList<>();
-
-        for (BSTeam team : teamsManager.getTeams()) {
-            if (winningTeams.isEmpty() && !team.isEliminated) {
-                winningTeams.add(team);
-            } else if (team.getScore() == winningTeams.get(0).getScore() && !team.isEliminated) {
-                winningTeams.add(team);
-            }
-        }
+        ArrayList<BSTeam> winningTeams = teamsManager.getWinningTeams();
 
         // TODO resolve block not found and elimination sound conflict
         // show splash titles
@@ -250,7 +242,7 @@ public class GameStateManager {
 
     private HashSet<BSTeam> getTeamsToEliminate() {
         int membersWithoutBlock;
-        HashSet<BSTeam> eliminatedTeams = new HashSet<>();
+        HashSet<BSTeam> teamsToEliminate = new HashSet<>();
         boolean eliminateAfterRound = settings.getBoolean("eliminateAfterRound");
         boolean allPlayersRequiredForTeamWin = settings.getBoolean("allPlayersRequiredForTeamWin");
 
@@ -260,15 +252,15 @@ public class GameStateManager {
                 if (!playersWhoFoundBlock.contains(player)) {
                     if (eliminateAfterRound) {
                         membersWithoutBlock++;
-                        eliminatedTeams.add(team);
+                        teamsToEliminate.add(team);
                     }
                 }
             }
             if (allPlayersRequiredForTeamWin && membersWithoutBlock > 0) {
-                eliminatedTeams.add(team);
+                teamsToEliminate.add(team);
             }
         }
-        return eliminatedTeams;
+        return teamsToEliminate;
     }
 
     private void increaseDifficulty() {
@@ -370,7 +362,6 @@ public class GameStateManager {
 
         BSTeam team = teamsManager.getTeam(player);
 
-        // if true just increment the teams score
         if (teamScoreIncrementPerPlayer) {
             teamsManager.incrementTeamScore(team);
         } else {
@@ -393,16 +384,12 @@ public class GameStateManager {
             plugin.sendMessage(p, player.getDisplayName() + " has found their block! (" + ChatColor.GOLD
                     + playerBlockMap.get(player).get(0).replace("_", " ") + ChatColor.RESET + ")");
         }
-
         playerBlockMap.remove(player);
 
-        // TODO SOUNDS
-        // avoid sound collision with win sound if player is in winning team
-//        if (teamsManager.isTeamWinning(team) && !isGameEnding(false)) {
-//            playBlockFoundSound(plugin, settings, player, true);
-//        }
+        if (!isGameEnding(false)) {
+            playBlockFoundSound(plugin, settings, player, true);
+        }
 
-        // if firstToWin endRound
         if (firstToWin) {
             // if not allPlayersRequiredForTeamWin set teammates block to found
             if (!allPlayersRequiredForTeamWin) {
@@ -423,7 +410,6 @@ public class GameStateManager {
             endRound();
             return;
         }
-        // if no players left - endRound
         if (playerBlockMap.isEmpty()) {
             endRound();
         }
@@ -476,5 +462,21 @@ public class GameStateManager {
 
         // Return random variant of the block
         return block.get(random.nextInt(block.size()));
+    }
+
+    private boolean isGameEnding(boolean teamsEliminated) {
+        boolean endGameIfOneTeamRemaining = settings.getBoolean("endGameIfOneTeamRemaining");
+        int teamsSizeAfterElimination = teamsManager.getTeams().size();
+
+        if (!teamsEliminated) {
+            teamsSizeAfterElimination -= getTeamsToEliminate().size();
+        }
+        if (teamsSizeAfterElimination == 0) {
+            return true;
+        }
+        if (endGameIfOneTeamRemaining && teamsSizeAfterElimination == 1) {
+            return true;
+        } else
+            return roundsRemaining == 0;
     }
 }

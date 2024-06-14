@@ -47,11 +47,13 @@ public class BossBarTimer {
         ChatColor timerColor;
 
         if (progress < 0.1) {
+            bossBar.setColor(BarColor.RED);
             timerColor = ChatColor.DARK_RED;
         } else if (progress < 0.2) {
             bossBar.setColor(BarColor.RED);
             timerColor = ChatColor.RED;
         } else if (progress < 0.3) {
+            bossBar.setColor(BarColor.YELLOW);
             timerColor = ChatColor.GOLD;
         } else if (progress < 0.5) {
             bossBar.setColor(BarColor.YELLOW);
