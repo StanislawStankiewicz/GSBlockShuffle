@@ -4,6 +4,7 @@ import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.commands.subcommands.DebugSubcommand;
 import me.stahu.gsblockshuffle.commands.subcommands.SettingsSubcommand;
 import me.stahu.gsblockshuffle.commands.subcommands.TeamSubcommand;
+import me.stahu.gsblockshuffle.event.GameState;
 import me.stahu.gsblockshuffle.event.GameStateManager;
 import me.stahu.gsblockshuffle.gui.page.GuiPage;
 import me.stahu.gsblockshuffle.team.TeamsManager;
@@ -76,14 +77,14 @@ public class BlockShuffleCommand extends CommandBase implements CommandExecutor,
 
     // /gsbs end
     private void endGame(Player player) {
-        if (!gameStateManager.setGameState(0)) {
+        if (!gameStateManager.setGameState(GameState.IDLE)) {
             player.sendMessage(ChatColor.RED + "Game is already stopped.");
         }
     }
 
     // /gsbs start
     private void startGame(Player player) {
-        if (!gameStateManager.setGameState(1)) {
+        if (!gameStateManager.setGameState(GameState.RUNNING)) {
             player.sendMessage(ChatColor.RED + "Game is already running.");
         }
     }

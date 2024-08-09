@@ -9,9 +9,9 @@ includeVariants: true
 treatAllAsIndividualBlocks: false
 
 #round settings
-roundsPerGame: 1 # -1 for infinite
-roundTime: 300 #seconds
-roundBreakTime: 10 #seconds
+totalRounds: 1 # -1 for infinite
+roundTimeSeconds: 300
+roundBreakSeconds: 10
 blockAssignmentMode: onePerPlayer # onePerPlayer | onePerTeam | onePerRound
 
 #win settings
@@ -25,7 +25,7 @@ firstToWin: true # the round ends when the first player/team finds their block i
 
 #teleport settings
 teleportMode: amountPerTeam # disabled | amountPerPlayer | amountPerTeam | unlimited
-amountOfTeleportsPerRound: 1
+teleportsPerRound: 1
 
 #miscelanous
 displaySplashTitle: true

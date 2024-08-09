@@ -7,6 +7,7 @@ import me.stahu.gsblockshuffle.gui.BossBarTimer;
 import me.stahu.gsblockshuffle.gui.TeammateCompass;
 import me.stahu.gsblockshuffle.gui.page.MainMenuGui;
 import me.stahu.gsblockshuffle.settings.CategoryTree;
+import me.stahu.gsblockshuffle.team.BSTeamsManager;
 import me.stahu.gsblockshuffle.team.TeamsManager;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -68,10 +69,10 @@ public final class GSBlockShuffle extends JavaPlugin {
         MainMenuGui mainMenuGui = new MainMenuGui(null, settings, this);
 
         // TODO setting this up immediately is inefficient
-        this.teamsManager = new TeamsManager(settings, this);
+        this.teamsManager = new BSTeamsManager(this, settings);
         this.teammateCompass = new TeammateCompass(teamsManager);
         this.bossBarTimer = new BossBarTimer(teamsManager);
-        gameStateManager = new GameStateManager(settings, this, teamsManager, bossBarTimer);
+        gameStateManager = new GameStateManager(this, settings, teamsManager, bossBarTimer);
 
         //register events for PlayerListener
         getServer().getPluginManager().registerEvents(new PlayerListener(settings, this, gameStateManager, teamsManager, teammateCompass), this);

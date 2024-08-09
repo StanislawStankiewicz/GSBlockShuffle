@@ -1,6 +1,7 @@
 package me.stahu.gsblockshuffle.gui.page;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
+import me.stahu.gsblockshuffle.event.GameState;
 import me.stahu.gsblockshuffle.gui.GuiUtils;
 import me.stahu.gsblockshuffle.gui.item.*;
 import me.stahu.gsblockshuffle.settings.Category;
@@ -53,9 +54,9 @@ public class MainMenuGui extends GuiPage implements Listener {
         updateItems();
     }
 
-    private void placePresetButtons(String[] filenames, int index){
-        for (int i=0; i < filenames.length;i++){
-            slotArray[index+i] = new PresetButton(filenames[i], plugin);
+    private void placePresetButtons(String[] filenames, int index) {
+        for (int i = 0; i < filenames.length; i++) {
+            slotArray[index + i] = new PresetButton(filenames[i], plugin);
         }
     }
 
@@ -101,20 +102,20 @@ public class MainMenuGui extends GuiPage implements Listener {
 
         //start game
         if (e.getRawSlot() == 3) {
-            if (!plugin.gameStateManager.setGameState(1)) {
+            if (!plugin.gameStateManager.setGameState(GameState.RUNNING)) {
                 Player player = (Player) e.getWhoClicked();
                 player.sendMessage(ChatColor.RED + "Game is already running.");
-            }else{
+            } else {
                 close(e.getWhoClicked());
             }
         }
 
         //end game
         if (e.getRawSlot() == 5) {
-            if (!plugin.gameStateManager.setGameState(0)) {
+            if (!plugin.gameStateManager.setGameState(GameState.IDLE)) {
                 Player player = (Player) e.getWhoClicked();
                 player.sendMessage(ChatColor.RED + "Game is already stopped.");
-            }else{
+            } else {
                 close(e.getWhoClicked());
             }
         }

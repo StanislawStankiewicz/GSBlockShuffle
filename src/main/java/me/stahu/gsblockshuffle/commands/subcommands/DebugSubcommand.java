@@ -2,6 +2,7 @@ package me.stahu.gsblockshuffle.commands.subcommands;
 
 import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.commands.CommandBase;
+import me.stahu.gsblockshuffle.event.GameState;
 import me.stahu.gsblockshuffle.event.GameStateManager;
 import me.stahu.gsblockshuffle.team.TeamsManager;
 import org.bukkit.ChatColor;
@@ -58,7 +59,7 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
 
     private void startGame(CommandSender sender) {
         sender.sendMessage(ChatColor.GREEN + "Game start invoked.");
-        gameStateManager.setGameState(1);
+        gameStateManager.setGameState(GameState.RUNNING);
     }
 
     private void newRound(CommandSender sender) {
@@ -73,7 +74,7 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
 
     private void endGame(CommandSender sender) {
         sender.sendMessage(ChatColor.GREEN + "End game invoked.");
-        gameStateManager.setGameState(0);
+        gameStateManager.setGameState(GameState.IDLE);
     }
 
     private void getRoundsRemaining(CommandSender sender) {
@@ -101,7 +102,7 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
 
         plugin.changeSetting(settings, key, value);
 
-        sender.sendMessage(ChatColor.GREEN + "Successfully set " + ChatColor.DARK_AQUA + key + " to " + ChatColor.DARK_GREEN + value);
+        sender.sendMessage(ChatColor.GREEN + "Successfully set " + ChatColor.DARK_AQUA + key + ChatColor.GREEN + " to " + ChatColor.DARK_GREEN + value);
     }
 
     private void teleportToPlayer(CommandSender sender, String[] args) {
@@ -142,7 +143,6 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
                     "tp");
             return filterCompletions(completions, args[1]);
         }
-
         List<String> settingKeysList = settings.getKeys(false).stream().toList();
         switch (args[1].toLowerCase()) {
             case "get", "set" -> {
@@ -151,7 +151,6 @@ public class DebugSubcommand extends CommandBase implements Subcommand {
                 }
             }
         }
-
         return Collections.emptyList();
     }
 }
