@@ -1,6 +1,6 @@
 name: GSBlockShuffle
 version: '1.0.0-alpha0'
-main: me.stahu.gSBlockShuffle.GSBlockShuffle
+main: me.stahu.gsblockshuffle.GSBlockShuffle
 api-version: '1.20'
 prefix: GSBlockShuffle
 authors: [ stahu & MRcoin ]

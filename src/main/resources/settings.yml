@@ -1,0 +1,34 @@
+#block settings
+difficulty: 0
+difficultyCap: 10 # hard capped at 1000
+increaseDifficulty: true
+increaseEveryNRounds: 1 # -1 if custom
+customIncrease: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] # increase at nth round
+includeLowerDifficulties: false
+includeVariants: true
+treatAllAsIndividualBlocks: false
+
+#round settings
+totalRounds: 1 # -1 for infinite
+roundTimeSeconds: 5
+roundBreakSeconds: 10
+blockAssignmentMode: onePerPlayer # onePerPlayer | onePerTeam | onePerRound
+
+#win settings
+allPlayersRequiredForTeamWin: true
+teamScoreIncrementPerPlayer: false # team score increments for each player who found their block if false, otherwise only 1 point is awarded to the team that found their block
+eliminateAfterRound: false
+endGameIfOneTeamRemaining: true
+firstToWin: true # the round ends when the first player/team finds their block if true
+#teamWinBy: score # score | time
+#winScore: 5
+
+#teleport settings
+teleportMode: amountPerTeam # disabled | amountPerPlayer | amountPerTeam | unlimited
+teleportsPerRound: 1
+
+#miscelanous
+displaySplashTitle: true
+showTeamCompass: false
+muteSounds: false
+disablePvP: true

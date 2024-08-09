@@ -1,4 +1,4 @@
-package me.stahu.gSBlockShuffle;
+package me.stahu.gsblockshuffle;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -7,7 +7,6 @@ public final class GSBlockShuffle extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-
     }
 
     @Override
