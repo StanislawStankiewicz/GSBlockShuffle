@@ -10,10 +10,10 @@ public class Category {
     String name;
     boolean isIncluded;
     int difficulty;
-    Set<Category> subcategories;
-    Set<Block> blocks;
+    List<Category> subcategories;
+    List<Block> blocks;
 
-    public Category(String name, boolean isIncluded, int difficulty, Set<Category> subcategories, Set<Block> blocks) {
+    public Category(String name, boolean isIncluded, int difficulty, List<Category> subcategories, List<Block> blocks) {
         this.name = name;
         this.isIncluded = isIncluded;
         this.difficulty = difficulty;
@@ -21,8 +21,8 @@ public class Category {
         this.blocks = blocks;
     }
 
-    public Set<Block> getBlocks() {
-        Set<Block> result = new HashSet<>();
+    public List<Block> getBlocks() {
+        List<Block> result = new ArrayList<>();
         for (Category subcategory : subcategories) {
             if (subcategory.isIncluded) {
                 result.addAll(subcategory.getBlocks());

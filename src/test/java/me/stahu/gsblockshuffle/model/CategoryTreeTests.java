@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Set;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,14 +16,14 @@ class CategoryTreeTests {
     @Test
     void getBlocks_returnsAllIncludedBlocks() {
         Category category1 =
-                new Category("category1", true, 1, Set.of(), Set.of(new Block("block1")));
+                new Category("category1", true, 1, List.of(), List.of(new Block("block1")));
         Category category2 =
-                new Category("category2", false, 1, Set.of(), Set.of(new Block("block2")));
+                new Category("category2", false, 1, List.of(), List.of(new Block("block2")));
         Category category3 =
-                new Category("category3", true, 1, Set.of(), Set.of(new Block("block3")));
-        CategoryTree categoryTree = new CategoryTree(Set.of(category1, category2, category3));
+                new Category("category3", true, 1, List.of(), List.of(new Block("block3")));
+        CategoryTree categoryTree = new CategoryTree(List.of(category1, category2, category3));
 
-        Set<Block> includedBlocks = categoryTree.getBlocks();
+        List<Block> includedBlocks = categoryTree.getBlocks();
         for (Block block : includedBlocks) {
             System.out.println(block.getNames());
         }
@@ -37,15 +37,15 @@ class CategoryTreeTests {
         String filePath = tempFile.toString();
 
         Category category4 =
-                new Category("category4", true, 1, Set.of(), Set.of(new Block("block4")));
+                new Category("category4", true, 1, List.of(), List.of(new Block("block4")));
         Category category3 =
-                new Category("category3", true, 1, Set.of(), Set.of(new Block("block3")));
+                new Category("category3", true, 1, List.of(), List.of(new Block("block3")));
         Category category2 =
-                new Category("category2", false, 1, Set.of(category4), Set.of());
+                new Category("category2", false, 1, List.of(category4), List.of());
         Category category1 =
-                new Category("category1", true, 1, Set.of(category2, category3), Set.of());
+                new Category("category1", true, 1, List.of(category2, category3), List.of());
 
-        CategoryTree categoryTree = new CategoryTree(Set.of(category1));
+        CategoryTree categoryTree = new CategoryTree(List.of(category1));
 
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("expectedYml.yaml");
         assert inputStream != null;

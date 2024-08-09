@@ -6,18 +6,18 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Set;
+import java.util.List;
 
 @Log
 @AllArgsConstructor
 public class CategoryTree {
 
-    private Set<Category> categories;
+    private List<Category> categories;
 
-    public Set<Block> getBlocks() {
-        Set<Block> blocks = new HashSet<>();
+    public List<Block> getBlocks() {
+        List<Block> blocks = new ArrayList<>();
         for (Category category : categories) {
             if (category.isIncluded()) {
                 blocks.addAll(category.getBlocks());

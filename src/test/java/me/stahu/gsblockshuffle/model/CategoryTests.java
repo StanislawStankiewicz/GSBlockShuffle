@@ -2,8 +2,8 @@ package me.stahu.gsblockshuffle.model;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,14 +13,14 @@ class CategoryTests {
 
     @Test
     void getBlocks_returnsAllBlocks() {
-        Set<Block> blocks = Set.of(new Block("block1"), new Block("block2"));
-        Set<Block> subcategoryBlocks = Set.of(new Block("block3"), new Block("block4"));
+        List<Block> blocks = List.of(new Block("block1"), new Block("block2"));
+        List<Block> subcategoryBlocks = List.of(new Block("block3"), new Block("block4"));
 
-        Category subcategory = new Category("Subcategory", true, 1, new HashSet<>(), subcategoryBlocks);
-        Category category = new Category("Category", true, 1, Set.of(subcategory), blocks);
+        Category subcategory = new Category("Subcategory", true, 1, new ArrayList<>(), subcategoryBlocks);
+        Category category = new Category("Category", true, 1, List.of(subcategory), blocks);
 
-        Set<Block> result = category.getBlocks();
-        Set<Block> expectedBlocks = Set.of(
+        List<Block> result = category.getBlocks();
+        List<Block> expectedBlocks = List.of(
                 new Block("block1"),
                 new Block("block2"),
                 new Block("block3"),
@@ -32,16 +32,16 @@ class CategoryTests {
 
     @Test
     void getBlocks_returnsAllIncludedBlocks() {
-        Set<Block> blocks = Set.of(new Block("block1"), new Block("block2"));
-        Set<Block> subcategoryBlocks1 = Set.of(new Block("block3"), new Block("block4"));
-        Set<Block> subcategoryBlocks2 = Set.of(new Block("block5"), new Block("block6"));
+        List<Block> blocks = List.of(new Block("block1"), new Block("block2"));
+        List<Block> subcategoryBlocks1 = List.of(new Block("block3"), new Block("block4"));
+        List<Block> subcategoryBlocks2 = List.of(new Block("block5"), new Block("block6"));
 
-        Category subcategory1 = new Category("Subcategory", false, 1, new HashSet<>(), subcategoryBlocks1);
-        Category subcategory2 = new Category("Subcategory", true, 1, new HashSet<>(), subcategoryBlocks2);
-        Category category = new Category("Category", true, 1, Set.of(subcategory1, subcategory2), blocks);
+        Category subcategory1 = new Category("Subcategory", false, 1, new ArrayList<>(), subcategoryBlocks1);
+        Category subcategory2 = new Category("Subcategory", true, 1, new ArrayList<>(), subcategoryBlocks2);
+        Category category = new Category("Category", true, 1, List.of(subcategory1, subcategory2), blocks);
 
-        Set<Block> result = category.getBlocks();
-        Set<Block> expectedBlocks = Set.of(
+        List<Block> result = category.getBlocks();
+        List<Block> expectedBlocks = List.of(
                 new Block("block1"),
                 new Block("block2"),
                 new Block("block5"),

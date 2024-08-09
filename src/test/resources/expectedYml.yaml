@@ -1,11 +1,6 @@
 category1:
   isIncluded: true
   difficulty: 1
-  category3:
-    isIncluded: true
-    difficulty: 1
-    elements:
-    - [block3]
   category2:
     isIncluded: false
     difficulty: 1
@@ -13,4 +8,9 @@ category1:
       isIncluded: true
       difficulty: 1
       elements:
-      - [block4]
+        - [block4]
+  category3:
+    isIncluded: true
+    difficulty: 1
+    elements:
+      - [block3]
