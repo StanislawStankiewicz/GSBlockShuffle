@@ -1,0 +1,68 @@
+# IntelliJ IDEA specific files
+.idea/
+*.iml
+*.iws
+out/
+logs/
+
+# Gradle specific files
+.gradle/
+build/
+
+# Dependency caches
+**/build/
+
+# Gradle Wrapper files
+!gradlew
+!gradlew.bat
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# Java class files
+*.class
+
+# Generated files
+gen/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Maven specific files (if any Maven projects are used)
+.mvn/
+target/
+
+# Miscellaneous
+*.log
+*.tmp
+*.bak
+*.swp
+*~.nib
+*.orig
+*.rej
+*.sublime-project
+*.sublime-workspace
+
+# Compiled source
+*.dll
+*.exe
+*.o
+*.pyc
+*.pyo
+*.rbc
+*.class
+
+# Generated JAR files and war files
+*.jar
+*.war
+*.ear
+
+# Project-specific files
+.settings/
+.externalToolBuilders/
+.classpath
+.project
+
+# Eclipse-specific files (in case you ever import it into Eclipse)
+.cproject
+.settings/
