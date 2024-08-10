@@ -24,6 +24,8 @@ dependencies {
     // Lombok
     compileOnly "org.projectlombok:lombok:1.18.34"
     annotationProcessor "org.projectlombok:lombok:1.18.34"
+    // JetBrains Annotations
+    compileOnly 'org.jetbrains:annotations:24.1.0'
     // Snake YAML
     implementation 'org.yaml:snakeyaml:2.2'
     // JUnit 5

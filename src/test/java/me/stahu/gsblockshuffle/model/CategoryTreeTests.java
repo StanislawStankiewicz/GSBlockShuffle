@@ -36,7 +36,7 @@ class CategoryTreeTests {
 
         CategoryTree categoryTree = getTestCategoryTree();
 
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testCategoryTree.yaml");
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("testCategoryTree.yml");
         assert inputStream != null;
         String expectedYaml = new String(inputStream.readAllBytes());
 
@@ -56,7 +56,7 @@ class CategoryTreeTests {
 
         CategoryTree parsedCategoryTree;
         try {
-            parsedCategoryTree = CategoryTree.parseYaml("src/test/resources/testCategoryTree.yaml");
+            parsedCategoryTree = CategoryTree.parseYaml("src/test/resources/testCategoryTree.yml");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
