@@ -5,21 +5,21 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import java.util.Set;
+import java.util.List;
 
 
 @Getter
-@EqualsAndHashCode
 @ToString
+@EqualsAndHashCode
 @RequiredArgsConstructor
 public class Block {
-    private final Set<String> names;
+    private final List<String> names;
 
     public Block(String name) {
-        this.names = Set.of(name);
+        this.names = List.of(name);
     }
 
     public Block(String... names) {
-        this.names = Set.of(names);
+        this.names = List.of(names);
     }
 }

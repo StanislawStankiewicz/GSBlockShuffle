@@ -1,10 +1,12 @@
 package me.stahu.gsblockshuffle.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.*;
 
 @Getter
+@EqualsAndHashCode
 public class Category {
 
     String name;
@@ -19,6 +21,11 @@ public class Category {
         this.difficulty = difficulty;
         this.subcategories = subcategories;
         this.blocks = blocks;
+    }
+
+    public Category(Map<String, Object> stringObjectMap, String key) {
+        this.name = key;
+        fromMap(stringObjectMap);
     }
 
     public List<Block> getBlocks() {
@@ -40,13 +47,46 @@ public class Category {
             for (Category subcategory : subcategories) {
                 map.put(subcategory.name, subcategory.toMap());
             }
-        } else {
-            ArrayList<ArrayList<String>> elements = new ArrayList<>();
-            for (Block block : blocks) {
-                elements.add(new ArrayList<>(block.getNames()));
-            }
-            map.put("elements", elements);
+            return map;
         }
+        ArrayList<ArrayList<String>> elements = new ArrayList<>();
+        for (Block block : blocks) {
+            elements.add(new ArrayList<>(block.getNames()));
+        }
+        map.put("elements", elements);
         return map;
+    }
+
+    void fromMap(Map<String, Object> map) {
+        this.isIncluded = map.get("isIncluded") != null && (boolean) map.get("isIncluded");
+        this.difficulty = map.get("difficulty") != null ? (int) map.get("difficulty") : 0;
+        map.remove("isIncluded");
+        map.remove("difficulty");
+        if (map.containsKey("elements")) {
+            this.blocks = new ArrayList<>();
+            for (ArrayList<String> element : castElements((ArrayList<Object>) map.get("elements"))) {
+                this.blocks.add(new Block(element));
+            }
+        } else {
+            this.subcategories = new ArrayList<>();
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                Category subcategory = new Category((LinkedHashMap<String, Object>) entry.getValue(), entry.getKey());
+                this.subcategories.add(subcategory);
+            }
+        }
+    }
+
+    ArrayList<ArrayList<String>> castElements(ArrayList<Object> elements) {
+        ArrayList<ArrayList<String>> castedElements = new ArrayList<>();
+        for (Object o : elements) {
+            if (o instanceof String s) {
+                ArrayList<String> element = new ArrayList<>();
+                element.add(s);
+                castedElements.add(element);
+            } else {
+                castedElements.add((ArrayList<String>) o);
+            }
+        }
+        return castedElements;
     }
 }

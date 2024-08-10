@@ -9,7 +9,7 @@ class BlockTests {
     @Test
     void equals_returnsTrueForEqualBlocks() {
         Block block1 = new Block("block1", "block2");
-        Block block2 = new Block("block2", "block1");
+        Block block2 = new Block("block1", "block2");
 
         assertEquals(block1, block2);
     }
