@@ -14,7 +14,7 @@ public class PlayerBlockAssignerTests {
 
     @Test
     void assignBlocks_AssignsBlocksToPlayers() {
-        GameBlockAssigner assigner = new GameBlockAssigner();
+        PlayerBlockAssigner assigner = new PlayerBlockAssigner();
 
         Set<Team> teams = AssignerTestsArranger.arrangeTeams(3, 3);
         List<Block> blocks = AssignerTestsArranger.arrangeBlocks(3);

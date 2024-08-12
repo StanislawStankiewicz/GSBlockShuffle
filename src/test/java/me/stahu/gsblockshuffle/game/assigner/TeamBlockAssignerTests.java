@@ -14,15 +14,16 @@ public class TeamBlockAssignerTests {
 
     @Test
     void assignBlocks_AssignsBlocksToPlayers() {
-        GameBlockAssigner assigner = new GameBlockAssigner();
+        TeamBlockAssigner assigner = new TeamBlockAssigner();
 
         Set<Team> teams = AssignerTestsArranger.arrangeTeams(3, 3);
         List<Block> blocks = AssignerTestsArranger.arrangeBlocks(3);
 
         assigner.assignBlocks(teams, blocks);
 
-        Block chosenBlock = teams.iterator().next().getPlayers().iterator().next().getBlock();
+        Block chosenBlock;
         for (Team team : teams) {
+            chosenBlock = team.getPlayers().iterator().next().getBlock();
             for (Player player : team.getPlayers()) {
                 assertEquals(chosenBlock, player.getBlock());
             }
