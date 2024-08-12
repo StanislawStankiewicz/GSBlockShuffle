@@ -26,7 +26,7 @@ public class AllPlayersRequiredEliminationStrategyTests {
         for (Player player : teamsList.get(1).getPlayers()) {
             player.setFoundBlock(false);
         }
-        // Third team passes
+        // Third team fails
         teamsList.get(2).getPlayers().iterator().next().setFoundBlock(true);
 
         strategy.eliminateTeams(teams);
