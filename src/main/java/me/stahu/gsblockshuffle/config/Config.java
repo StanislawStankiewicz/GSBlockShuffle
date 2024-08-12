@@ -1,5 +1,7 @@
 package me.stahu.gsblockshuffle.config;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,7 +10,9 @@ import java.io.File;
 import java.util.List;
 
 @Getter
+@Builder
 @NoArgsConstructor(force = true)
+@AllArgsConstructor
 public class Config {
     int difficulty;
     int difficultyCap;
