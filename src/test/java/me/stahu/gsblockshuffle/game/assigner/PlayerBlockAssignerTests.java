@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Set;
 
+import static me.stahu.gsblockshuffle.game.assigner.AssignerTestsArranger.arrangeBlocks;
+import static me.stahu.gsblockshuffle.game.assigner.AssignerTestsArranger.arrangeTeams;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerBlockAssignerTests {
@@ -16,8 +18,8 @@ public class PlayerBlockAssignerTests {
     void assignBlocks_AssignsBlocksToPlayers() {
         PlayerBlockAssigner assigner = new PlayerBlockAssigner();
 
-        Set<Team> teams = AssignerTestsArranger.arrangeTeams(3, 3);
-        List<Block> blocks = AssignerTestsArranger.arrangeBlocks(3);
+        Set<Team> teams = arrangeTeams(3, 3);
+        List<Block> blocks = arrangeBlocks(3);
 
         assigner.assignBlocks(teams, blocks);
 
