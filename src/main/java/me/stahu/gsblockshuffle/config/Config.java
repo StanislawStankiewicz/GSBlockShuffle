@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(force = true)
@@ -13,14 +14,14 @@ public class Config {
     int difficultyCap;
     boolean increaseDifficulty;
     int increaseEveryNRounds;
-    int[] customIncrease;
+    List<Integer> customIncrease;
     boolean includeLowerDifficulties;
     boolean includeVariants;
     boolean treatAllAsIndividualBlocks;
 
     int totalRounds;
-    int roundTimeSeconds;
-    int breakTimeSeconds;
+    int roundDurationSeconds;
+    int breakDurationSeconds;
     BlockAssignmentMode blockAssignmentMode;
 
     boolean isAllPlayersRequiredForTeamWin;
@@ -51,14 +52,14 @@ public class Config {
         difficultyCap = settings.getInt("difficultyCap");
         increaseDifficulty = settings.getBoolean("increaseDifficulty");
         increaseEveryNRounds = settings.getInt("increaseEveryNRounds");
-        customIncrease = settings.getIntegerList("customIncrease").stream().mapToInt(i -> i).toArray();
+        customIncrease = settings.getIntegerList("customIncrease");
         includeLowerDifficulties = settings.getBoolean("includeLowerDifficulties");
         includeVariants = settings.getBoolean("includeVariants");
         treatAllAsIndividualBlocks = settings.getBoolean("treatAllAsIndividualBlocks");
 
         totalRounds = settings.getInt("totalRounds");
-        roundTimeSeconds = settings.getInt("roundTimeSeconds");
-        breakTimeSeconds = settings.getInt("breakTimeSeconds");
+        roundDurationSeconds = settings.getInt("roundDurationSeconds");
+        breakDurationSeconds = settings.getInt("breakDurationSeconds");
         blockAssignmentMode = BlockAssignmentMode.fromString(settings.getString("blockAssignmentMode"));
 
         isAllPlayersRequiredForTeamWin = settings.getBoolean("allPlayersRequiredForTeamWin");

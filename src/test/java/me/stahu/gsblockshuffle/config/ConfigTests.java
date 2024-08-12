@@ -4,6 +4,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,14 +22,14 @@ public class ConfigTests {
         assertEquals(10, config.getDifficultyCap());
         assertTrue(config.isIncreaseDifficulty());
         assertEquals(1, config.getIncreaseEveryNRounds());
-        assertArrayEquals(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, config.getCustomIncrease());
+        assertArrayEquals(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10).toArray(), config.getCustomIncrease().toArray());
         assertFalse(config.isIncludeLowerDifficulties());
         assertTrue(config.isIncludeVariants());
         assertFalse(config.isTreatAllAsIndividualBlocks());
 
         assertEquals(1, config.getTotalRounds());
-        assertEquals(5, config.getRoundTimeSeconds());
-        assertEquals(10, config.getBreakTimeSeconds());
+        assertEquals(5, config.getRoundDurationSeconds());
+        assertEquals(10, config.getBreakDurationSeconds());
         assertEquals(BlockAssignmentMode.ONE_PER_PLAYER, config.getBlockAssignmentMode());
 
         assertTrue(config.isAllPlayersRequiredForTeamWin());
