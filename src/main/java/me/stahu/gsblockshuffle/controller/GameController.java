@@ -31,6 +31,10 @@ public class GameController {
         return true;
     }
 
+    public void startGame() {
+        nextState(GameState.WAITING);
+    }
+
     private void nextState(GameState state) {
         switch (state) {
             case WAITING:
@@ -46,7 +50,7 @@ public class GameController {
                 if (gameManager.isGameEnd()) {
                     executeState(GameState.GAME_END, gameManager::endGame);
                 } else {
-                    executeState(GameState.ROUND_NEW, gameManager::newRound);
+                    executeState(GameState.ROUND_BREAK, gameManager::newRound);
                 }
                 break;
             case ROUND_BREAK:
