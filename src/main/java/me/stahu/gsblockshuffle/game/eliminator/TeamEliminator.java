@@ -20,7 +20,7 @@ public class TeamEliminator {
         }
     }
 
-    void eliminateTeams(Set<Team> teams) {
+    public void eliminateTeams(Set<Team> teams) {
         strategy.eliminateTeams(teams);
     }
 }
