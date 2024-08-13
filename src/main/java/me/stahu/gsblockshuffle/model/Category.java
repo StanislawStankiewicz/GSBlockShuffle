@@ -28,17 +28,6 @@ public class Category {
         fromMap(stringObjectMap);
     }
 
-    public List<Block> getBlocks() {
-        List<Block> result = new ArrayList<>();
-        for (Category subcategory : subcategories) {
-            if (subcategory.isIncluded) {
-                result.addAll(subcategory.getBlocks());
-            }
-        }
-        result.addAll(this.blocks);
-        return result;
-    }
-
     public Map<String, Object> toMap() {
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         map.put("isIncluded", isIncluded);
@@ -51,7 +40,7 @@ public class Category {
         }
         ArrayList<ArrayList<String>> elements = new ArrayList<>();
         for (Block block : blocks) {
-            elements.add(new ArrayList<>(block.getNames()));
+            elements.add(new ArrayList<>(block.names()));
         }
         map.put("elements", elements);
         return map;

@@ -23,16 +23,6 @@ public class CategoryTree {
 
     private List<Category> categories;
 
-    public List<Block> getBlocks() {
-        List<Block> blocks = new ArrayList<>();
-        for (Category category : categories) {
-            if (category.isIncluded()) {
-                blocks.addAll(category.getBlocks());
-            }
-        }
-        return blocks;
-    }
-
     public void dumpYaml(String filePath) {
         Yaml yaml = new Yaml();
         LinkedHashMap<String, Object> map = this.toMap();

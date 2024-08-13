@@ -9,25 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CategoryTreeTests {
-
-    @Test
-    void getBlocks_returnsAllIncludedBlocks() {
-        Category category1 =
-                new Category("category1", true, 1, List.of(), List.of(new Block("block1")));
-        Category category2 =
-                new Category("category2", false, 1, List.of(), List.of(new Block("block2")));
-        Category category3 =
-                new Category("category3", true, 1, List.of(), List.of(new Block("block3")));
-        CategoryTree categoryTree = new CategoryTree(List.of(category1, category2, category3));
-
-        List<Block> includedBlocks = categoryTree.getBlocks();
-
-        assertThat(includedBlocks).containsExactlyInAnyOrder(new Block("block1"), new Block("block3"));
-    }
 
     @Test
     void testDumpYaml() throws IOException {
