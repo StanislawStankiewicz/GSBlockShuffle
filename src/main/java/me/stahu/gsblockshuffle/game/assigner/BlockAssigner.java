@@ -1,6 +1,6 @@
 package me.stahu.gsblockshuffle.game.assigner;
 
-import me.stahu.gsblockshuffle.model.Block;
+import me.stahu.gsblockshuffle.model.BlockPack;
 import me.stahu.gsblockshuffle.model.Team;
 
 import java.util.List;
@@ -11,5 +11,5 @@ public interface BlockAssigner {
 
     Random random = new Random();
 
-    void assignBlocks(Set<Team> players, List<Block> blocks);
+    void assignBlocks(Set<Team> players, List<BlockPack> blocks);
 }

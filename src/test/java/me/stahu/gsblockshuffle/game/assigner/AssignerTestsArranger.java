@@ -1,6 +1,7 @@
 package me.stahu.gsblockshuffle.game.assigner;
 
 import me.stahu.gsblockshuffle.model.Block;
+import me.stahu.gsblockshuffle.model.BlockPack;
 import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
 import org.bukkit.scoreboard.Scoreboard;
@@ -36,10 +37,10 @@ public class AssignerTestsArranger {
         return Set.of(teams);
     }
 
-    public static List<Block> arrangeBlocks(int blockCount) {
-        List<Block> blocks = new ArrayList<>();
+    public static List<BlockPack> arrangeBlocks(int blockCount) {
+        List<BlockPack> blocks = new ArrayList<>();
         for (int i = 0; i < blockCount; i++) {
-            blocks.add(new Block("block" + i));
+            blocks.add(new BlockPack(List.of(new Block("block" + i))));
         }
         return blocks;
     }
