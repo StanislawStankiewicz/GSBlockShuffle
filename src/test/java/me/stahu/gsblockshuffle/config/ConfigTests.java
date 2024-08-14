@@ -18,7 +18,7 @@ public class ConfigTests {
 
         config.loadSettings(settings);
 
-        assertEquals(0, config.getDifficulty());
+        assertEquals(0, config.getStartDifficulty());
         assertEquals(10, config.getDifficultyCap());
         assertTrue(config.isIncreaseDifficulty());
         assertEquals(1, config.getIncreaseEveryNRounds());

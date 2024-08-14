@@ -1,5 +1,5 @@
 #block settings
-difficulty: 0
+startDifficulty: 0
 difficultyCap: 10 # hard capped at 1000
 increaseDifficulty: true
 increaseEveryNRounds: 1 # -1 if custom

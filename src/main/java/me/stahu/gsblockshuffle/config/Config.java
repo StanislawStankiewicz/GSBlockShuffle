@@ -1,9 +1,6 @@
 package me.stahu.gsblockshuffle.config;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -14,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 public class Config {
-    int difficulty;
+    @Setter int startDifficulty;
     int difficultyCap;
     boolean increaseDifficulty;
     int increaseEveryNRounds;
@@ -52,7 +49,7 @@ public class Config {
     }
 
     void loadSettings(YamlConfiguration settings) {
-        difficulty = settings.getInt("difficulty");
+        startDifficulty = settings.getInt("startDifficulty");
         difficultyCap = settings.getInt("difficultyCap");
         increaseDifficulty = settings.getBoolean("increaseDifficulty");
         increaseEveryNRounds = settings.getInt("increaseEveryNRounds");
