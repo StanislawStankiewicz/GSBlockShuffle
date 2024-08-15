@@ -12,7 +12,7 @@ public class EveryNthRoundIncrementStrategy implements DifficultyIncrementStrate
 
     @Override
     public int increaseDifficulty(int difficulty, @NonNegative int round) {
-        if ((round + 1) % n == 0) {
+        if (round % n == 0) {
             return difficulty + 1;
         } else {
             return difficulty;

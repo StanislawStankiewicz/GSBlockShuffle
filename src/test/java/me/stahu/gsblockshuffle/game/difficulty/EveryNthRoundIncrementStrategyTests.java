@@ -4,14 +4,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class EveryNthRoundIncrementStrategyTests {
+class EveryNthRoundIncrementStrategyTests {
 
     @Test
     void increaseDifficulty_IncrementsDifficultyOnNthRound() {
         EveryNthRoundIncrementStrategy strategy = new EveryNthRoundIncrementStrategy(3);
 
-        assertEquals(1, strategy.increaseDifficulty(0, 2));
-        assertEquals(2, strategy.increaseDifficulty(1, 5));
+        assertEquals(1, strategy.increaseDifficulty(0, 3));
+        assertEquals(2, strategy.increaseDifficulty(1, 6));
     }
 
     @Test

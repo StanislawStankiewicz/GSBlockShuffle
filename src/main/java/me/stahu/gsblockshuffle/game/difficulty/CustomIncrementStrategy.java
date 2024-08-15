@@ -11,6 +11,6 @@ public class CustomIncrementStrategy implements DifficultyIncrementStrategy {
 
     @Override
     public int increaseDifficulty(int difficulty, int round) {
-        return difficulties.get(Math.min(round, difficulties.size() - 1));
+        return difficulties.get(Math.min(round - 1, difficulties.size() - 1));
     }
 }
