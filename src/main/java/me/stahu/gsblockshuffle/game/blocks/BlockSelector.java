@@ -26,10 +26,12 @@ public class BlockSelector {
     }
 
     private List<BlockPack> getBlocksRecursive(Category category, int difficulty) {
-        List<BlockPack> blocks = new ArrayList<>(
-                category.getBlocks().stream()
-                .map(block -> new BlockPack(List.of(block)))
-                .toList());
+        List<BlockPack> blocks = new ArrayList<>();
+        if (category.getBlocks() != null) {
+            blocks.addAll(category.getBlocks().stream()
+                    .map(block -> new BlockPack(List.of(block)))
+                    .toList());
+        }
         if (category.getSubcategories() != null) {
             for (Category subcategory : category.getSubcategories()) {
                 if (isCategoryIncluded(subcategory, difficulty)) {
