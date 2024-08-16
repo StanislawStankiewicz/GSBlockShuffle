@@ -12,7 +12,7 @@ import static me.stahu.gsblockshuffle.game.assigner.AssignerTestsArranger.arrang
 import static me.stahu.gsblockshuffle.game.assigner.AssignerTestsArranger.arrangeTeams;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PlayerBlockAssignerTests {
+class PlayerBlockAssignerTests {
 
     @Test
     void assignBlocks_AssignsBlocksToPlayers() {
@@ -25,7 +25,7 @@ public class PlayerBlockAssignerTests {
 
         for (Team team : teams) {
             for (Player player : team.getPlayers()) {
-                assertNotNull(player.getBlock());
+                assertNotNull(player.getAssignedBlock());
             }
         }
     }

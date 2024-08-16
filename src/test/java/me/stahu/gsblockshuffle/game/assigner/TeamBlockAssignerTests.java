@@ -13,7 +13,7 @@ import static me.stahu.gsblockshuffle.game.assigner.AssignerTestsArranger.arrang
 import static me.stahu.gsblockshuffle.game.assigner.AssignerTestsArranger.arrangeTeams;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TeamBlockAssignerTests {
+class TeamBlockAssignerTests {
 
     @Test
     void assignBlocks_AssignsBlocksToPlayers() {
@@ -26,9 +26,9 @@ public class TeamBlockAssignerTests {
 
         Block chosenBlock;
         for (Team team : teams) {
-            chosenBlock = team.getPlayers().iterator().next().getBlock();
+            chosenBlock = team.getPlayers().iterator().next().getAssignedBlock();
             for (Player player : team.getPlayers()) {
-                assertEquals(chosenBlock, player.getBlock());
+                assertEquals(chosenBlock, player.getAssignedBlock());
             }
         }
     }

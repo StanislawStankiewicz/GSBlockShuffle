@@ -16,12 +16,9 @@ public class AnyPlayerRequiredEliminationStrategy implements TeamEliminationStra
                     break;
                 }
             }
-            System.out.println("Team " + team + " has found block: " + hasFoundBlock);
             if (!hasFoundBlock) {
-                System.out.println("Team " + team + " is eliminated");
                 team.setEliminated(true);
             }
-            System.out.println("Team " + team + " is eliminated: " + team.isEliminated());
         }
     }
 }

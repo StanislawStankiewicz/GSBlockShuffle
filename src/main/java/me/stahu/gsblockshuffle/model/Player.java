@@ -10,7 +10,7 @@ import lombok.Setter;
 public class Player {
     final org.bukkit.entity.Player player;
     Team team;
-    Block block;
+    Block assignedBlock;
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
     boolean hasFoundBlock;
 
@@ -28,9 +28,5 @@ public class Player {
 
     public String getDisplayName() {
         return player.getDisplayName();
-    }
-
-    public org.bukkit.scoreboard.Scoreboard getScoreboard() {
-        return player.getScoreboard();
     }
 }

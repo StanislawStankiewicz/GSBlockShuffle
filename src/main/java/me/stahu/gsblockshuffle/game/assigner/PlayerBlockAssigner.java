@@ -17,7 +17,7 @@ public class PlayerBlockAssigner implements BlockAssigner {
             for (Player player : team.getPlayers()) {
                 block = blocks.get(random.nextInt(blocks.size()))
                         .blocks().get(random.nextInt(blocks.get(0).blocks().size()));
-                player.setBlock(block);
+                player.setAssignedBlock(block);
             }
         }
     }
