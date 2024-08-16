@@ -29,12 +29,13 @@ dependencies {
     // Snake YAML
     implementation 'org.yaml:snakeyaml:2.2'
     // JUnit 5
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.3")
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.10.3"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.10.3"
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
     // AssertJ
     testImplementation 'org.assertj:assertj-core:3.26.3'
     // Mockito
-    testImplementation("org.mockito:mockito-junit-jupiter:5.12.0")
+    testImplementation "org.mockito:mockito-junit-jupiter:5.12.0"
 }
 
 test {
