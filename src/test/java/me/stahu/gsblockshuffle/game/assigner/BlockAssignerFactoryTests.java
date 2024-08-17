@@ -2,19 +2,29 @@ package me.stahu.gsblockshuffle.game.assigner;
 
 import me.stahu.gsblockshuffle.config.BlockAssignmentMode;
 import me.stahu.gsblockshuffle.config.Config;
+import me.stahu.gsblockshuffle.event.GameEventDispatcher;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 
-public class BlockAssignerFactoryTests {
+class BlockAssignerFactoryTests {
+
+    GameEventDispatcher dispatcher;
+
+    @BeforeEach
+    void setUp() {
+        dispatcher = mock(GameEventDispatcher.class);
+    }
 
     @Test
     void getBlockAssigner_ReturnsGameBlockAssignerForOnePerGameMode() {
         Config config = Config.builder()
                 .blockAssignmentMode(BlockAssignmentMode.ONE_PER_GAME)
                 .build();
-        assertInstanceOf(GameBlockAssigner.class, BlockAssignerFactory.getBlockAssigner(config));
+        assertInstanceOf(GameBlockAssigner.class, BlockAssignerFactory.getBlockAssigner(config, dispatcher));
     }
 
     @Test
@@ -22,7 +32,7 @@ public class BlockAssignerFactoryTests {
         Config config = Config.builder()
                 .blockAssignmentMode(BlockAssignmentMode.ONE_PER_TEAM)
                 .build();
-        assertInstanceOf(TeamBlockAssigner.class, BlockAssignerFactory.getBlockAssigner(config));
+        assertInstanceOf(TeamBlockAssigner.class, BlockAssignerFactory.getBlockAssigner(config, dispatcher));
     }
 
     @Test
@@ -30,13 +40,13 @@ public class BlockAssignerFactoryTests {
         Config config = Config.builder()
                 .blockAssignmentMode(BlockAssignmentMode.ONE_PER_PLAYER)
                 .build();
-        assertInstanceOf(PlayerBlockAssigner.class, BlockAssignerFactory.getBlockAssigner(config));
+        assertInstanceOf(PlayerBlockAssigner.class, BlockAssignerFactory.getBlockAssigner(config, dispatcher));
     }
 
     @Test
     void getBlockAssigner_ThrowsExceptionForNullConfig() {
         //noinspection ConstantConditions
-        assertThrows(NullPointerException.class, () -> BlockAssignerFactory.getBlockAssigner(null));
+        assertThrows(NullPointerException.class, () -> BlockAssignerFactory.getBlockAssigner(null, null));
     }
 
     @Test
@@ -44,6 +54,6 @@ public class BlockAssignerFactoryTests {
         Config config = Config.builder()
                 .blockAssignmentMode(null)
                 .build();
-        assertThrows(NullPointerException.class, () -> BlockAssignerFactory.getBlockAssigner(config));
+        assertThrows(NullPointerException.class, () -> BlockAssignerFactory.getBlockAssigner(config, dispatcher));
     }
 }

@@ -5,8 +5,11 @@ import lombok.RequiredArgsConstructor;
 import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.config.Config;
 import me.stahu.gsblockshuffle.manager.GameManager;
+import me.stahu.gsblockshuffle.model.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 public class GameController {
@@ -15,6 +18,8 @@ public class GameController {
     private final Config config;
     private final GameManager gameManager;
     private final BukkitScheduler scheduler = Bukkit.getScheduler();
+
+    private int currentTask;
 
     @Getter
     private GameState gameState;
@@ -32,15 +37,14 @@ public class GameController {
     }
 
     public void startGame() {
-        nextState(GameState.WAITING);
+        executeState(GameState.GAME_START, gameManager::startGame);
     }
 
     private void nextState(GameState state) {
         switch (state) {
             case WAITING:
-                executeState(GameState.GAME_START, gameManager::startGame);
                 break;
-            case GAME_START:
+            case GAME_START, ROUND_BREAK_END:
                 executeState(GameState.ROUND_NEW, gameManager::newRound);
                 break;
             case ROUND_NEW:
@@ -50,29 +54,44 @@ public class GameController {
                 if (gameManager.isGameEnd()) {
                     executeState(GameState.GAME_END, gameManager::endGame);
                 } else {
-                    executeState(GameState.ROUND_BREAK, gameManager::newRound);
+                    executeState(GameState.ROUND_BREAK, gameManager::roundBreak);
                 }
                 break;
             case ROUND_BREAK:
-                executeState(GameState.ROUND_BREAK_END, gameManager::roundBreak);
-                break;
-            case ROUND_BREAK_END:
-                executeState(GameState.ROUND_NEW, gameManager::endBreak);
+                executeState(GameState.ROUND_BREAK_END, gameManager::endBreak);
                 break;
             case GAME_END:
-                executeState(GameState.WAITING, gameManager::endGame);
+                executeState(GameState.WAITING, () -> {});
                 break;
         }
     }
 
     private void executeState(GameState state, Runnable action) {
+        scheduler.cancelTask(currentTask);
         setGameState(state);
-        action.run();
         int duration = switch (state) {
             case ROUND_NEW -> config.getRoundDurationSeconds();
             case ROUND_BREAK -> config.getBreakDurationSeconds();
             default -> 0;
         };
-        scheduler.scheduleSyncDelayedTask(plugin, () -> nextState(state), duration * 20L);
+        action.run();
+        currentTask = scheduler.scheduleSyncDelayedTask(plugin, () -> nextState(state), duration * 20L);
+    }
+
+    public void handlePlayerMoveEvent(Player player) {
+        if (gameState != GameState.ROUND_NEW || player.getTeam() == null || player.hasFoundBlock()) {
+            return;
+        }
+        String playerBlockName = player.getPlayer().getLocation().getBlock().getType().name();
+        String belowPlayerBlockName = player.getPlayer().getLocation().subtract(0, 1, 0).getBlock().getType().name();
+        List<String> assignedBlockNames = player.getAssignedBlock().names();
+
+        if (assignedBlockNames.contains(playerBlockName) || assignedBlockNames.contains(belowPlayerBlockName)) {
+            player.setFoundBlock(true);
+        } else return;
+        if (gameManager.isRoundEnd()) {
+            scheduler.cancelTask(currentTask);
+            executeState(GameState.ROUND_END, gameManager::endRound);
+        }
     }
 }

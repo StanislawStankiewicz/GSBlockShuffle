@@ -1,7 +1,8 @@
 package me.stahu.gsblockshuffle.event;
 
+import lombok.RequiredArgsConstructor;
 
-import me.stahu.gsblockshuffle.config.Config;
-
-public record GameEvent(GameEventType type, Config config) {
+@RequiredArgsConstructor
+public class GameEvent {
+    private final GameEventType type;
 }

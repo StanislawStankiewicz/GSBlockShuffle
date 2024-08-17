@@ -6,5 +6,7 @@ public enum GameEventType {
     ROUND_END,
     ROUND_BREAK,
     ROUND_BREAK_END,
-    GAME_END
+    GAME_END,
+    BLOCK_ASSIGN,
+    BLOCK_FOUND,
 }

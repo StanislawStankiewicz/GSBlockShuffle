@@ -91,6 +91,6 @@ public class GameManagerImpl implements GameManager {
     }
 
     private void dispatchEvent(GameEventType eventType) {
-        dispatcher.dispatch(new GameEvent(eventType, config));
+        dispatcher.dispatch(new GameEvent(eventType));
     }
 }
