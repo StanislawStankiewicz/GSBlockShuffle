@@ -1,0 +1,16 @@
+category1:
+  isIncluded: true
+  difficulty: 1
+  category2:
+    isIncluded: false
+    difficulty: 1
+    category4:
+      isIncluded: true
+      difficulty: 1
+      elements:
+        - [block4]
+  category3:
+    isIncluded: true
+    difficulty: 1
+    elements:
+      - [block3]

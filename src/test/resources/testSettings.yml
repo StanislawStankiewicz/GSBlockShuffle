@@ -9,16 +9,16 @@ includeVariants: true
 treatAllAsIndividualBlocks: false
 
 #round settings
-totalRounds: 5 # -1 for infinite
-roundDurationSeconds: 20
-breakDurationSeconds: 5
+totalRounds: 1 # -1 for infinite
+roundDurationSeconds: 5
+breakDurationSeconds: 10
 blockAssignmentMode: onePerPlayer # onePerPlayer | onePerTeam | onePerRound
 
 #win settings
 allPlayersRequiredForTeamWin: true
 teamScoreIncrementPerPlayer: false # team score increments for each player who found their block if false, otherwise only 1 point is awarded to the team that found their block
 eliminateAfterRound: false
-endGameIfOneTeamRemaining: false
+endGameIfOneTeamRemaining: true
 firstToWin: true # the round ends when the first player/team finds their block if true
 #teamWinBy: score # score | time
 #winScore: 5

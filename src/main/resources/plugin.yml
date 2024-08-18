@@ -1,67 +1,12 @@
 name: GSBlockShuffle
-version: '${version}'
+version: '1.0.0-alpha0'
 main: me.stahu.gsblockshuffle.GSBlockShuffle
 api-version: '1.20'
+prefix: GSBlockShuffle
+authors: [ stahu & MRcoin ]
+description: Highly customizable BlockShuffle minecraft plugin
+
 commands:
-  blockshuffle:
-    description: BlockShuffle command
-    usage: /<command>
-    aliases: [ bs ]
-permissions:
-  blockshuffle.admin:
-    description: Allows access to the BlockShuffle menu
-    default: op
-  blockshuffle.command.*:
-    description: Allows access to all BlockShuffle commands
-    default: op
-  blockshuffle.command.debug:
-    description: Allows access to the BlockShuffle debug command
-    default: op
-  blockshuffle.command.end:
-    description: Allows access to the BlockShuffle end command
-    default: op
-  blockshuffle.command.start:
-    description: Allows access to the BlockShuffle start command
-    default: op
-  blockshuffle.command.team:
-    description: Allows access to the BlockShuffle team command
-    default: true
-  blockshuffle.command.team.*:
-    description: Allows access to all BlockShuffle team commands
-    default: op
-  blockshuffle.command.team.create:
-    description: Allows access to the BlockShuffle team create command
-    default: true
-  blockshuffle.command.team.color:
-    description: Allows access to the BlockShuffle team color command
-    default: true
-  blockshuffle.command.team.add:
-    description: Allows access to the BlockShuffle team add command
-    default: op
-  blockshuffle.command.team.remove:
-    description: Allows access to the BlockShuffle team remove command
-    default: op
-  blockshuffle.command.team.join:
-    description: Allows access to the BlockShuffle team join command
-    default: true
-  blockshuffle.command.team.invite:
-    description: Allows access to the BlockShuffle team invite command
-    default: true
-  blockshuffle.command.team.accept:
-    description: Allows access to the BlockShuffle team accept command
-    default: true
-  blockshuffle.command.team.leave:
-    description: Allows access to the BlockShuffle team leave command
-    default: true
-  blockshuffle.command.team.tp:
-    description: Allows access to the BlockShuffle team tp command
-    default: true
-  blockshuffle.command.team.tpaccept:
-    description: Allows access to the BlockShuffle team tpaccept command
-    default: true
-  blockshuffle.command.tp:
-    description: Allows access to the BlockShuffle tp command
-    default: true
-  blockshuffle.command.tpaccept:
-    description: Allows access to the BlockShuffle tpaccept command
-    default: true
+  bs:
+    description: start
+    usage: /bs
