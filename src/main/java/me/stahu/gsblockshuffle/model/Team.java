@@ -21,4 +21,8 @@ public class Team {
         this.isEliminated = false;
         this.score = 0;
     }
+
+    public String getDisplayName() {
+        return name;
+    }
 }

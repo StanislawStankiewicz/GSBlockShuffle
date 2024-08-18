@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.config.Config;
+import me.stahu.gsblockshuffle.event.GameEventDispatcher;
+import me.stahu.gsblockshuffle.event.type.BlockFoundEvent;
+import me.stahu.gsblockshuffle.game.score.PointsAwarder;
 import me.stahu.gsblockshuffle.manager.GameManager;
 import me.stahu.gsblockshuffle.model.Player;
 import org.bukkit.Bukkit;
@@ -16,7 +19,9 @@ public class GameController {
 
     private final GSBlockShuffle plugin;
     private final Config config;
+    private final GameEventDispatcher dispatcher;
     private final GameManager gameManager;
+    private final PointsAwarder pointsAwarder;
     private final BukkitScheduler scheduler = Bukkit.getScheduler();
 
     private int currentTask;
@@ -37,12 +42,15 @@ public class GameController {
     }
 
     public void startGame() {
-        executeState(GameState.GAME_START, gameManager::startGame);
+        executeState(GameState.INVOKE_GAME_START, gameManager::invokeGameStart);
     }
 
     private void nextState(GameState state) {
         switch (state) {
             case WAITING:
+                break;
+            case INVOKE_GAME_START:
+                executeState(GameState.GAME_START, gameManager::startGame);
                 break;
             case GAME_START, ROUND_BREAK_END:
                 executeState(GameState.ROUND_NEW, gameManager::newRound);
@@ -70,6 +78,7 @@ public class GameController {
         scheduler.cancelTask(currentTask);
         setGameState(state);
         int duration = switch (state) {
+            case INVOKE_GAME_START -> 2;
             case ROUND_NEW -> config.getRoundDurationSeconds();
             case ROUND_BREAK -> config.getBreakDurationSeconds();
             default -> 0;

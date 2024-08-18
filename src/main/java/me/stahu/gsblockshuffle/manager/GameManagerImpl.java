@@ -2,9 +2,8 @@ package me.stahu.gsblockshuffle.manager;
 
 import lombok.Builder;
 import me.stahu.gsblockshuffle.config.Config;
-import me.stahu.gsblockshuffle.event.GameEvent;
 import me.stahu.gsblockshuffle.event.GameEventDispatcher;
-import me.stahu.gsblockshuffle.event.GameEventType;
+import me.stahu.gsblockshuffle.event.type.*;
 import me.stahu.gsblockshuffle.game.assigner.BlockAssigner;
 import me.stahu.gsblockshuffle.game.blocks.BlockSelector;
 import me.stahu.gsblockshuffle.game.difficulty.DifficultyIncrementer;
@@ -34,12 +33,17 @@ public class GameManagerImpl implements GameManager {
     int difficulty;
 
     @Override
+    public void invokeGameStart() {
+        dispatcher.dispatch(new InvokeGameStartEvent());
+    }
+
+    @Override
     public void startGame() {
         round = 0;
 
         playersManager.assignTeams();
 
-        dispatchEvent(GameEventType.GAME_START);
+        dispatcher.dispatch(new GameStartEvent());
     }
 
     @Override
@@ -50,34 +54,30 @@ public class GameManagerImpl implements GameManager {
         playersManager.resetBlocks();
         blockAssigner.assignBlocks(teams, blocks);
 
-        dispatchEvent(GameEventType.ROUND_NEW);
+        dispatcher.dispatch(new RoundNewEvent());
     }
 
     @Override
     public void endRound() {
         teamEliminator.eliminateTeams(teams);
-        if (isGameEnd()) {
-            dispatchEvent(GameEventType.GAME_END);
-            return;
-        }
         difficulty = difficultyIncrementer.increaseDifficulty(difficulty, round);
 
-        dispatchEvent(GameEventType.ROUND_END);
+        dispatcher.dispatch(new RoundEndEvent());
     }
 
     @Override
     public void roundBreak() {
-        dispatchEvent(GameEventType.ROUND_BREAK);
+        dispatcher.dispatch(new RoundBreakEvent());
     }
 
     @Override
     public void endBreak() {
-        dispatchEvent(GameEventType.ROUND_BREAK_END);
+        dispatcher.dispatch(new RoundBreakEndEvent());
     }
 
     @Override
     public void endGame() {
-        dispatchEvent(GameEventType.GAME_END);
+        dispatcher.dispatch(new GameEndEvent(teams));
     }
 
     @Override
@@ -88,9 +88,5 @@ public class GameManagerImpl implements GameManager {
     @Override
     public boolean isGameEnd() {
         return GameEndConditionChecker.isGameEnd(config, teams, round);
-    }
-
-    private void dispatchEvent(GameEventType eventType) {
-        dispatcher.dispatch(new GameEvent(eventType));
     }
 }

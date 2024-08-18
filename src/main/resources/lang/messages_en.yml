@@ -1,0 +1,6 @@
+game_start: "The game has started!"
+block_assignment: "Your block is: %s"
+block_found: "%s has found their block! (%s)"
+
+game_end: "The game has ended!"
+end_scores: "Final scores:"

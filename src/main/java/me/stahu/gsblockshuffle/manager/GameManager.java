@@ -2,6 +2,8 @@ package me.stahu.gsblockshuffle.manager;
 
 public interface GameManager {
 
+    void invokeGameStart();
+
     void startGame();
 
     void newRound();

@@ -2,18 +2,15 @@ package me.stahu.gsblockshuffle.event.handler;
 
 import lombok.RequiredArgsConstructor;
 import me.stahu.gsblockshuffle.controller.MessageController;
-import me.stahu.gsblockshuffle.model.Block;
-import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.view.cli.MessageBuilder;
 
 @RequiredArgsConstructor
-public class BlockAssignHandler {
+public class GameStartHandler {
 
     final MessageController messageController;
     final MessageBuilder messageBuilder;
 
-    public void sendAssignmentMessage(Player player, Block block) {
-        messageController.sendMessage(player,
-                messageBuilder.buildBlockAssignmentMessage(block));
+    public void sendGameStartMessage() {
+        messageController.sendMessageToAll(messageBuilder.buildGameStartMessage());
     }
 }
