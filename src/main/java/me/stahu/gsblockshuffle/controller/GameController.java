@@ -97,7 +97,10 @@ public class GameController {
 
         if (assignedBlockNames.contains(playerBlockName) || assignedBlockNames.contains(belowPlayerBlockName)) {
             player.setFoundBlock(true);
-        } else return;
+            player.getTeam()
+                    .setScore(player.getTeam().getScore() + pointsAwarder.awardPoints(player.getTeam()));
+            dispatcher.dispatch(new BlockFoundEvent(player, player.getAssignedBlock()));
+        }
         if (gameManager.isRoundEnd()) {
             scheduler.cancelTask(currentTask);
             executeState(GameState.ROUND_END, gameManager::endRound);
