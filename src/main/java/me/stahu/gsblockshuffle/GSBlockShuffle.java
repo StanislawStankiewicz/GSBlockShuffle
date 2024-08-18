@@ -3,10 +3,11 @@ package me.stahu.gsblockshuffle;
 import me.stahu.gsblockshuffle.api.BukkitAPI;
 import me.stahu.gsblockshuffle.api.ServerAPI;
 import me.stahu.gsblockshuffle.event.BlockAssignEvent;
+import me.stahu.gsblockshuffle.event.handler.BlockFoundHandler;
 import me.stahu.gsblockshuffle.event.handler.GameEndHandler;
 import me.stahu.gsblockshuffle.event.handler.GameStartHandler;
-import me.stahu.gsblockshuffle.event.listener.GameEndListener;
-import me.stahu.gsblockshuffle.event.listener.GameStartListener;
+import me.stahu.gsblockshuffle.event.listener.*;
+import me.stahu.gsblockshuffle.event.type.BlockFoundEvent;
 import me.stahu.gsblockshuffle.event.type.GameEndEvent;
 import me.stahu.gsblockshuffle.event.type.GameStartEvent;
 import me.stahu.gsblockshuffle.game.score.PointsAwarder;
@@ -16,8 +17,6 @@ import me.stahu.gsblockshuffle.controller.GameController;
 import me.stahu.gsblockshuffle.controller.MessageController;
 import me.stahu.gsblockshuffle.event.GameEventDispatcher;
 import me.stahu.gsblockshuffle.event.handler.BlockAssignHandler;
-import me.stahu.gsblockshuffle.event.listener.BlockAssignListener;
-import me.stahu.gsblockshuffle.event.listener.PlayerListener;
 import me.stahu.gsblockshuffle.game.assigner.BlockAssignerFactory;
 import me.stahu.gsblockshuffle.game.blocks.BlockSelector;
 import me.stahu.gsblockshuffle.game.difficulty.DifficultyIncrementer;
@@ -147,6 +146,7 @@ public final class GSBlockShuffle extends JavaPlugin {
         return new GameEventDispatcher()
                 .registerListener(GameStartEvent.class, new GameStartListener(new GameStartHandler(messageController, messageBuilder)))
                 .registerListener(BlockAssignEvent.class, new BlockAssignListener(new BlockAssignHandler(messageController, messageBuilder)))
+                .registerListener(BlockFoundEvent.class, new BlockFoundListener(new BlockFoundHandler(messageController, messageBuilder)))
                 .registerListener(GameEndEvent.class, new GameEndListener(new GameEndHandler(messageController, messageBuilder)));
     }
 
