@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import me.stahu.gsblockshuffle.view.sound.Note;
 
 @Getter @Setter
 @RequiredArgsConstructor
@@ -28,5 +29,9 @@ public class Player {
 
     public String getDisplayName() {
         return player.getDisplayName();
+    }
+
+    public void playSound(Note note) {
+        player.playSound(player.getLocation(), note.instrument(), note.volume(), note.pitch());
     }
 }
