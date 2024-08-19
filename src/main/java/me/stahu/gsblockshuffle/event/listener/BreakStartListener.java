@@ -1,15 +1,17 @@
 package me.stahu.gsblockshuffle.event.listener;
 
+import lombok.RequiredArgsConstructor;
 import me.stahu.gsblockshuffle.event.GameEventListener;
-import me.stahu.gsblockshuffle.event.type.RoundBreakEvent;
+import me.stahu.gsblockshuffle.event.handler.BreakStartHandler;
 import me.stahu.gsblockshuffle.event.type.BreakStartEvent;
 
+@RequiredArgsConstructor
 public class BreakStartListener implements GameEventListener<BreakStartEvent> {
 
-public class RoundBreakListener implements GameEventListener<RoundBreakEvent> {
+    final BreakStartHandler breakStartHandler;
+
     @Override
-    public void onGameEvent(RoundBreakEvent event) {
-        // currently no usage
     public void onGameEvent(BreakStartEvent event) {
+        breakStartHandler.playRoundCountDownSound(event.roundStartDelaySeconds());
     }
 }

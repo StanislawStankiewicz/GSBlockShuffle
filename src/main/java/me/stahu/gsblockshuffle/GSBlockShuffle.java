@@ -2,25 +2,20 @@ package me.stahu.gsblockshuffle;
 
 import me.stahu.gsblockshuffle.api.BukkitAPI;
 import me.stahu.gsblockshuffle.api.ServerAPI;
-import me.stahu.gsblockshuffle.event.BlockAssignEvent;
-import me.stahu.gsblockshuffle.event.handler.BlockFoundHandler;
-import me.stahu.gsblockshuffle.event.handler.GameEndHandler;
-import me.stahu.gsblockshuffle.event.handler.GameStartHandler;
-import me.stahu.gsblockshuffle.event.listener.*;
-import me.stahu.gsblockshuffle.event.type.BlockFoundEvent;
-import me.stahu.gsblockshuffle.event.type.GameEndEvent;
-import me.stahu.gsblockshuffle.event.type.GameStartEvent;
-import me.stahu.gsblockshuffle.game.score.PointsAwarder;
-import me.stahu.gsblockshuffle.view.cli.command.BlockShuffleCommands;
 import me.stahu.gsblockshuffle.config.Config;
 import me.stahu.gsblockshuffle.controller.GameController;
 import me.stahu.gsblockshuffle.controller.MessageController;
+import me.stahu.gsblockshuffle.controller.SoundController;
+import me.stahu.gsblockshuffle.event.BlockAssignEvent;
 import me.stahu.gsblockshuffle.event.GameEventDispatcher;
-import me.stahu.gsblockshuffle.event.handler.BlockAssignHandler;
+import me.stahu.gsblockshuffle.event.handler.*;
+import me.stahu.gsblockshuffle.event.listener.*;
+import me.stahu.gsblockshuffle.event.type.*;
 import me.stahu.gsblockshuffle.game.assigner.BlockAssignerFactory;
 import me.stahu.gsblockshuffle.game.blocks.BlockSelector;
 import me.stahu.gsblockshuffle.game.difficulty.DifficultyIncrementer;
 import me.stahu.gsblockshuffle.game.eliminator.TeamEliminator;
+import me.stahu.gsblockshuffle.game.score.PointsAwarder;
 import me.stahu.gsblockshuffle.manager.GameManager;
 import me.stahu.gsblockshuffle.manager.GameManagerImpl;
 import me.stahu.gsblockshuffle.manager.PlayersManager;
@@ -30,9 +25,14 @@ import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
 import me.stahu.gsblockshuffle.view.LocalizationManager;
 import me.stahu.gsblockshuffle.view.cli.MessageBuilder;
+import me.stahu.gsblockshuffle.view.cli.command.BlockShuffleCommands;
+import me.stahu.gsblockshuffle.view.sound.SoundPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.*;
@@ -44,11 +44,13 @@ public final class GSBlockShuffle extends JavaPlugin {
 
     private Config config;
     private GameController gameController;
-    private PlayersManager playersManager;
-    private ServerAPI serverAPI;
     private MessageController messageController;
+    private PlayersManager playersManager;
+    private SoundPlayer soundPlayer;
+    private ServerAPI serverAPI;
     private LocalizationManager localizationManager;
 
+    private Set<Player> players;
     private final Set<Team> teams = new HashSet<>();
 
     private static final String BLOCKS_FILE_PATH = "block_list_categorized.yml";
@@ -63,6 +65,7 @@ public final class GSBlockShuffle extends JavaPlugin {
         initializeAPIs();
         initializeManagers();
         initializeLocalization();
+        initializeSounds();
         initializeGameController();
         registerEventListeners();
         registerCommands();
@@ -100,7 +103,7 @@ public final class GSBlockShuffle extends JavaPlugin {
     }
 
     private void initializeManagers() {
-        Set<Player> players = serverAPI.getPlayers();
+        players = serverAPI.getPlayers();
         playersManager = new PlayersManagerImpl(teams, players);
         messageController = new MessageController(players);
     }
@@ -112,6 +115,11 @@ public final class GSBlockShuffle extends JavaPlugin {
             // TODO: handle this exception
             throw new RuntimeException(e);
         }
+    }
+
+    private void initializeSounds() {
+        SoundController soundController = new SoundController(this, Bukkit.getScheduler(), players);
+        soundPlayer = new SoundPlayer(soundController, !config.isMuteSound());
     }
 
     private void initializeGameController() {
@@ -144,10 +152,12 @@ public final class GSBlockShuffle extends JavaPlugin {
 
     private GameEventDispatcher createEventDispatcher(MessageBuilder messageBuilder) {
         return new GameEventDispatcher()
-                .registerListener(GameStartEvent.class, new GameStartListener(new GameStartHandler(messageController, messageBuilder)))
+                .registerListener(InvokeGameStartEvent.class, new InvokeGameStartListener(new InvokeGameStartHandler(soundPlayer)))
+                .registerListener(GameStartEvent.class, new GameStartListener(new GameStartHandler(messageController, soundPlayer, messageBuilder)))
                 .registerListener(BlockAssignEvent.class, new BlockAssignListener(new BlockAssignHandler(messageController, messageBuilder)))
-                .registerListener(BlockFoundEvent.class, new BlockFoundListener(new BlockFoundHandler(messageController, messageBuilder)))
-                .registerListener(GameEndEvent.class, new GameEndListener(new GameEndHandler(messageController, messageBuilder)));
+                .registerListener(BlockFoundEvent.class, new BlockFoundListener(new BlockFoundHandler(messageController, soundPlayer, messageBuilder)))
+                .registerListener(BreakStartEvent.class, new BreakStartListener(new BreakStartHandler(soundPlayer)))
+                .registerListener(GameEndEvent.class, new GameEndListener(new GameEndHandler(messageController, soundPlayer, messageBuilder)));
     }
 
     private void registerEventListeners() {

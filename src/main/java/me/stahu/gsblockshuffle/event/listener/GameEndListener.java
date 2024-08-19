@@ -14,5 +14,6 @@ public class GameEndListener implements GameEventListener<GameEndEvent> {
     public void onGameEvent(GameEndEvent event) {
         gameEndHandler.sendGameEndMessage();
         gameEndHandler.sendEndScoresMessage(event.teams());
+        gameEndHandler.playWinnerSound(event.teams());
     }
 }

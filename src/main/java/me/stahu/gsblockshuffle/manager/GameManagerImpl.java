@@ -34,7 +34,7 @@ public class GameManagerImpl implements GameManager {
 
     @Override
     public void invokeGameStart() {
-        dispatcher.dispatch(new InvokeGameStartEvent());
+        dispatcher.dispatch(new InvokeGameStartEvent(config.getGameStartDelaySeconds()));
     }
 
     @Override
@@ -67,12 +67,12 @@ public class GameManagerImpl implements GameManager {
 
     @Override
     public void roundBreak() {
-        dispatcher.dispatch(new RoundBreakEvent());
+        dispatcher.dispatch(new BreakStartEvent(config.getBreakDurationSeconds()));
     }
 
     @Override
     public void endBreak() {
-        dispatcher.dispatch(new RoundBreakEndEvent());
+        dispatcher.dispatch(new BreakEndEvent());
     }
 
     @Override
