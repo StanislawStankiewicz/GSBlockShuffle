@@ -1,20 +1,12 @@
 package me.stahu.gsblockshuffle.event.handler;
 
 import lombok.RequiredArgsConstructor;
-import me.stahu.gsblockshuffle.controller.MessageController;
-import me.stahu.gsblockshuffle.view.cli.MessageBuilder;
 import me.stahu.gsblockshuffle.view.sound.SoundPlayer;
 
 @RequiredArgsConstructor
-public class GameStartHandler {
+public class BreakStartHandler {
 
-    final MessageController messageController;
     final SoundPlayer soundPlayer;
-    final MessageBuilder messageBuilder;
-
-    public void sendGameStartMessage() {
-        messageController.sendMessageToAll(messageBuilder.buildGameStartMessage());
-    }
 
     public void playRoundCountDownSound(int roundStartDelaySeconds) {
         int startInSeconds = roundStartDelaySeconds - 2;

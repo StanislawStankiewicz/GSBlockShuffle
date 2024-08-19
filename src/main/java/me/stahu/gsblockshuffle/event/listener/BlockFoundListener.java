@@ -13,5 +13,6 @@ public class BlockFoundListener implements GameEventListener<BlockFoundEvent> {
     @Override
     public void onGameEvent(BlockFoundEvent event) {
         blockFoundHandler.sendBlockFoundMessage(event.player(), event.block());
+        blockFoundHandler.playBlockFoundSound(event.player());
     }
 }

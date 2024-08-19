@@ -21,6 +21,7 @@ public class Config {
     boolean treatAllAsIndividualBlocks;
 
     int totalRounds;
+    int gameStartDelaySeconds;
     int roundDurationSeconds;
     int breakDurationSeconds;
     BlockAssignmentMode blockAssignmentMode;
@@ -59,6 +60,7 @@ public class Config {
         treatAllAsIndividualBlocks = settings.getBoolean("treatAllAsIndividualBlocks");
 
         totalRounds = settings.getInt("totalRounds");
+        gameStartDelaySeconds = settings.getInt("gameStartDelaySeconds");
         roundDurationSeconds = settings.getInt("roundDurationSeconds");
         breakDurationSeconds = settings.getInt("breakDurationSeconds");
         blockAssignmentMode = BlockAssignmentMode.fromString(settings.getString("blockAssignmentMode"));

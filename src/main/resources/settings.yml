@@ -10,6 +10,7 @@ treatAllAsIndividualBlocks: false
 
 #round settings
 totalRounds: 5 # -1 for infinite
+gameStartDelaySeconds: 2
 roundDurationSeconds: 20
 breakDurationSeconds: 5
 blockAssignmentMode: onePerPlayer # onePerPlayer | onePerTeam | onePerRound
