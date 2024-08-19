@@ -78,7 +78,7 @@ public class GameController {
         scheduler.cancelTask(currentTask);
         setGameState(state);
         int duration = switch (state) {
-            case INVOKE_GAME_START -> 2;
+            case INVOKE_GAME_START -> config.getGameStartDelaySeconds();
             case ROUND_NEW -> config.getRoundDurationSeconds();
             case ROUND_BREAK -> config.getBreakDurationSeconds();
             default -> 0;

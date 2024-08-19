@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ConfigTests {
+class ConfigTests {
 
     @Test
     void testLoadSettings() {
@@ -28,6 +28,7 @@ public class ConfigTests {
         assertFalse(config.isTreatAllAsIndividualBlocks());
 
         assertEquals(1, config.getTotalRounds());
+        assertEquals(2, config.getGameStartDelaySeconds());
         assertEquals(5, config.getRoundDurationSeconds());
         assertEquals(10, config.getBreakDurationSeconds());
         assertEquals(BlockAssignmentMode.ONE_PER_PLAYER, config.getBlockAssignmentMode());
