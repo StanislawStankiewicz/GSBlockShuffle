@@ -1,8 +1,8 @@
-package me.stahu.gsblockshuffle.event.listener;
+package me.stahu.gsblockshuffle.event.listener.game;
 
 import lombok.RequiredArgsConstructor;
 import me.stahu.gsblockshuffle.event.BlockShuffleEventListener;
-import me.stahu.gsblockshuffle.event.handler.GameStartHandler;
+import me.stahu.gsblockshuffle.event.handler.game.GameStartHandler;
 import me.stahu.gsblockshuffle.event.type.game.GameStartEvent;
 
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package me.stahu.gsblockshuffle.event.handler;
+package me.stahu.gsblockshuffle.event.handler.game;
 
 import lombok.RequiredArgsConstructor;
 import me.stahu.gsblockshuffle.controller.MessageController;

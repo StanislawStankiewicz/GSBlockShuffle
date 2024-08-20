@@ -1,10 +1,10 @@
-package me.stahu.gsblockshuffle.event.handler;
+package me.stahu.gsblockshuffle.event.handler.game;
 
 import lombok.RequiredArgsConstructor;
 import me.stahu.gsblockshuffle.view.sound.SoundPlayer;
 
 @RequiredArgsConstructor
-public class BreakStartHandler {
+public class InvokeGameStartHandler {
 
     final SoundPlayer soundPlayer;
 

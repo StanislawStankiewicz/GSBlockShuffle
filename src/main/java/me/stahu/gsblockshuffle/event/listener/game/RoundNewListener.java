@@ -1,4 +1,4 @@
-package me.stahu.gsblockshuffle.event.listener;
+package me.stahu.gsblockshuffle.event.listener.game;
 
 import me.stahu.gsblockshuffle.event.BlockShuffleEventListener;
 import me.stahu.gsblockshuffle.event.type.game.RoundNewEvent;

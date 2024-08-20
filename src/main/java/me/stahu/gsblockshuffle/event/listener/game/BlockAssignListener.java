@@ -1,9 +1,9 @@
-package me.stahu.gsblockshuffle.event.listener;
+package me.stahu.gsblockshuffle.event.listener.game;
 
 import lombok.RequiredArgsConstructor;
 import me.stahu.gsblockshuffle.event.type.game.BlockAssignEvent;
 import me.stahu.gsblockshuffle.event.BlockShuffleEventListener;
-import me.stahu.gsblockshuffle.event.handler.BlockAssignHandler;
+import me.stahu.gsblockshuffle.event.handler.game.BlockAssignHandler;
 
 @RequiredArgsConstructor
 public class BlockAssignListener implements BlockShuffleEventListener<BlockAssignEvent> {
