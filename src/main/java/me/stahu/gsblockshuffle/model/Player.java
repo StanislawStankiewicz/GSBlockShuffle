@@ -7,11 +7,12 @@ import me.stahu.gsblockshuffle.view.sound.Note;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 public class Player {
-    final org.bukkit.entity.Player player;
+    final org.bukkit.entity.Player serverPlayer;
     Team team;
     Block assignedBlock;
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
     boolean hasFoundBlock;
+    boolean isOnline = true;
 
     public boolean hasFoundBlock() {
         return hasFoundBlock;
@@ -22,14 +23,14 @@ public class Player {
     }
 
     public String getName() {
-        return player.getDisplayName();
+        return serverPlayer.getDisplayName();
     }
 
     public String getDisplayName() {
-        return player.getDisplayName();
+        return serverPlayer.getDisplayName();
     }
 
     public void playSound(Note note) {
-        player.playSound(player.getLocation(), note.instrument(), note.volume(), note.pitch());
+        serverPlayer.playSound(serverPlayer.getLocation(), note.instrument(), note.volume(), note.pitch());
     }
 }

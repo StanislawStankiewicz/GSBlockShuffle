@@ -4,66 +4,109 @@ import lombok.RequiredArgsConstructor;
 import me.stahu.gsblockshuffle.model.Block;
 import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
-import me.stahu.gsblockshuffle.view.LocalizationManager;
+import me.stahu.gsblockshuffle.view.cli.message.GameMessageBuilder;
+import me.stahu.gsblockshuffle.view.cli.message.TeamMessageBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
 
-import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
 public class MessageBuilder {
 
-    private final LocalizationManager localizationManager;
+    final GameMessageBuilder gameMessageBuilder;
+    final TeamMessageBuilder teamMessageBuilder;
 
-    public TextComponent buildBlockAssignmentMessage (Block block) {
-        String blockName = ChatColor.GOLD +
-                block.names().get(0)
-                    .replace("_", " ");
-        String template = localizationManager.getMessage("block_assignment");
-        String messageText = String.format(template, blockName);
-        return new TextComponent(messageText);
+    // Game-related messages
+    public TextComponent buildBlockAssignmentMessage(Block block) {
+        return gameMessageBuilder.buildBlockAssignmentMessage(block);
     }
 
     public TextComponent buildGameStartMessage() {
-        return new TextComponent(localizationManager.getMessage("game_start"));
+        return gameMessageBuilder.buildGameStartMessage();
     }
 
     public TextComponent buildEndGameMessage() {
-        return new TextComponent(localizationManager.getMessage("game_end"));
+        return gameMessageBuilder.buildEndGameMessage();
     }
 
     public TextComponent buildEndScoresMessage(Set<Team> teams) {
-        TextComponent endMessage = new TextComponent(localizationManager.getMessage("end_scores"));
-        int currentPlace = 0;
-        int previousPlace = -1;
-        int place;
-        int previousScore = -1;
-
-        List<Team> sortedTeams = teams.stream()
-                .sorted((team1, team2) -> Integer.compare(team2.getScore(), team1.getScore()))  // Sort in descending order
-                .toList();
-
-        for (Team team : sortedTeams) {
-            currentPlace++;
-            place = team.getScore() == previousScore ? previousPlace : currentPlace;
-            previousScore = team.getScore();
-            previousPlace = place;
-            ChatColor rankColor = switch (currentPlace) {
-                case 1 -> ChatColor.GOLD;
-                case 2 -> ChatColor.GRAY;
-                case 3 -> ChatColor.RED;
-                default -> ChatColor.DARK_GRAY;
-            };
-            endMessage.addExtra("\n    " + rankColor + place + ChatColor.RESET + ". " + team.getName() + ": " + team.getScore());
-        }
-        return endMessage;
+        return gameMessageBuilder.buildEndScoresMessage(teams);
     }
 
     public TextComponent buildBlockFoundMessage(Player player, Block block) {
-        String messageText = String.format(localizationManager.getMessage("block_found"),
-                player.getDisplayName(),
-                ChatColor.GOLD + block.names().get(0).replace("_", " "));
-        return new TextComponent(messageText);
+        return gameMessageBuilder.buildBlockFoundMessage(player, block);
+    }
+
+    // Team-related messages
+    public TextComponent buildCreateTeamMessage(Team team) {
+        return teamMessageBuilder.buildCreateTeamMessage(team);
+    }
+
+    public TextComponent buildRemoveTeamMessage(Team team) {
+        return teamMessageBuilder.buildRemoveTeamMessage(team);
+    }
+
+    public TextComponent buildLeaveTeamMessage(Team team) {
+        return teamMessageBuilder.buildLeaveTeamMessage(team);
+    }
+
+    public TextComponent buildAddPlayerToTeamMessage(Team team, Player player) {
+        return teamMessageBuilder.buildAddPlayerToTeamSenderMessage(team, player);
+    }
+
+    public TextComponent buildAddPlayerToTeamReceiverMessage(Team team, Player player) {
+        return teamMessageBuilder.buildAddPlayerToTeamReceiverMessage(team, player);
+    }
+
+    public TextComponent buildInvitePlayerToTeamSenderMessage(Team team, Player player) {
+        return teamMessageBuilder.buildInvitePlayerToTeamSenderMessage(team, player);
+    }
+
+    public TextComponent buildInvitePlayerToTeamReceiverMessage(Team team, Player player) {
+        return teamMessageBuilder.buildInvitePlayerToTeamReceiverMessage(team, player);
+    }
+
+    public TextComponent buildAcceptInviteSenderMessage(Team team) {
+        return teamMessageBuilder.buildAcceptInviteSenderMessage(team);
+    }
+
+    public TextComponent buildAcceptInviteReceiverMessage(Team team, Player player) {
+        return teamMessageBuilder.buildAcceptInviteReceiverMessage(team, player);
+    }
+
+    public TextComponent buildDenyInviteSenderMessage(Team team) {
+        return teamMessageBuilder.buildDenyInviteSenderMessage(team);
+    }
+
+    public TextComponent buildRequestToJoinTeamReceiverMessage(Team team, Player player) {
+        return teamMessageBuilder.buildRequestToJoinTeamReceiverMessage(team, player);
+    }
+
+    public TextComponent buildAcceptRequestSenderMessage(Team team, Player player) {
+        return teamMessageBuilder.buildAcceptRequestSenderMessage(team, player);
+    }
+
+    public TextComponent buildAcceptRequestReceiverMessage(Team team, Player player) {
+        return teamMessageBuilder.buildAcceptRequestReceiverMessage(team, player);
+    }
+
+    public TextComponent buildKickFromTeamSenderMessage(Team team, Player player) {
+        return teamMessageBuilder.buildKickFromTeamSenderMessage(team, player);
+    }
+
+    public TextComponent buildKickFromTeamReceiverMessage(Team team) {
+        return teamMessageBuilder.buildKickFromTeamReceiverMessage(team);
+    }
+
+    public TextComponent buildNoTeamMessage(Player player) {
+        return teamMessageBuilder.buildNoTeamMessage(player);
+    }
+
+    public TextComponent buildAlreadyInTeamMessage(Player player) {
+        return teamMessageBuilder.buildAlreadyInTeamMessage(player);
+    }
+
+    public TextComponent buildIsNotLeaderMessage(Player player, Team team) {
+        return teamMessageBuilder.buildIsNotLeaderMessage(player, team);
     }
 }

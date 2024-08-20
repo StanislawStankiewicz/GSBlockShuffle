@@ -1,6 +1,27 @@
+# game
 game_start: "The game has started!"
 block_assignment: "Your block is: %s"
 block_found: "%s has found their block! (%s)"
-
 game_end: "The game has ended!"
 end_scores: "Final scores:"
+
+#teams
+create_team: "Team %s has been created!"
+remove_team: "Team %s has been removed!"
+leave_team: "You have left team %s!"
+add_player_to_team_sender: "%s has been added to team %s!"
+add_player_to_team_receiver: "You have been added to team %s!"
+invite_player_to_team_sender: "You have invited %s to team %s!"
+invite_player_to_team_receiver: "You have been invited to team %s!"
+accept_invite_sender: "You have accepted the invite to team %s!"
+accept_invite_receiver: "%s has accepted your invite to team %s!"
+deny_invite_sender: "You have denied the invite to team %s!"
+request_to_join_team_receiver: "%s has requested to join team %s!"
+accept_request_sender: "You have accepted %s's request to join team %s!"
+accept_request_receiver: "%s has accepted your request to join team %s!"
+kick_from_team_sender: "%s has been kicked from team %s!"
+kick_from_team_receiver: "You have been kicked from team %s!"
+
+no_team: "Player %s is not in a team!"
+already_in_team: "Player %s is already in a team!"
+is_not_leader: "Player %s is not the leader of team %s!"

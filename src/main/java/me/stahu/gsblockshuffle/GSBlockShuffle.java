@@ -23,6 +23,8 @@ import me.stahu.gsblockshuffle.model.Team;
 import me.stahu.gsblockshuffle.view.LocalizationManager;
 import me.stahu.gsblockshuffle.view.cli.MessageBuilder;
 import me.stahu.gsblockshuffle.view.cli.command.BlockShuffleCommands;
+import me.stahu.gsblockshuffle.view.cli.message.GameMessageBuilder;
+import me.stahu.gsblockshuffle.view.cli.message.TeamMessageBuilder;
 import me.stahu.gsblockshuffle.view.sound.SoundPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -122,7 +124,9 @@ public final class GSBlockShuffle extends JavaPlugin {
     }
 
     private void initializeGameController() {
-        MessageBuilder messageBuilder = new MessageBuilder(localizationManager);
+        GameMessageBuilder gameMessageBuilder = new GameMessageBuilder(localizationManager);
+        TeamMessageBuilder teamMessageBuilder = new TeamMessageBuilder(localizationManager);
+        MessageBuilder messageBuilder = new MessageBuilder(gameMessageBuilder, teamMessageBuilder);
         BlockShuffleEventDispatcher dispatcher = createEventDispatcher(messageBuilder);
         PointsAwarder pointsAwarder = new PointsAwarder(config);
 
