@@ -6,11 +6,10 @@ import me.stahu.gsblockshuffle.config.Config;
 import me.stahu.gsblockshuffle.controller.GameController;
 import me.stahu.gsblockshuffle.controller.MessageController;
 import me.stahu.gsblockshuffle.controller.SoundController;
-import me.stahu.gsblockshuffle.event.BlockAssignEvent;
-import me.stahu.gsblockshuffle.event.GameEventDispatcher;
+import me.stahu.gsblockshuffle.event.type.game.*;
+import me.stahu.gsblockshuffle.event.BlockShuffleEventDispatcher;
 import me.stahu.gsblockshuffle.event.handler.*;
 import me.stahu.gsblockshuffle.event.listener.*;
-import me.stahu.gsblockshuffle.event.type.*;
 import me.stahu.gsblockshuffle.game.assigner.BlockAssignerFactory;
 import me.stahu.gsblockshuffle.game.blocks.BlockSelector;
 import me.stahu.gsblockshuffle.game.difficulty.DifficultyIncrementer;
@@ -18,14 +17,13 @@ import me.stahu.gsblockshuffle.game.eliminator.TeamEliminator;
 import me.stahu.gsblockshuffle.game.score.PointsAwarder;
 import me.stahu.gsblockshuffle.manager.GameManager;
 import me.stahu.gsblockshuffle.manager.GameManagerImpl;
-import me.stahu.gsblockshuffle.manager.PlayersManager;
-import me.stahu.gsblockshuffle.manager.PlayersManagerImpl;
+import me.stahu.gsblockshuffle.manager.TeamsManager;
+import me.stahu.gsblockshuffle.manager.TeamsManagerImpl;
 import me.stahu.gsblockshuffle.model.CategoryTree;
 import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
 import me.stahu.gsblockshuffle.view.LocalizationManager;
 import me.stahu.gsblockshuffle.view.cli.MessageBuilder;
-import me.stahu.gsblockshuffle.view.cli.command.BlockShuffleCommands;
 import me.stahu.gsblockshuffle.view.sound.SoundPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,7 +43,7 @@ public final class GSBlockShuffle extends JavaPlugin {
     private Config config;
     private GameController gameController;
     private MessageController messageController;
-    private PlayersManager playersManager;
+    private TeamsManager teamsManager;
     private SoundPlayer soundPlayer;
     private ServerAPI serverAPI;
     private LocalizationManager localizationManager;
@@ -104,7 +102,7 @@ public final class GSBlockShuffle extends JavaPlugin {
 
     private void initializeManagers() {
         players = serverAPI.getPlayers();
-        playersManager = new PlayersManagerImpl(teams, players);
+        teamsManager = new TeamsManagerImpl(teams);
         messageController = new MessageController(players);
     }
 
@@ -124,7 +122,7 @@ public final class GSBlockShuffle extends JavaPlugin {
 
     private void initializeGameController() {
         MessageBuilder messageBuilder = new MessageBuilder(localizationManager);
-        GameEventDispatcher dispatcher = createEventDispatcher(messageBuilder);
+        BlockShuffleEventDispatcher dispatcher = createEventDispatcher(messageBuilder);
         PointsAwarder pointsAwarder = new PointsAwarder(config);
 
         CategoryTree categoryTree;
@@ -140,7 +138,7 @@ public final class GSBlockShuffle extends JavaPlugin {
         GameManager gameManager = GameManagerImpl.builder()
                 .blockSelector(new BlockSelector(config, categoryTree))
                 .dispatcher(dispatcher)
-                .playersManager(playersManager)
+                .teamsManager(teamsManager)
                 .blockAssigner(BlockAssignerFactory.getBlockAssigner(config, dispatcher))
                 .teamEliminator(new TeamEliminator(config))
                 .difficultyIncrementer(new DifficultyIncrementer(config))
@@ -150,18 +148,18 @@ public final class GSBlockShuffle extends JavaPlugin {
         gameController = new GameController(this, config, dispatcher, gameManager, pointsAwarder);
     }
 
-    private GameEventDispatcher createEventDispatcher(MessageBuilder messageBuilder) {
-        return new GameEventDispatcher()
-                .registerListener(InvokeGameStartEvent.class, new InvokeGameStartListener(new InvokeGameStartHandler(soundPlayer)))
-                .registerListener(GameStartEvent.class, new GameStartListener(new GameStartHandler(messageController, soundPlayer, messageBuilder)))
+    private BlockShuffleEventDispatcher createEventDispatcher(MessageBuilder messageBuilder) {
+        return new BlockShuffleEventDispatcher()
+                .registerListener(InvokeGameStartEvent.class, new InvokeBlockShuffleStartListener(new InvokeGameStartHandler(soundPlayer)))
+                .registerListener(GameStartEvent.class, new BlockShuffleStartListener(new GameStartHandler(messageController, soundPlayer, messageBuilder)))
                 .registerListener(BlockAssignEvent.class, new BlockAssignListener(new BlockAssignHandler(messageController, messageBuilder)))
                 .registerListener(BlockFoundEvent.class, new BlockFoundListener(new BlockFoundHandler(messageController, soundPlayer, messageBuilder)))
                 .registerListener(BreakStartEvent.class, new BreakStartListener(new BreakStartHandler(soundPlayer)))
-                .registerListener(GameEndEvent.class, new GameEndListener(new GameEndHandler(messageController, soundPlayer, messageBuilder)));
+                .registerListener(GameEndEvent.class, new BlockShuffleEndListener(new GameEndHandler(messageController, soundPlayer, messageBuilder)));
     }
 
     private void registerEventListeners() {
-        getServer().getPluginManager().registerEvents(new PlayerListener(gameController, playersManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(gameController, teamsManager), this);
     }
 
     private void registerCommands() {

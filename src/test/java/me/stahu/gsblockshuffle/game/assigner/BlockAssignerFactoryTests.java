@@ -2,7 +2,7 @@ package me.stahu.gsblockshuffle.game.assigner;
 
 import me.stahu.gsblockshuffle.config.BlockAssignmentMode;
 import me.stahu.gsblockshuffle.config.Config;
-import me.stahu.gsblockshuffle.event.GameEventDispatcher;
+import me.stahu.gsblockshuffle.event.BlockShuffleEventDispatcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,11 +12,11 @@ import static org.mockito.Mockito.mock;
 
 class BlockAssignerFactoryTests {
 
-    GameEventDispatcher dispatcher;
+    BlockShuffleEventDispatcher dispatcher;
 
     @BeforeEach
     void setUp() {
-        dispatcher = mock(GameEventDispatcher.class);
+        dispatcher = mock(BlockShuffleEventDispatcher.class);
     }
 
     @Test

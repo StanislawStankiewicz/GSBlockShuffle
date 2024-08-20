@@ -1,4 +1,4 @@
-package me.stahu.gsblockshuffle.event;
+package me.stahu.gsblockshuffle.event.type.game;
 
 import me.stahu.gsblockshuffle.model.Block;
 import me.stahu.gsblockshuffle.model.Player;

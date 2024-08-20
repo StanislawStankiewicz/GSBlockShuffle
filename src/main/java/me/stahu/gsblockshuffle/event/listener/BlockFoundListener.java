@@ -1,12 +1,12 @@
 package me.stahu.gsblockshuffle.event.listener;
 
 import lombok.RequiredArgsConstructor;
-import me.stahu.gsblockshuffle.event.GameEventListener;
+import me.stahu.gsblockshuffle.event.BlockShuffleEventListener;
 import me.stahu.gsblockshuffle.event.handler.BlockFoundHandler;
-import me.stahu.gsblockshuffle.event.type.BlockFoundEvent;
+import me.stahu.gsblockshuffle.event.type.game.BlockFoundEvent;
 
 @RequiredArgsConstructor
-public class BlockFoundListener implements GameEventListener<BlockFoundEvent> {
+public class BlockFoundListener implements BlockShuffleEventListener<BlockFoundEvent> {
 
     final BlockFoundHandler blockFoundHandler;
 

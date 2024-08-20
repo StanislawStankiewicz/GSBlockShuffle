@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.stahu.gsblockshuffle.GSBlockShuffle;
 import me.stahu.gsblockshuffle.config.Config;
-import me.stahu.gsblockshuffle.event.GameEventDispatcher;
-import me.stahu.gsblockshuffle.event.type.BlockFoundEvent;
+import me.stahu.gsblockshuffle.event.BlockShuffleEventDispatcher;
+import me.stahu.gsblockshuffle.event.type.game.BlockFoundEvent;
 import me.stahu.gsblockshuffle.game.score.PointsAwarder;
 import me.stahu.gsblockshuffle.manager.GameManager;
 import me.stahu.gsblockshuffle.model.Player;
@@ -19,7 +19,7 @@ public class GameController {
 
     private final GSBlockShuffle plugin;
     private final Config config;
-    private final GameEventDispatcher dispatcher;
+    private final BlockShuffleEventDispatcher dispatcher;
     private final GameManager gameManager;
     private final PointsAwarder pointsAwarder;
     private final BukkitScheduler scheduler = Bukkit.getScheduler();

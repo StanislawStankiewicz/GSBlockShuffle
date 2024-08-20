@@ -1,9 +1,9 @@
 package me.stahu.gsblockshuffle.event.listener;
 
-import me.stahu.gsblockshuffle.event.GameEventListener;
-import me.stahu.gsblockshuffle.event.type.RoundEndEvent;
+import me.stahu.gsblockshuffle.event.BlockShuffleEventListener;
+import me.stahu.gsblockshuffle.event.type.game.RoundEndEvent;
 
-public class RoundEndListener implements GameEventListener<RoundEndEvent> {
+public class RoundEndListener implements BlockShuffleEventListener<RoundEndEvent> {
     @Override
     public void onGameEvent(RoundEndEvent event) {
         // currently no usage

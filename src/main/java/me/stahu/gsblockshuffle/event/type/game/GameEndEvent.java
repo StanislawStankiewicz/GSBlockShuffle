@@ -1,6 +1,5 @@
-package me.stahu.gsblockshuffle.event.type;
+package me.stahu.gsblockshuffle.event.type.game;
 
-import me.stahu.gsblockshuffle.event.GameEvent;
 import me.stahu.gsblockshuffle.model.Team;
 
 import java.util.Set;

@@ -2,8 +2,8 @@ package me.stahu.gsblockshuffle.manager;
 
 import lombok.Builder;
 import me.stahu.gsblockshuffle.config.Config;
-import me.stahu.gsblockshuffle.event.GameEventDispatcher;
-import me.stahu.gsblockshuffle.event.type.*;
+import me.stahu.gsblockshuffle.event.BlockShuffleEventDispatcher;
+import me.stahu.gsblockshuffle.event.type.game.*;
 import me.stahu.gsblockshuffle.game.assigner.BlockAssigner;
 import me.stahu.gsblockshuffle.game.blocks.BlockSelector;
 import me.stahu.gsblockshuffle.game.difficulty.DifficultyIncrementer;
@@ -19,9 +19,9 @@ import java.util.Set;
 @Builder
 public class GameManagerImpl implements GameManager {
 
-    final GameEventDispatcher dispatcher;
+    final BlockShuffleEventDispatcher dispatcher;
     final Config config;
-    final PlayersManager playersManager;
+    final TeamsManager teamsManager;
     DifficultyIncrementer difficultyIncrementer;
     BlockSelector blockSelector;
     BlockAssigner blockAssigner;
@@ -41,7 +41,7 @@ public class GameManagerImpl implements GameManager {
     public void startGame() {
         round = 0;
 
-        playersManager.assignTeams();
+        teamsManager.assignDefaultTeams();
 
         dispatcher.dispatch(new GameStartEvent());
     }
@@ -51,7 +51,11 @@ public class GameManagerImpl implements GameManager {
         round++;
         blocks = blockSelector.getBlocks(difficulty);
 
-        playersManager.resetBlocks();
+        teams.forEach(team -> team.getPlayers()
+                .forEach(player -> {
+                    player.setAssignedBlock(null);
+                    player.setFoundBlock(false);
+                }));
         blockAssigner.assignBlocks(teams, blocks);
 
         dispatcher.dispatch(new RoundNewEvent());
