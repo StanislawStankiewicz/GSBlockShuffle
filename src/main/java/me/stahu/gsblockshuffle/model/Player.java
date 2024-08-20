@@ -1,13 +1,11 @@
 package me.stahu.gsblockshuffle.model;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import me.stahu.gsblockshuffle.view.sound.Note;
 
 @Getter @Setter
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class Player {
     final org.bukkit.entity.Player player;
     Team team;

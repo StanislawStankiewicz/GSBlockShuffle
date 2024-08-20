@@ -6,24 +6,23 @@ import me.stahu.gsblockshuffle.config.Config;
 import me.stahu.gsblockshuffle.controller.GameController;
 import me.stahu.gsblockshuffle.controller.MessageController;
 import me.stahu.gsblockshuffle.controller.SoundController;
-import me.stahu.gsblockshuffle.event.type.game.*;
 import me.stahu.gsblockshuffle.event.BlockShuffleEventDispatcher;
-import me.stahu.gsblockshuffle.event.handler.*;
-import me.stahu.gsblockshuffle.event.listener.*;
+import me.stahu.gsblockshuffle.event.handler.game.*;
+import me.stahu.gsblockshuffle.event.listener.PlayerListener;
+import me.stahu.gsblockshuffle.event.listener.game.*;
+import me.stahu.gsblockshuffle.event.type.game.*;
 import me.stahu.gsblockshuffle.game.assigner.BlockAssignerFactory;
 import me.stahu.gsblockshuffle.game.blocks.BlockSelector;
 import me.stahu.gsblockshuffle.game.difficulty.DifficultyIncrementer;
 import me.stahu.gsblockshuffle.game.eliminator.TeamEliminator;
 import me.stahu.gsblockshuffle.game.score.PointsAwarder;
-import me.stahu.gsblockshuffle.manager.GameManager;
-import me.stahu.gsblockshuffle.manager.GameManagerImpl;
-import me.stahu.gsblockshuffle.manager.TeamsManager;
-import me.stahu.gsblockshuffle.manager.TeamsManagerImpl;
+import me.stahu.gsblockshuffle.manager.*;
 import me.stahu.gsblockshuffle.model.CategoryTree;
 import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
 import me.stahu.gsblockshuffle.view.LocalizationManager;
 import me.stahu.gsblockshuffle.view.cli.MessageBuilder;
+import me.stahu.gsblockshuffle.view.cli.command.BlockShuffleCommands;
 import me.stahu.gsblockshuffle.view.sound.SoundPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -44,6 +43,7 @@ public final class GSBlockShuffle extends JavaPlugin {
     private GameController gameController;
     private MessageController messageController;
     private TeamsManager teamsManager;
+    private PlayersManager playersManager;
     private SoundPlayer soundPlayer;
     private ServerAPI serverAPI;
     private LocalizationManager localizationManager;
@@ -102,7 +102,8 @@ public final class GSBlockShuffle extends JavaPlugin {
 
     private void initializeManagers() {
         players = serverAPI.getPlayers();
-        teamsManager = new TeamsManagerImpl(teams);
+        playersManager = new PlayersManager(players);
+        teamsManager = new TeamsManagerImpl(playersManager, teams);
         messageController = new MessageController(players);
     }
 
@@ -159,7 +160,7 @@ public final class GSBlockShuffle extends JavaPlugin {
     }
 
     private void registerEventListeners() {
-        getServer().getPluginManager().registerEvents(new PlayerListener(gameController, teamsManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(gameController, playersManager), this);
     }
 
     private void registerCommands() {
