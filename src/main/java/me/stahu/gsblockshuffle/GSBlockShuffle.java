@@ -8,9 +8,12 @@ import me.stahu.gsblockshuffle.controller.MessageController;
 import me.stahu.gsblockshuffle.controller.SoundController;
 import me.stahu.gsblockshuffle.event.BlockShuffleEventDispatcher;
 import me.stahu.gsblockshuffle.event.handler.game.*;
+import me.stahu.gsblockshuffle.event.handler.team.*;
 import me.stahu.gsblockshuffle.event.listener.PlayerListener;
 import me.stahu.gsblockshuffle.event.listener.game.*;
+import me.stahu.gsblockshuffle.event.listener.team.*;
 import me.stahu.gsblockshuffle.event.type.game.*;
+import me.stahu.gsblockshuffle.event.type.team.*;
 import me.stahu.gsblockshuffle.game.assigner.BlockAssignerFactory;
 import me.stahu.gsblockshuffle.game.blocks.BlockSelector;
 import me.stahu.gsblockshuffle.game.difficulty.DifficultyIncrementer;
@@ -160,7 +163,18 @@ public final class GSBlockShuffle extends JavaPlugin {
                 .registerListener(BlockAssignEvent.class, new BlockAssignListener(new BlockAssignHandler(messageController, messageBuilder)))
                 .registerListener(BlockFoundEvent.class, new BlockFoundListener(new BlockFoundHandler(messageController, soundPlayer, messageBuilder)))
                 .registerListener(BreakStartEvent.class, new BreakStartListener(new BreakStartHandler(soundPlayer)))
-                .registerListener(GameEndEvent.class, new BlockShuffleEndListener(new GameEndHandler(messageController, soundPlayer, messageBuilder)));
+                .registerListener(GameEndEvent.class, new BlockShuffleEndListener(new GameEndHandler(messageController, soundPlayer, messageBuilder)))
+                // Register team events
+                .registerListener(AcceptInviteEvent.class, new AcceptInviteListener(new AcceptInviteHandler(messageController, messageBuilder)))
+                .registerListener(AcceptRequestEvent.class, new AcceptRequestListener(new AcceptRequestHandler(messageController, messageBuilder)))
+                .registerListener(AddPlayerToTeamEvent.class, new AddPlayerToTeamListener(new AddPlayerToTeamHandler(messageController, messageBuilder)))
+                .registerListener(CreateTeamEvent.class, new CreateTeamListener(new CreateTeamHandler(messageController, messageBuilder)))
+                .registerListener(InvitePlayerToTeamEvent.class, new InvitePlayerToTeamListener(new InvitePlayerToTeamHandler(messageController, messageBuilder)))
+                .registerListener(KickFromTeamEvent.class, new KickFromTeamListener(new KickFromTeamHandler(messageController, messageBuilder)))
+                .registerListener(LeaveTeamEvent.class, new LeaveTeamListener(new LeaveTeamHandler(messageController, messageBuilder)))
+                .registerListener(RemoveTeamEvent.class, new RemoveTeamListener(new RemoveTeamHandler(messageController, messageBuilder)))
+                .registerListener(RequestToJoinTeamEvent.class, new RequestToJoinTeamListener(new RequestToJoinTeamHandler(messageController, messageBuilder)))
+                .registerListener(TeamFailEvent.class, new TeamFailListener(new TeamFailHandler(messageController, messageBuilder)));
     }
 
     private void registerEventListeners() {
