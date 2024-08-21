@@ -8,7 +8,7 @@ import me.stahu.gsblockshuffle.event.type.team.KickFromTeamEvent;
 @RequiredArgsConstructor
 public class KickFromTeamListener implements BlockShuffleEventListener<KickFromTeamEvent> {
 
-    KickFromTeamHandler kickFromTeamHandler;
+    final KickFromTeamHandler kickFromTeamHandler;
 
     @Override
     public void onGameEvent(KickFromTeamEvent event) {

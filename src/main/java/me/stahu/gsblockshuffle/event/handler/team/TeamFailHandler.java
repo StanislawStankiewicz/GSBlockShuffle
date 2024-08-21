@@ -1,14 +1,16 @@
 package me.stahu.gsblockshuffle.event.handler.team;
 
+import lombok.RequiredArgsConstructor;
 import me.stahu.gsblockshuffle.controller.MessageController;
 import me.stahu.gsblockshuffle.event.type.team.TeamFailReason;
 import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.view.cli.MessageBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 
+@RequiredArgsConstructor
 public class TeamFailHandler {
-    MessageController messageController;
-    MessageBuilder messageBuilder;
+    final MessageController messageController;
+    final MessageBuilder messageBuilder;
 
     public void sendTeamFailMessages(Player player, TeamFailReason reason) {
         TextComponent message = switch (reason) {
