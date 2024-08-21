@@ -1,6 +1,6 @@
 package me.stahu.gsblockshuffle.game.assigner;
 
-import me.stahu.gsblockshuffle.event.GameEventDispatcher;
+import me.stahu.gsblockshuffle.event.BlockShuffleEventDispatcher;
 import me.stahu.gsblockshuffle.model.BlockPack;
 import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
@@ -17,11 +17,11 @@ import static org.mockito.Mockito.mock;
 
 class PlayerBlockAssignerTests {
 
-    GameEventDispatcher dispatcher;
+    BlockShuffleEventDispatcher dispatcher;
 
     @BeforeEach
     void setUp() {
-        dispatcher = mock(GameEventDispatcher.class);
+        dispatcher = mock(BlockShuffleEventDispatcher.class);
     }
 
     @Test

@@ -1,6 +1,6 @@
 package me.stahu.gsblockshuffle.game.assigner;
 
-import me.stahu.gsblockshuffle.event.GameEventDispatcher;
+import me.stahu.gsblockshuffle.event.BlockShuffleEventDispatcher;
 import me.stahu.gsblockshuffle.model.Block;
 import me.stahu.gsblockshuffle.model.BlockPack;
 import me.stahu.gsblockshuffle.model.Player;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class GameBlockAssigner extends BlockAssigner {
 
-    public GameBlockAssigner(GameEventDispatcher dispatcher) {
+    public GameBlockAssigner(BlockShuffleEventDispatcher dispatcher) {
         super(dispatcher);
     }
 
