@@ -50,7 +50,7 @@ public class MessageBuilder {
         return teamMessageBuilder.buildLeaveTeamMessage(team);
     }
 
-    public TextComponent buildAddPlayerToTeamMessage(Team team, Player player) {
+    public TextComponent buildAddPlayerToTeamSenderMessage(Team team, Player player) {
         return teamMessageBuilder.buildAddPlayerToTeamSenderMessage(team, player);
     }
 
@@ -74,8 +74,8 @@ public class MessageBuilder {
         return teamMessageBuilder.buildAcceptInviteReceiverMessage(team, player);
     }
 
-    public TextComponent buildDenyInviteSenderMessage(Team team) {
-        return teamMessageBuilder.buildDenyInviteSenderMessage(team);
+    public TextComponent buildRequestToJoinTeamSenderMessage(Team team, Player player) {
+        return teamMessageBuilder.buildRequestToJoinTeamSenderMessage(team, player);
     }
 
     public TextComponent buildRequestToJoinTeamReceiverMessage(Team team, Player player) {
@@ -106,7 +106,15 @@ public class MessageBuilder {
         return teamMessageBuilder.buildAlreadyInTeamMessage(player);
     }
 
-    public TextComponent buildIsNotLeaderMessage(Player player, Team team) {
-        return teamMessageBuilder.buildIsNotLeaderMessage(player, team);
+    public TextComponent buildIsNotLeaderMessage(Player player) {
+        return teamMessageBuilder.buildIsNotLeaderMessage(player);
+    }
+
+    public TextComponent buildNoSuchRequestMessage(Player player) {
+        return teamMessageBuilder.buildNoSuchRequestMessage(player);
+    }
+
+    public TextComponent buildNoSuchPlayerMessage(Player player) {
+        return teamMessageBuilder.buildNoSuchPlayerMessage(player);
     }
 }

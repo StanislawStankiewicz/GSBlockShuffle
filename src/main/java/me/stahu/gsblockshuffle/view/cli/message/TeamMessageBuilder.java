@@ -47,8 +47,8 @@ public class TeamMessageBuilder {
         return templateTeamPlayerMessage(team, player, "accept_invite_receiver");
     }
 
-    public TextComponent buildDenyInviteSenderMessage(Team team) {
-        return templateTeamMessage(team, "deny_invite_sender");
+    public TextComponent buildRequestToJoinTeamSenderMessage(Team team, Player player) {
+        return templateTeamPlayerMessage(team, player, "request_to_join_team_sender");
     }
 
     public TextComponent buildRequestToJoinTeamReceiverMessage(Team team, Player player) {
@@ -79,8 +79,16 @@ public class TeamMessageBuilder {
         return templatePlayerMessage(player, "already_in_team");
     }
 
-    public TextComponent buildIsNotLeaderMessage(Player player, Team team) {
-        return templateTeamPlayerMessage(team, player, "is_not_leader");
+    public TextComponent buildIsNotLeaderMessage(Player player) {
+        return templatePlayerMessage(player, "is_not_leader");
+    }
+
+    public TextComponent buildNoSuchRequestMessage(Player player) {
+        return templatePlayerMessage(player, "no_such_request");
+    }
+
+    public TextComponent buildNoSuchPlayerMessage(Player player) {
+        return templatePlayerMessage(player, "no_such_player");
     }
 
     private TextComponent templateTeamMessage(Team team, String templateId) {
