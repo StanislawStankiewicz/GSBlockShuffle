@@ -20,8 +20,8 @@ import java.util.Set;
 public class GameManagerImpl implements GameManager {
 
     final BlockShuffleEventDispatcher dispatcher;
+    final PlayerManager playerManager;
     final Config config;
-    final TeamsManager teamsManager;
     DifficultyIncrementer difficultyIncrementer;
     BlockSelector blockSelector;
     BlockAssigner blockAssigner;
@@ -41,7 +41,7 @@ public class GameManagerImpl implements GameManager {
     public void startGame() {
         round = 0;
 
-        teamsManager.assignDefaultTeams();
+        playerManager.assignDefaultTeams();
 
         dispatcher.dispatch(new GameStartEvent());
     }

@@ -1,16 +1,12 @@
 package me.stahu.gsblockshuffle.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Builder
 @Getter @Setter
-@AllArgsConstructor
 public class Team {
     final String name;
     final Set<Player> players = new HashSet<>();
@@ -19,11 +15,7 @@ public class Team {
     int score;
 
     public Team(Player leader) {
-        this.name = leader.getDisplayName();
-        this.leader = leader;
-        this.players.add(leader);
-        this.isEliminated = false;
-        this.score = 0;
+        this(leader, leader.getName());
     }
 
     public Team(Player player, String name) {

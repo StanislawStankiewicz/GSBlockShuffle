@@ -1,18 +1,20 @@
 package me.stahu.gsblockshuffle.model;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import me.stahu.gsblockshuffle.api.PlayerAPI;
 import me.stahu.gsblockshuffle.view.sound.Note;
 
 @Getter @Setter
 @RequiredArgsConstructor
-@EqualsAndHashCode
 public class Player {
-    final org.bukkit.entity.Player serverPlayer;
+    final PlayerAPI api;
     Team team;
     Block assignedBlock;
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
     boolean hasFoundBlock;
-    boolean isOnline = true;
 
     public boolean hasFoundBlock() {
         return hasFoundBlock;
@@ -23,14 +25,14 @@ public class Player {
     }
 
     public String getName() {
-        return serverPlayer.getDisplayName();
+        return api.getDisplayName();
     }
 
     public String getDisplayName() {
-        return serverPlayer.getDisplayName();
+        return api.getDisplayName();
     }
 
     public void playSound(Note note) {
-        serverPlayer.playSound(serverPlayer.getLocation(), note.instrument(), note.volume(), note.pitch());
+        api.playSound(note);
     }
 }

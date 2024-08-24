@@ -1,10 +1,10 @@
 package me.stahu.gsblockshuffle.game.assigner;
 
+import me.stahu.gsblockshuffle.api.PlayerAPI;
 import me.stahu.gsblockshuffle.model.Block;
 import me.stahu.gsblockshuffle.model.BlockPack;
 import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
-import org.bukkit.scoreboard.Scoreboard;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
@@ -21,10 +21,8 @@ public class AssignerTestsArranger {
         Player[][] players = new Player[teamCount][playerCount];
         for (int i = 0; i < teamCount; i++) {
             for (int j = 0; j < playerCount; j++) {
-                org.bukkit.entity.Player bukkitPlayer = Mockito.mock(org.bukkit.entity.Player.class);
-                Scoreboard scoreboard = Mockito.mock(Scoreboard.class);
-                Mockito.when(bukkitPlayer.getScoreboard()).thenReturn(scoreboard);
-                players[i][j] = new Player(bukkitPlayer);
+                PlayerAPI playerApi = Mockito.mock(PlayerAPI.class);
+                players[i][j] = new Player(playerApi);
             }
         }
 

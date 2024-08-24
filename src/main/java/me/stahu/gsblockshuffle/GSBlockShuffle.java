@@ -47,8 +47,7 @@ public final class GSBlockShuffle extends JavaPlugin {
     private Config config;
     private GameController gameController;
     private MessageController messageController;
-    private TeamsManager teamsManager;
-    private PlayersManager playersManager;
+    private PlayerManager playerManager;
     private SoundPlayer soundPlayer;
     private ServerAPI serverAPI;
     private LocalizationManager localizationManager;
@@ -107,8 +106,7 @@ public final class GSBlockShuffle extends JavaPlugin {
 
     private void initializeManagers() {
         players = serverAPI.getPlayers();
-        playersManager = new PlayersManager(players);
-        teamsManager = new TeamsManagerImpl(playersManager, teams);
+        playerManager = new PlayerManagerImpl(teams, players);
         messageController = new MessageController(players);
     }
 
@@ -144,10 +142,10 @@ public final class GSBlockShuffle extends JavaPlugin {
         }
 
         GameManager gameManager = GameManagerImpl.builder()
-                .blockSelector(new BlockSelector(config, categoryTree))
                 .dispatcher(dispatcher)
-                .teamsManager(teamsManager)
+                .playerManager(playerManager)
                 .blockAssigner(BlockAssignerFactory.getBlockAssigner(config, dispatcher))
+                .blockSelector(new BlockSelector(config, categoryTree))
                 .teamEliminator(new TeamEliminator(config))
                 .difficultyIncrementer(new DifficultyIncrementer(config))
                 .teams(teams)
@@ -178,7 +176,7 @@ public final class GSBlockShuffle extends JavaPlugin {
     }
 
     private void registerEventListeners() {
-        getServer().getPluginManager().registerEvents(new PlayerListener(gameController, playersManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(gameController, playerManager), this);
     }
 
     private void registerCommands() {

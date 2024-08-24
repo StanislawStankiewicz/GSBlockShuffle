@@ -68,7 +68,3 @@ processResources {
         expand props
     }
 }
-
-jar {
-    destinationDirectory.set(file("C:\\Users\\super\\OneDrive\\Pulpit\\serwer2\\plugins"))
-}

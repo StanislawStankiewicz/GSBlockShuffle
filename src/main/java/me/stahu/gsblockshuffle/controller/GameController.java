@@ -91,8 +91,8 @@ public class GameController {
         if (gameState != GameState.ROUND_NEW || player.getTeam() == null || player.hasFoundBlock()) {
             return;
         }
-        String playerBlockName = player.getServerPlayer().getLocation().getBlock().getType().name();
-        String belowPlayerBlockName = player.getServerPlayer().getLocation().subtract(0, 1, 0).getBlock().getType().name();
+        String playerBlockName = player.getApi().getBlockNameBelow(0);
+        String belowPlayerBlockName = player.getApi().getBlockNameBelow(1);
         List<String> assignedBlockNames = player.getAssignedBlock().names();
 
         if (assignedBlockNames.contains(playerBlockName) || assignedBlockNames.contains(belowPlayerBlockName)) {
