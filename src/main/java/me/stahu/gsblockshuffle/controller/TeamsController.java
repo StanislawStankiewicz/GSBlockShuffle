@@ -6,12 +6,11 @@ import me.stahu.gsblockshuffle.event.type.team.*;
 import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
-// TODO refactor:
-//  - create methods for getting a team that will fail if no team exists for use in commands
-//  - perform validation in separate methods
 @RequiredArgsConstructor
 public class TeamsController {
 
@@ -32,25 +31,16 @@ public class TeamsController {
     }
 
     public void removeTeam(Team team) {
-        team.getPlayers().forEach(player -> player.setTeam(null));
+        team.getPlayers().forEach(player -> player.setTeam(Optional.empty()));
         teams.remove(team);
         dispatcher.dispatch(new RemoveTeamEvent(team));
     }
 
-    public void removeOwnTeam(Player player) {
-        if (isPlayerInNoTeam(player)) {
-            return;
-        }
-        removeTeam(player.getTeam());
-    }
-
     public void leaveTeam(Player player) {
-        if (isPlayerInNoTeam(player)) {
-            return;
-        }
-        Team team = player.getTeam();
-        player.getTeam().removePlayer(player);
-        player.setTeam(null);
+        Team team = player.getTeam()
+                .orElseThrow();
+        team.removePlayer(player);
+        player.setTeam(Optional.empty());
         dispatcher.dispatch(new LeaveTeamEvent(team, player));
     }
 
@@ -63,27 +53,25 @@ public class TeamsController {
             return;
         }
         team.addPlayer(player);
-        player.setTeam(team);
+        player.setTeam(Optional.of(team));
         dispatcher.dispatch(new AddPlayerToTeamEvent(team, player));
     }
 
-    public void invitePlayerToTeam(Player inviter, Player player, Team team) {
-        if (isNotLeader(inviter) || isPlayerInTeam(player)) {
-            return;
-        }
-        invites.put(player, team);
+    public void invitePlayerToTeam(Player inviter, Player player) {
+        invites.put(player, inviter.getTeam()
+                .orElseThrow());
         dispatcher.dispatch(new InvitePlayerToTeamEvent(inviter, player));
     }
 
-    public void acceptInvite(Player player) {
+    public boolean acceptInvite(Player player) {
         Team team = invites.get(player);
         if (team == null) {
-            dispatcher.dispatch(new TeamFailEvent(player, TeamFailReason.NO_TEAM));
-            return;
+            return false;
         }
         addPlayerToTeam(player, team);
         invites.remove(player);
         dispatcher.dispatch(new AcceptInviteEvent(team, player));
+        return true;
     }
 
     public void requestToJoinTeam(Player player, Team team) {
@@ -94,30 +82,24 @@ public class TeamsController {
         dispatcher.dispatch(new RequestToJoinTeamEvent(team, player));
     }
 
-    public void acceptRequest(Player leader) {
-        if (isNotLeader(leader)) {
-            return;
-        }
-        Player player = requests.get(leader.getTeam());
+    public boolean acceptRequest(Player leader) {
+        Team team = leader.getTeam()
+                .orElseThrow();
+        Player player = requests.get(team);
         if (player == null) {
-            dispatcher.dispatch(new TeamFailEvent(leader, TeamFailReason.NO_SUCH_REQUEST));
-            return;
+            return false;
         }
-        requests.remove(leader.getTeam());
-        addPlayerToTeam(player, leader.getTeam());
+        requests.remove(team);
+        addPlayerToTeam(player, team);
         dispatcher.dispatch(new AcceptRequestEvent(leader, player));
+        return true;
     }
 
     public void kickFromTeam(Player leader, Player player) {
-        if (isNotLeader(leader)) {
-            return;
-        }
-        if (!leader.getTeam().getPlayers().contains(player)) {
-            dispatcher.dispatch(new TeamFailEvent(leader, TeamFailReason.NO_SUCH_PLAYER));
-            return;
-        }
-        leader.getTeam().removePlayer(player);
-        player.setTeam(null);
+        Team team = leader.getTeam()
+                .orElseThrow();
+        team.removePlayer(player);
+        player.setTeam(Optional.empty());
         dispatcher.dispatch(new KickFromTeamEvent(leader, player));
     }
 

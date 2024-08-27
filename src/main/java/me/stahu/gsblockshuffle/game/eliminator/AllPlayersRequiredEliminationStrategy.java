@@ -10,7 +10,7 @@ public class AllPlayersRequiredEliminationStrategy implements TeamEliminationStr
     public void eliminateTeams(Set<Team> teams) {
         for (Team team : teams) {
             for (Player player : team.getPlayers()) {
-                if (!player.hasFoundBlock()) {
+                if (!player.isFoundBlock()) {
                     team.setEliminated(true);
                     break;
                 }

@@ -15,4 +15,6 @@ public interface PlayerAPI {
     void sendMessage(TextComponent message);
 
     String getBlockNameBelow(int offset);
+
+    boolean hasPermission(String permission);
 }

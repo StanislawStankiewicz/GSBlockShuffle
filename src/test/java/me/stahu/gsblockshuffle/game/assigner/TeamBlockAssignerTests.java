@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static me.stahu.gsblockshuffle.game.assigner.AssignerTestsArranger.arrangeBlocks;
@@ -36,9 +37,9 @@ class TeamBlockAssignerTests {
 
         Block chosenBlock;
         for (Team team : teams) {
-            chosenBlock = team.getPlayers().iterator().next().getAssignedBlock();
+            chosenBlock = team.getPlayers().iterator().next().getAssignedBlock().get();
             for (Player player : team.getPlayers()) {
-                assertEquals(chosenBlock, player.getAssignedBlock());
+                assertEquals(Optional.of(chosenBlock), player.getAssignedBlock());
             }
         }
     }

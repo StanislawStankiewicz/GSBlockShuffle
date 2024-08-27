@@ -21,10 +21,10 @@ public class PlayerManagerImpl implements PlayerManager {
     public void assignDefaultTeams() {
         Team team;
         for (Player player : players) {
-            if (player.getTeam() == null) {
+            if (player.getTeam().isEmpty()) {
                 team = new Team(player);
                 teams.add(team);
-                player.setTeam(team);
+                player.setTeam(Optional.of(team));
             }
         }
     }

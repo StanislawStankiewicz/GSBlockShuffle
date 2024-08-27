@@ -27,9 +27,9 @@ class RoundEndConditionCheckerTests {
         when(config.isFirstToWin()).thenReturn(firstToWin);
 
         Player player1 = mock(Player.class);
-        when(player1.hasFoundBlock()).thenReturn(player1Found);
+        when(player1.isFoundBlock()).thenReturn(player1Found);
         Player player2 = mock(Player.class);
-        when(player2.hasFoundBlock()).thenReturn(player2Found);
+        when(player2.isFoundBlock()).thenReturn(player2Found);
 
         Team team = mock(Team.class);
         when(team.getPlayers()).thenReturn(Set.of(player1, player2));
@@ -48,9 +48,9 @@ class RoundEndConditionCheckerTests {
         when(config.isFirstToWin()).thenReturn(false);
 
         Player player1 = mock(Player.class);
-        when(player1.hasFoundBlock()).thenReturn(true);
+        when(player1.isFoundBlock()).thenReturn(true);
         Player player2 = mock(Player.class);
-        when(player2.hasFoundBlock()).thenReturn(true);
+        when(player2.isFoundBlock()).thenReturn(true);
 
         Team team = mock(Team.class);
         when(team.getPlayers()).thenReturn(Set.of(player1, player2));
@@ -65,9 +65,9 @@ class RoundEndConditionCheckerTests {
         when(config.isFirstToWin()).thenReturn(true);
 
         Player player1 = mock(Player.class);
-        when(player1.hasFoundBlock()).thenReturn(true);
+        when(player1.isFoundBlock()).thenReturn(true);
         Player player2 = mock(Player.class);
-        when(player2.hasFoundBlock()).thenReturn(false);
+        when(player2.isFoundBlock()).thenReturn(false);
 
         Team team = mock(Team.class);
         when(team.getPlayers()).thenReturn(Set.of(player1, player2));
@@ -82,17 +82,17 @@ class RoundEndConditionCheckerTests {
         when(config.isFirstToWin()).thenReturn(false);
 
         Player player1 = mock(Player.class);
-        when(player1.hasFoundBlock()).thenReturn(true);
+        when(player1.isFoundBlock()).thenReturn(true);
         Player player2 = mock(Player.class);
-        when(player2.hasFoundBlock()).thenReturn(true);
+        when(player2.isFoundBlock()).thenReturn(true);
 
         Team team1 = mock(Team.class);
         when(team1.getPlayers()).thenReturn(Set.of(player1, player2));
 
         Player player3 = mock(Player.class);
-        when(player3.hasFoundBlock()).thenReturn(true);
+        when(player3.isFoundBlock()).thenReturn(true);
         Player player4 = mock(Player.class);
-        when(player4.hasFoundBlock()).thenReturn(true);
+        when(player4.isFoundBlock()).thenReturn(true);
 
         Team team2 = mock(Team.class);
         when(team2.getPlayers()).thenReturn(Set.of(player3, player4));

@@ -11,7 +11,7 @@ public class AnyPlayerRequiredEliminationStrategy implements TeamEliminationStra
         for (Team team : teams) {
             boolean hasFoundBlock = false;
             for (Player player : team.getPlayers()) {
-                if (player.hasFoundBlock()) {
+                if (player.isFoundBlock()) {
                     hasFoundBlock = true;
                     break;
                 }

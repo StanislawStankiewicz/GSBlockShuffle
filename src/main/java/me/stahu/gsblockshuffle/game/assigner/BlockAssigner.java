@@ -9,6 +9,7 @@ import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ public abstract class BlockAssigner {
     public abstract void assignBlocks(Set<Team> teams, List<BlockPack> blocks);
 
     void assignBlock(Player player, Block block) {
-        player.setAssignedBlock(block);
+        player.setAssignedBlock(Optional.of(block));
         dispatcher.dispatch(new BlockAssignEvent(player, block));
     }
 }

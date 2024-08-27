@@ -40,4 +40,8 @@ public class BukkitPlayerAPI implements PlayerAPI {
     public String getBlockNameBelow(int offset) {
         return bukkitPlayer.getLocation().add(0, -offset, 0).getBlock().getType().name();
     }
+
+    public boolean hasPermission(String permission) {
+        return bukkitPlayer.hasPermission(permission);
+    }
 }

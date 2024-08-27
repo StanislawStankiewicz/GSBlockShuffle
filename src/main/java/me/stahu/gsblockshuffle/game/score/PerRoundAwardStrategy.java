@@ -8,7 +8,7 @@ public class PerRoundAwardStrategy implements ScoreIncrementStrategy {
     @Override
     public int awardPoints(Team team) {
         if (team.getPlayers().stream()
-                .allMatch(Player::hasFoundBlock)) {
+                .allMatch(Player::isFoundBlock)) {
             return 1;
         }
         return 0;
