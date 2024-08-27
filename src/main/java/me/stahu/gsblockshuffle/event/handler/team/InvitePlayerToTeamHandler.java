@@ -11,7 +11,7 @@ public class InvitePlayerToTeamHandler {
     final MessageBuilder messageBuilder;
 
     public void sendInvitePlayerToTeamMessages(Player leader, Player player) {
-        messageController.sendMessage(player, messageBuilder.buildInvitePlayerToTeamSenderMessage(leader.getTeam(), leader));
-        messageController.sendMessage(leader, messageBuilder.buildInvitePlayerToTeamReceiverMessage(leader.getTeam(), player));
+        messageController.commandResponse(player, messageBuilder.buildInvitePlayerToTeamSenderMessage(leader.getTeam().get(), leader), true);
+        messageController.commandResponse(leader, messageBuilder.buildInvitePlayerToTeamReceiverMessage(leader.getTeam().get(), player), true);
     }
 }

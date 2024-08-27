@@ -12,7 +12,7 @@ public class RequestToJoinTeamHandler {
     final MessageBuilder messageBuilder;
 
     public void sendRequestToJoinTeamMessages(Player player, Team team) {
-        messageController.sendMessage(player, messageBuilder.buildRequestToJoinTeamSenderMessage(team, player));
-        messageController.sendMessage(team.getLeader(), messageBuilder.buildRequestToJoinTeamReceiverMessage(team, player));
+        messageController.commandResponse(player, messageBuilder.buildRequestToJoinTeamSenderMessage(team, player), true);
+        messageController.commandResponse(team.getLeader(), messageBuilder.buildRequestToJoinTeamReceiverMessage(team, player), true);
     }
 }
