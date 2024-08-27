@@ -5,6 +5,7 @@ import me.stahu.gsblockshuffle.event.BlockShuffleEventDispatcher;
 import me.stahu.gsblockshuffle.event.type.team.*;
 import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
+import org.bukkit.ChatColor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,17 +18,20 @@ public class TeamsController {
     final BlockShuffleEventDispatcher dispatcher;
 
     final Set<Team> teams;
-    final Map<Player, Team> invites;
-    final Map<Team, Player> requests;
+    final Map<Player, Team> invites = new HashMap<>();
+    final Map<Team, Player> requests = new HashMap<>();
+
+    public Optional<Team> findTeamByName(String name) {
+        return teams.stream()
+                .filter(team -> team.getName().equals(name))
+                .findFirst();
+    }
 
     public void createTeam(Player player, String name) {
-        if (isPlayerInTeam(player)) {
-            return;
-        }
         Team team = new Team(player, name);
         teams.add(team);
-        player.setTeam(team);
-        dispatcher.dispatch(new CreateTeamEvent(player, team));
+        player.setTeam(Optional.of(team));
+        dispatcher.dispatch(new CreateTeamEvent(team, player));
     }
 
     public void removeTeam(Team team) {
@@ -44,14 +48,11 @@ public class TeamsController {
         dispatcher.dispatch(new LeaveTeamEvent(team, player));
     }
 
-    public void changeColor(Team team) {
+    public void changeColor(Team team, ChatColor color) {
         // to be implemented
     }
 
     public void addPlayerToTeam(Player player, Team team) {
-        if (isPlayerInTeam(player)) {
-            return;
-        }
         team.addPlayer(player);
         player.setTeam(Optional.of(team));
         dispatcher.dispatch(new AddPlayerToTeamEvent(team, player));
@@ -75,9 +76,6 @@ public class TeamsController {
     }
 
     public void requestToJoinTeam(Player player, Team team) {
-        if (isPlayerInTeam(player)) {
-            return;
-        }
         requests.put(team, player);
         dispatcher.dispatch(new RequestToJoinTeamEvent(team, player));
     }
@@ -101,32 +99,5 @@ public class TeamsController {
         team.removePlayer(player);
         player.setTeam(Optional.empty());
         dispatcher.dispatch(new KickFromTeamEvent(leader, player));
-    }
-
-    private boolean isPlayerInNoTeam(Player player) {
-        if (player.getTeam() == null) {
-            dispatcher.dispatch(new TeamFailEvent(player, TeamFailReason.NO_TEAM));
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isPlayerInTeam(Player player) {
-        if (player.getTeam() != null) {
-            dispatcher.dispatch(new TeamFailEvent(player, TeamFailReason.ALREADY_IN_TEAM));
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isNotLeader(Player player) {
-        if (isPlayerInNoTeam(player)) {
-            return true;
-        }
-        if (!player.getTeam().getLeader().equals(player)) {
-            dispatcher.dispatch(new TeamFailEvent(player, TeamFailReason.NOT_A_LEADER));
-            return true;
-        }
-        return false;
     }
 }

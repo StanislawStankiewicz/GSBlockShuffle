@@ -1,10 +1,13 @@
 package me.stahu.gsblockshuffle.view.cli;
 
 import lombok.RequiredArgsConstructor;
+import me.stahu.gsblockshuffle.config.Config;
 import me.stahu.gsblockshuffle.model.Block;
 import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
+import me.stahu.gsblockshuffle.view.cli.message.CommandSubcommandMessageBuilder;
 import me.stahu.gsblockshuffle.view.cli.message.GameMessageBuilder;
+import me.stahu.gsblockshuffle.view.cli.message.SettingsSubcommandMessageBuilder;
 import me.stahu.gsblockshuffle.view.cli.message.TeamMessageBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -15,6 +18,7 @@ public class MessageBuilder {
 
     final GameMessageBuilder gameMessageBuilder;
     final TeamMessageBuilder teamMessageBuilder;
+    final CommandSubcommandMessageBuilder commandSubcommandMessageBuilder;
 
     // Game-related messages
     public TextComponent buildBlockAssignmentMessage(Block block) {
@@ -98,20 +102,52 @@ public class MessageBuilder {
         return teamMessageBuilder.buildKickFromTeamReceiverMessage(team);
     }
 
-    public TextComponent buildNoTeamMessage(Player player) {
-        return teamMessageBuilder.buildNoTeamMessage(player);
+    public TextComponent buildSpecifyTeamNameMessage() {
+        return commandSubcommandMessageBuilder.buildSpecifyTeamNameMessage();
     }
 
-    public TextComponent buildAlreadyInTeamMessage(Player player) {
-        return teamMessageBuilder.buildAlreadyInTeamMessage(player);
+    public TextComponent buildSpecifyColorMessage() {
+        return commandSubcommandMessageBuilder.buildSpecifyColorMessage();
     }
 
-    public TextComponent buildIsNotLeaderMessage(Player player) {
-        return teamMessageBuilder.buildIsNotLeaderMessage(player);
+    public TextComponent buildInvalidColorMessage() {
+        return commandSubcommandMessageBuilder.buildInvalidColorMessage();
     }
 
-    public TextComponent buildNoSuchRequestMessage(Player player) {
-        return teamMessageBuilder.buildNoSuchRequestMessage(player);
+    public TextComponent buildSpecifyPlayerMessage() {
+        return commandSubcommandMessageBuilder.buildSpecifyPlayerMessage();
+    }
+
+    public TextComponent buildNoTeamMessage(Player sender) {
+        return commandSubcommandMessageBuilder.buildNoTeamMessage(sender);
+    }
+
+    public TextComponent buildAlreadyInTeamMessage(Player sender) {
+        return commandSubcommandMessageBuilder.buildAlreadyInTeamMessage(sender);
+    }
+
+    public TextComponent buildNoSuchRequestMessage(Player sender) {
+        return commandSubcommandMessageBuilder.buildNoSuchRequestMessage(sender);
+    }
+
+    public TextComponent buildNotLeaderMessage(Player sender) {
+        return commandSubcommandMessageBuilder.buildNotLeaderMessage(sender);
+    }
+
+    public TextComponent buildNoSuchTeamMessage(String arg) {
+        return commandSubcommandMessageBuilder.buildNoSuchTeamMessage(arg);
+    }
+
+    public TextComponent buildNoPermissionMessage() {
+        return commandSubcommandMessageBuilder.buildNoPermissionMessage();
+    }
+
+    public TextComponent buildNoSuchInviteMessage(Player player) {
+        return commandSubcommandMessageBuilder.buildNoSuchInviteMessage(player);
+    }
+
+    public TextComponent buildNoSuchPlayerMessage(String playerName) {
+        return commandSubcommandMessageBuilder.buildNoSuchPlayerMessage(playerName);
     }
 
     public TextComponent buildNoSuchPlayerMessage(Player player) {
