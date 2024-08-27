@@ -14,6 +14,7 @@ import me.stahu.gsblockshuffle.model.BlockPack;
 import me.stahu.gsblockshuffle.model.Team;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Builder
@@ -40,8 +41,10 @@ public class GameManagerImpl implements GameManager {
     @Override
     public void startGame() {
         round = 0;
+        difficulty = config.getStartDifficulty();
 
         playerManager.assignDefaultTeams();
+        teams.forEach(team -> team.setScore(0));
 
         dispatcher.dispatch(new GameStartEvent());
     }
@@ -51,9 +54,12 @@ public class GameManagerImpl implements GameManager {
         round++;
         blocks = blockSelector.getBlocks(difficulty);
 
+//        System.out.println("Round " + round);
+//        blocks.forEach(block -> System.out.println(block.blocks().get(0).toString()));
+
         teams.forEach(team -> team.getPlayers()
                 .forEach(player -> {
-                    player.setAssignedBlock(null);
+                    player.setAssignedBlock(Optional.empty());
                     player.setFoundBlock(false);
                 }));
         blockAssigner.assignBlocks(teams, blocks);

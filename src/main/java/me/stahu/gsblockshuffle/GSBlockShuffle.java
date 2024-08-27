@@ -6,12 +6,16 @@ import me.stahu.gsblockshuffle.config.Config;
 import me.stahu.gsblockshuffle.controller.GameController;
 import me.stahu.gsblockshuffle.controller.MessageController;
 import me.stahu.gsblockshuffle.controller.SoundController;
+import me.stahu.gsblockshuffle.controller.TeamsController;
 import me.stahu.gsblockshuffle.event.BlockShuffleEventDispatcher;
+import me.stahu.gsblockshuffle.event.handler.command.*;
 import me.stahu.gsblockshuffle.event.handler.game.*;
 import me.stahu.gsblockshuffle.event.handler.team.*;
 import me.stahu.gsblockshuffle.event.listener.PlayerListener;
+import me.stahu.gsblockshuffle.event.listener.command.*;
 import me.stahu.gsblockshuffle.event.listener.game.*;
 import me.stahu.gsblockshuffle.event.listener.team.*;
+import me.stahu.gsblockshuffle.event.type.command.*;
 import me.stahu.gsblockshuffle.event.type.game.*;
 import me.stahu.gsblockshuffle.event.type.team.*;
 import me.stahu.gsblockshuffle.game.assigner.BlockAssignerFactory;
@@ -25,8 +29,13 @@ import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
 import me.stahu.gsblockshuffle.view.LocalizationManager;
 import me.stahu.gsblockshuffle.view.cli.MessageBuilder;
-import me.stahu.gsblockshuffle.view.cli.command.BlockShuffleCommands;
+import me.stahu.gsblockshuffle.view.cli.command.BlockShuffleCommand;
+import me.stahu.gsblockshuffle.view.cli.command.subcommands.DebugSubcommand;
+import me.stahu.gsblockshuffle.view.cli.command.subcommands.SettingsSubcommand;
+import me.stahu.gsblockshuffle.view.cli.command.subcommands.TeamSubcommand;
+import me.stahu.gsblockshuffle.view.cli.message.CommandSubcommandMessageBuilder;
 import me.stahu.gsblockshuffle.view.cli.message.GameMessageBuilder;
+import me.stahu.gsblockshuffle.view.cli.message.SettingsSubcommandMessageBuilder;
 import me.stahu.gsblockshuffle.view.cli.message.TeamMessageBuilder;
 import me.stahu.gsblockshuffle.view.sound.SoundPlayer;
 import org.bukkit.Bukkit;
@@ -45,8 +54,11 @@ import java.util.zip.ZipInputStream;
 public final class GSBlockShuffle extends JavaPlugin {
 
     private Config config;
+    private BlockShuffleEventDispatcher eventDispatcher;
     private GameController gameController;
+    private TeamsController teamsController;
     private MessageController messageController;
+    private MessageBuilder messageBuilder;
     private PlayerManager playerManager;
     private SoundPlayer soundPlayer;
     private ServerAPI serverAPI;
@@ -71,6 +83,23 @@ public final class GSBlockShuffle extends JavaPlugin {
         initializeGameController();
         registerEventListeners();
         registerCommands();
+
+        CategoryTree categoryTree;
+        try {
+            categoryTree = CategoryTree.parseYaml(
+                    this.getDataFolder().toPath().resolve(BLOCKS_FILE_PATH).toString()
+            );
+        } catch (FileNotFoundException e) {
+            // TODO: handle this exception
+            throw new RuntimeException(e);
+        }
+
+        BlockSelector selector = new BlockSelector(config, categoryTree);
+
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Difficulty: " + i);
+            selector.getBlocks(i).forEach(System.out::println);
+        }
     }
 
     @Override
@@ -127,8 +156,14 @@ public final class GSBlockShuffle extends JavaPlugin {
     private void initializeGameController() {
         GameMessageBuilder gameMessageBuilder = new GameMessageBuilder(localizationManager);
         TeamMessageBuilder teamMessageBuilder = new TeamMessageBuilder(localizationManager);
-        MessageBuilder messageBuilder = new MessageBuilder(gameMessageBuilder, teamMessageBuilder);
-        BlockShuffleEventDispatcher dispatcher = createEventDispatcher(messageBuilder);
+        CommandSubcommandMessageBuilder commandSubcommandMessageBuilder = new CommandSubcommandMessageBuilder(localizationManager);
+        SettingsSubcommandMessageBuilder settingsSubcommandMessageBuilder = new SettingsSubcommandMessageBuilder(localizationManager);
+        messageBuilder = new MessageBuilder(
+                gameMessageBuilder,
+                teamMessageBuilder,
+                commandSubcommandMessageBuilder,
+                settingsSubcommandMessageBuilder);
+        eventDispatcher = createEventDispatcher(messageBuilder);
         PointsAwarder pointsAwarder = new PointsAwarder(config);
 
         CategoryTree categoryTree;
@@ -142,16 +177,17 @@ public final class GSBlockShuffle extends JavaPlugin {
         }
 
         GameManager gameManager = GameManagerImpl.builder()
-                .dispatcher(dispatcher)
+                .dispatcher(eventDispatcher)
                 .playerManager(playerManager)
-                .blockAssigner(BlockAssignerFactory.getBlockAssigner(config, dispatcher))
+                .blockAssigner(BlockAssignerFactory.getBlockAssigner(config, eventDispatcher))
                 .blockSelector(new BlockSelector(config, categoryTree))
                 .teamEliminator(new TeamEliminator(config))
                 .difficultyIncrementer(new DifficultyIncrementer(config))
                 .teams(teams)
                 .config(config)
                 .build();
-        gameController = new GameController(this, config, dispatcher, gameManager, pointsAwarder);
+        gameController = new GameController(this, config, eventDispatcher, gameManager, pointsAwarder);
+        teamsController = new TeamsController(eventDispatcher, teams);
     }
 
     private BlockShuffleEventDispatcher createEventDispatcher(MessageBuilder messageBuilder) {
@@ -172,7 +208,18 @@ public final class GSBlockShuffle extends JavaPlugin {
                 .registerListener(LeaveTeamEvent.class, new LeaveTeamListener(new LeaveTeamHandler(messageController, messageBuilder)))
                 .registerListener(RemoveTeamEvent.class, new RemoveTeamListener(new RemoveTeamHandler(messageController, messageBuilder)))
                 .registerListener(RequestToJoinTeamEvent.class, new RequestToJoinTeamListener(new RequestToJoinTeamHandler(messageController, messageBuilder)))
-                .registerListener(TeamFailEvent.class, new TeamFailListener(new TeamFailHandler(messageController, messageBuilder)));
+                // Register team command events
+                .registerListener(AlreadyInTeamEvent.class, new AlreadyInTeamListener(new AlreadyInTeamHandler(messageController, messageBuilder)))
+                .registerListener(InvalidColorEvent.class, new InvalidColorListener(new InvalidColorHandler(messageController, messageBuilder)))
+                .registerListener(NoPermissionEvent.class, new NoPermissionListener(new NoPermissionHandler(messageController, messageBuilder)))
+                .registerListener(NoSuchInviteEvent.class, new NoSuchInviteListener(new NoSuchInviteHandler(messageController, messageBuilder)))
+                .registerListener(NoSuchPlayerEvent.class, new NoSuchPlayerListener(new NoSuchPlayerHandler(messageController, messageBuilder)))
+                .registerListener(NoSuchRequestEvent.class, new NoSuchRequestListener(new NoSuchRequestHandler(messageController, messageBuilder)))
+                .registerListener(NoSuchTeamEvent.class, new NoSuchTeamListener(new NoSuchTeamHandler(messageController, messageBuilder)))
+                .registerListener(NoTeamEvent.class, new NoTeamListener(new NoTeamHandler(messageController, messageBuilder)))
+                .registerListener(NotLeaderEvent.class, new NotLeaderListener(new NotLeaderHandler(messageController, messageBuilder)))
+                .registerListener(SpecifyColorEvent.class, new SpecifyColorListener(new SpecifyColorHandler(messageController, messageBuilder)))
+                .registerListener(SpecifyPlayerEvent.class, new SpecifyPlayerListener(new SpecifyPlayerHandler(messageController, messageBuilder)));
     }
 
     private void registerEventListeners() {
@@ -180,7 +227,14 @@ public final class GSBlockShuffle extends JavaPlugin {
     }
 
     private void registerCommands() {
-        BlockShuffleCommands commands = new BlockShuffleCommands(gameController);
+        BlockShuffleCommand commands = new BlockShuffleCommand(gameController,
+                new DebugSubcommand(gameController, playerManager, config.getSettings()),
+                new TeamSubcommand(eventDispatcher, teamsController, playerManager),
+                new SettingsSubcommand(config, messageController, messageBuilder),
+                messageController,
+                messageBuilder,
+                players
+        );
         Objects.requireNonNull(this.getCommand("bs")).setExecutor(commands);
     }
 

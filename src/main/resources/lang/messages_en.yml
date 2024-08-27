@@ -34,3 +34,5 @@ not_leader: "Player %s is not a leader of a team!"
 no_such_team: "There is no such team!"
 no_permission: "You do not have permission to do that!"
 no_such_player: "There is no such player on the server!"
+
+settings: "Settings:"

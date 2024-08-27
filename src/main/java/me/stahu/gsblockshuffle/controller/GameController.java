@@ -45,6 +45,10 @@ public class GameController {
         executeState(GameState.INVOKE_GAME_START, gameManager::invokeGameStart);
     }
 
+    public void endGame() {
+        executeState(GameState.GAME_END, gameManager::endGame);
+    }
+
     private void nextState(GameState state) {
         switch (state) {
             case WAITING:
@@ -60,7 +64,7 @@ public class GameController {
                 break;
             case ROUND_END:
                 if (gameManager.isGameEnd()) {
-                    executeState(GameState.GAME_END, gameManager::endGame);
+                    endGame();
                 } else {
                     executeState(GameState.ROUND_BREAK, gameManager::roundBreak);
                 }
@@ -74,7 +78,7 @@ public class GameController {
         }
     }
 
-    private void executeState(GameState state, Runnable action) {
+    public void executeState(GameState state, Runnable action) {
         scheduler.cancelTask(currentTask);
         setGameState(state);
         int duration = switch (state) {
@@ -88,18 +92,18 @@ public class GameController {
     }
 
     public void handlePlayerMoveEvent(Player player) {
-        if (gameState != GameState.ROUND_NEW || player.getTeam() == null || player.hasFoundBlock()) {
+        if (gameState != GameState.ROUND_NEW || player.getTeam().isEmpty() || player.isFoundBlock()) {
             return;
         }
         String playerBlockName = player.getApi().getBlockNameBelow(0);
         String belowPlayerBlockName = player.getApi().getBlockNameBelow(1);
-        List<String> assignedBlockNames = player.getAssignedBlock().names();
+        List<String> assignedBlockNames = player.getAssignedBlock().get().names();
 
         if (assignedBlockNames.contains(playerBlockName) || assignedBlockNames.contains(belowPlayerBlockName)) {
             player.setFoundBlock(true);
-            player.getTeam()
-                    .setScore(player.getTeam().getScore() + pointsAwarder.awardPoints(player.getTeam()));
-            dispatcher.dispatch(new BlockFoundEvent(player, player.getAssignedBlock()));
+            player.getTeam().get()
+                    .setScore(player.getTeam().get().getScore() + pointsAwarder.awardPoints(player.getTeam().get()));
+            dispatcher.dispatch(new BlockFoundEvent(player, player.getAssignedBlock().get()));
         }
         if (gameManager.isRoundEnd()) {
             scheduler.cancelTask(currentTask);

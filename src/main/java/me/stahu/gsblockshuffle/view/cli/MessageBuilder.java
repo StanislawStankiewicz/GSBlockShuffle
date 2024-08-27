@@ -19,6 +19,7 @@ public class MessageBuilder {
     final GameMessageBuilder gameMessageBuilder;
     final TeamMessageBuilder teamMessageBuilder;
     final CommandSubcommandMessageBuilder commandSubcommandMessageBuilder;
+    final SettingsSubcommandMessageBuilder settingsSubcommandMessageBuilder;
 
     // Game-related messages
     public TextComponent buildBlockAssignmentMessage(Block block) {
@@ -150,7 +151,7 @@ public class MessageBuilder {
         return commandSubcommandMessageBuilder.buildNoSuchPlayerMessage(playerName);
     }
 
-    public TextComponent buildNoSuchPlayerMessage(Player player) {
-        return teamMessageBuilder.buildNoSuchPlayerMessage(player);
+    public TextComponent buildSettingsMessage(Config config) {
+        return settingsSubcommandMessageBuilder.buildSettingsMessage(config);
     }
 }

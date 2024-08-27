@@ -18,6 +18,16 @@ public class PlayerManagerImpl implements PlayerManager {
     }
 
     @Override
+    public Set<Player> getPlayers() {
+        return players;
+    }
+
+    @Override
+    public Set<Team> getTeams() {
+        return teams;
+    }
+
+    @Override
     public void assignDefaultTeams() {
         Team team;
         for (Player player : players) {
