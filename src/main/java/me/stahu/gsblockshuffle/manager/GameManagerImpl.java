@@ -14,7 +14,6 @@ import me.stahu.gsblockshuffle.model.BlockPack;
 import me.stahu.gsblockshuffle.model.Team;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Builder
@@ -59,7 +58,7 @@ public class GameManagerImpl implements GameManager {
 
         teams.forEach(team -> team.getPlayers()
                 .forEach(player -> {
-                    player.setAssignedBlock(Optional.empty());
+                    player.setAssignedBlock(null);
                     player.setFoundBlock(false);
                 }));
         blockAssigner.assignBlocks(teams, blocks);

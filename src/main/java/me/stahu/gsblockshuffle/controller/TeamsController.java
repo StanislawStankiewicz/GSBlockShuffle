@@ -30,21 +30,20 @@ public class TeamsController {
     public void createTeam(Player player, String name) {
         Team team = new Team(player, name);
         teams.add(team);
-        player.setTeam(Optional.of(team));
+        player.setTeam(team);
         dispatcher.dispatch(new CreateTeamEvent(team, player));
     }
 
     public void removeTeam(Team team) {
-        team.getPlayers().forEach(player -> player.setTeam(Optional.empty()));
+        team.getPlayers().forEach(player -> player.setTeam(null));
         teams.remove(team);
         dispatcher.dispatch(new RemoveTeamEvent(team));
     }
 
     public void leaveTeam(Player player) {
-        Team team = player.getTeam()
-                .orElseThrow();
+        Team team = player.getTeam();
         team.removePlayer(player);
-        player.setTeam(Optional.empty());
+        player.setTeam(null);
         dispatcher.dispatch(new LeaveTeamEvent(team, player));
     }
 
@@ -54,13 +53,12 @@ public class TeamsController {
 
     public void addPlayerToTeam(Player player, Team team) {
         team.addPlayer(player);
-        player.setTeam(Optional.of(team));
+        player.setTeam(team);
         dispatcher.dispatch(new AddPlayerToTeamEvent(team, player));
     }
 
     public void invitePlayerToTeam(Player inviter, Player player) {
-        invites.put(player, inviter.getTeam()
-                .orElseThrow());
+        invites.put(player, inviter.getTeam());
         dispatcher.dispatch(new InvitePlayerToTeamEvent(inviter, player));
     }
 
@@ -81,8 +79,7 @@ public class TeamsController {
     }
 
     public boolean acceptRequest(Player leader) {
-        Team team = leader.getTeam()
-                .orElseThrow();
+        Team team = leader.getTeam();
         Player player = requests.get(team);
         if (player == null) {
             return false;
@@ -94,10 +91,9 @@ public class TeamsController {
     }
 
     public void kickFromTeam(Player leader, Player player) {
-        Team team = leader.getTeam()
-                .orElseThrow();
+        Team team = leader.getTeam();
         team.removePlayer(player);
-        player.setTeam(Optional.empty());
+        player.setTeam(null);
         dispatcher.dispatch(new KickFromTeamEvent(leader, player));
     }
 }

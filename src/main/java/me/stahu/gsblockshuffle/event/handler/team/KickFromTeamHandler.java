@@ -11,7 +11,7 @@ public class KickFromTeamHandler {
     final MessageBuilder messageBuilder;
 
     public void sendKickFromTeamMessages(Player leader, Player player) {
-        messageController.commandResponse(leader, messageBuilder.buildKickFromTeamSenderMessage(leader.getTeam().get(), player), true);
-        messageController.commandResponse(player, messageBuilder.buildKickFromTeamReceiverMessage(leader.getTeam().get()), true);
+        messageController.commandResponse(leader, messageBuilder.buildKickFromTeamSenderMessage(leader.getTeam(), player), true);
+        messageController.commandResponse(player, messageBuilder.buildKickFromTeamReceiverMessage(leader.getTeam()), true);
     }
 }

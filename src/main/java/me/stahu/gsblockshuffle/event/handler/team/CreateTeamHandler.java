@@ -11,6 +11,6 @@ public class CreateTeamHandler {
     final MessageBuilder messageBuilder;
 
     public void sendCreateTeamMessages(Player leader) {
-        messageController.commandResponse(leader, messageBuilder.buildCreateTeamMessage(leader.getTeam().get()), true);
+        messageController.commandResponse(leader, messageBuilder.buildCreateTeamMessage(leader.getTeam()), true);
     }
 }

@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,7 +46,7 @@ class TeamsControllerTests {
     @Test
     void testCreateTeam() {
         String teamName = "TeamA";
-        when(player.getTeam()).thenReturn(Optional.empty());
+        when(player.getTeam()).thenReturn(null);
 
         teamsController.createTeam(player, teamName);
 
@@ -55,7 +54,7 @@ class TeamsControllerTests {
         Team createdTeam = teams.iterator().next();
         assertEquals(teamName, createdTeam.getName());
         assertTrue(createdTeam.getPlayers().contains(player));
-        verify(player).setTeam(Optional.of(createdTeam));
+        verify(player).setTeam(createdTeam);
     }
 
     @Test
@@ -66,34 +65,34 @@ class TeamsControllerTests {
         teamsController.removeTeam(team);
 
         assertFalse(teams.contains(team));
-        verify(player).setTeam(Optional.empty());
+        verify(player).setTeam(null);
     }
 
     @Test
     void testLeaveTeam() {
-        when(player.getTeam()).thenReturn(Optional.of(team));
+        when(player.getTeam()).thenReturn(team);
 
         teamsController.leaveTeam(player);
 
         verify(team).removePlayer(player);
-        verify(player).setTeam(Optional.empty());
+        verify(player).setTeam(null);
         assertFalse(teams.contains(team));
     }
 
     @Test
     void testAddPlayerToTeam() {
         when(team.getPlayers()).thenReturn(new HashSet<>());
-        when(player.getTeam()).thenReturn(Optional.empty());
+        when(player.getTeam()).thenReturn(null);
 
         teamsController.addPlayerToTeam(player, team);
 
         verify(team).addPlayer(player);
-        verify(player).setTeam(Optional.of(team));
+        verify(player).setTeam(team);
     }
 
     @Test
     void testInvitePlayerToTeam() {
-        when(leader.getTeam()).thenReturn(Optional.of(team));
+        when(leader.getTeam()).thenReturn(team);
 
         teamsController.invitePlayerToTeam(leader, player);
 
@@ -120,7 +119,7 @@ class TeamsControllerTests {
 
     @Test
     void testAcceptRequest() {
-        when(leader.getTeam()).thenReturn(Optional.of(team));
+        when(leader.getTeam()).thenReturn(team);
         teamsController.requests.put(team, player);
 
         boolean result = teamsController.acceptRequest(leader);
@@ -132,13 +131,13 @@ class TeamsControllerTests {
 
     @Test
     void testKickFromTeam() {
-        when(leader.getTeam()).thenReturn(Optional.of(team));
+        when(leader.getTeam()).thenReturn(team);
         when(team.getPlayers()).thenReturn(new HashSet<>(Set.of(player)));
 
         teamsController.kickFromTeam(leader, player);
 
         verify(team).removePlayer(player);
-        verify(player).setTeam(Optional.empty());
+        verify(player).setTeam(null);
 
         ArgumentCaptor<KickFromTeamEvent> eventCaptor = ArgumentCaptor.forClass(KickFromTeamEvent.class);
         verify(dispatcher).dispatch(eventCaptor.capture());

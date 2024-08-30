@@ -92,22 +92,25 @@ public class GameController {
     }
 
     public void handlePlayerMoveEvent(Player player) {
-        if (gameState != GameState.ROUND_NEW || player.getTeam().isEmpty() || player.isFoundBlock()) {
+        if (gameState != GameState.ROUND_NEW || player.isFoundBlock() || player.getTeam() == null) {
             return;
         }
-        String playerBlockName = player.getApi().getBlockNameBelow(0);
-        String belowPlayerBlockName = player.getApi().getBlockNameBelow(1);
-        List<String> assignedBlockNames = player.getAssignedBlock().get().names();
-
-        if (assignedBlockNames.contains(playerBlockName) || assignedBlockNames.contains(belowPlayerBlockName)) {
+        if (isPlayerOnAssignedBlock(player)) {
             player.setFoundBlock(true);
-            player.getTeam().get()
-                    .setScore(player.getTeam().get().getScore() + pointsAwarder.awardPoints(player.getTeam().get()));
-            dispatcher.dispatch(new BlockFoundEvent(player, player.getAssignedBlock().get()));
+            player.getTeam()
+                    .setScore(player.getTeam().getScore() + pointsAwarder.awardPoints(player.getTeam()));
+            dispatcher.dispatch(new BlockFoundEvent(player, player.getAssignedBlock()));
         }
         if (gameManager.isRoundEnd()) {
             scheduler.cancelTask(currentTask);
             executeState(GameState.ROUND_END, gameManager::endRound);
         }
+    }
+
+    private boolean isPlayerOnAssignedBlock(Player player) {
+        List<String> assignedBlockNames = player.getAssignedBlock().names();
+        String playerBlockName = player.getApi().getBlockNameBelow(0);
+        String belowPlayerBlockName = player.getApi().getBlockNameBelow(1);
+        return assignedBlockNames.contains(playerBlockName) || assignedBlockNames.contains(belowPlayerBlockName);
     }
 }

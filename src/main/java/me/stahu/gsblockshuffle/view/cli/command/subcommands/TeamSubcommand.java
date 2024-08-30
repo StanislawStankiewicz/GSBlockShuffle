@@ -21,11 +21,11 @@ public class TeamSubcommand extends Command implements Subcommand {
     public void parseSubcommand(Player sender, String[] args) {
         // tell player his team and team members
         if (args.length == 1) {
-            if (sender.getTeam().isEmpty()) {
+            if (sender.getTeam() == null) {
                 eventDispatcher.dispatch(new NoTeamEvent(sender));
                 return;
             }
-            Team team = sender.getTeam().get();
+            Team team = sender.getTeam();
             // TODO: Handle sending team information to the player
             return;
         }
@@ -51,7 +51,7 @@ public class TeamSubcommand extends Command implements Subcommand {
     }
 
     private void createTeam(Player sender, String[] args) {
-        if (sender.getTeam().isPresent()) {
+        if (sender.getTeam() != null) {
             eventDispatcher.dispatch(new AlreadyInTeamEvent(sender));
             return;
         }
@@ -63,7 +63,7 @@ public class TeamSubcommand extends Command implements Subcommand {
     }
 
     private void changeTeamColor(Player sender, String[] args) {
-        if (sender.getTeam().isEmpty()) {
+        if (sender.getTeam() == null) {
             eventDispatcher.dispatch(new NoTeamEvent(sender));
             return;
         }
@@ -78,12 +78,11 @@ public class TeamSubcommand extends Command implements Subcommand {
             eventDispatcher.dispatch(new InvalidColorEvent(sender));
             return;
         }
-        teamsController.changeColor(sender.getTeam().get(), color);
+        teamsController.changeColor(sender.getTeam(), color);
     }
 
     private void teamAdd(Player sender, String[] args) {
-        System.out.println("Adding player to team");
-        if (sender.getTeam().isEmpty() || !sender.getTeam().get().getLeader().equals(sender)) {
+        if (sender.getTeam() == null || !sender.getTeam().getLeader().equals(sender)) {
             eventDispatcher.dispatch(new NotLeaderEvent(sender));
             return;
         }
@@ -97,20 +96,19 @@ public class TeamSubcommand extends Command implements Subcommand {
             return;
         }
         Player target = targetOpt.get();
-        if (sender.getTeam().get().getPlayers().contains(target)) {
+        if (sender.getTeam().getPlayers().contains(target)) {
             eventDispatcher.dispatch(new AlreadyInTeamEvent(sender));
             return;
         }
-        if (target.getTeam().isPresent()) {
+        if (target.getTeam() != null) {
             eventDispatcher.dispatch(new AlreadyInTeamEvent(target));
             return;
         }
-        System.out.println("Adding player to team");
-        teamsController.addPlayerToTeam(target, sender.getTeam().get());
+        teamsController.addPlayerToTeam(target, sender.getTeam());
     }
 
     private void teamRemove(Player sender, String[] args) {
-        if (sender.getTeam().isEmpty() || !sender.getTeam().get().getLeader().equals(sender)) {
+        if (sender.getTeam() == null || !sender.getTeam().getLeader().equals(sender)) {
             eventDispatcher.dispatch(new NotLeaderEvent(sender));
             return;
         }
@@ -157,7 +155,7 @@ public class TeamSubcommand extends Command implements Subcommand {
             eventDispatcher.dispatch(new NoSuchPlayerEvent(sender, args[2]));
             return;
         }
-        if (targetOpt.get().getTeam().isPresent()) {
+        if (targetOpt.get().getTeam() != null) {
             eventDispatcher.dispatch(new AlreadyInTeamEvent(targetOpt.get()));
             return;
         }
@@ -178,7 +176,7 @@ public class TeamSubcommand extends Command implements Subcommand {
     }
 
     private void leaveTeam(Player sender) {
-        if (sender.getTeam().isEmpty()) {
+        if (sender.getTeam() == null) {
             eventDispatcher.dispatch(new NoTeamEvent(sender));
             return;
         }

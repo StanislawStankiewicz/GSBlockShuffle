@@ -10,7 +10,7 @@ import java.util.Set;
 public class PlayerManagerImpl implements PlayerManager {
 
     final Set<Team> teams;
-    Set<Player> players;
+    final Set<Player> players;
 
     public PlayerManagerImpl(Set<Team> teams, Set<Player> players) {
         this.teams = teams;
@@ -31,10 +31,10 @@ public class PlayerManagerImpl implements PlayerManager {
     public void assignDefaultTeams() {
         Team team;
         for (Player player : players) {
-            if (player.getTeam().isEmpty()) {
+            if (player.getTeam() == null) {
                 team = new Team(player);
                 teams.add(team);
-                player.setTeam(Optional.of(team));
+                player.setTeam(team);
             }
         }
     }

@@ -7,14 +7,13 @@ import me.stahu.gsblockshuffle.api.PlayerAPI;
 import me.stahu.gsblockshuffle.view.sound.Note;
 import net.md_5.bungee.api.chat.TextComponent;
 
-import java.util.Optional;
 
 @Getter @Setter
 @RequiredArgsConstructor
 public class Player {
     final PlayerAPI api;
-    Optional<Team> team = Optional.empty();
-    Optional<Block> assignedBlock = Optional.empty();
+    Team team;
+    Block assignedBlock;
     boolean isFoundBlock;
 
     public String getName() {
@@ -42,6 +41,9 @@ public class Player {
     }
 
     public boolean isLeader() {
-        return team.map(value -> value.getLeader().equals(this)).orElse(false);
+        if (team == null) {
+            return false;
+        }
+        return team.getLeader().equals(this);
     }
 }

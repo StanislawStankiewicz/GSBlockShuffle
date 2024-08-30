@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static me.stahu.gsblockshuffle.game.assigner.AssignerTestsArranger.arrangeBlocks;
@@ -34,10 +33,10 @@ class GameBlockAssignerTests {
 
         assigner.assignBlocks(teams, blocks);
 
-        Block chosenBlock = teams.iterator().next().getPlayers().iterator().next().getAssignedBlock().get();
+        Block chosenBlock = teams.iterator().next().getPlayers().iterator().next().getAssignedBlock();
         for (Team team : teams) {
             for (Player player : team.getPlayers()) {
-                assertEquals(Optional.of(chosenBlock), player.getAssignedBlock());
+                assertEquals(chosenBlock, player.getAssignedBlock());
             }
         }
     }

@@ -11,6 +11,6 @@ public class RemoveTeamHandler {
     final MessageBuilder messageBuilder;
 
     public void sendRemoveTeamMessages(Player leader) {
-        messageController.commandResponse(leader, messageBuilder.buildRemoveTeamMessage(leader.getTeam().get()), true);
+        messageController.commandResponse(leader, messageBuilder.buildRemoveTeamMessage(leader.getTeam()), true);
     }
 }
