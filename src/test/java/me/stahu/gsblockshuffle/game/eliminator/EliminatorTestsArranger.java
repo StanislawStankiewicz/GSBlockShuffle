@@ -1,8 +1,8 @@
 package me.stahu.gsblockshuffle.game.eliminator;
 
+import me.stahu.gsblockshuffle.api.PlayerAPI;
 import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
-import org.bukkit.scoreboard.Scoreboard;
 import org.mockito.Mockito;
 
 import java.util.HashSet;
@@ -15,10 +15,8 @@ public class EliminatorTestsArranger {
         for (int i = 0; i < teamCount; i++) {
             Set<Player> players = new HashSet<>();
             for (int j = 0; j < playerCount; j++) {
-                org.bukkit.entity.Player bukkitPlayer = Mockito.mock(org.bukkit.entity.Player.class);
-                Scoreboard scoreboard = Mockito.mock(Scoreboard.class);
-                Mockito.when(bukkitPlayer.getScoreboard()).thenReturn(scoreboard);
-                Player player = new Player(bukkitPlayer);
+                PlayerAPI playerApi = Mockito.mock(PlayerAPI.class);
+                Player player = new Player(playerApi);
                 player.setFoundBlock(false);
                 players.add(player);
             }

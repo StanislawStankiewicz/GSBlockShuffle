@@ -12,7 +12,7 @@ public class AcceptInviteHandler {
     final MessageBuilder messageBuilder;
 
     public void sendAcceptInviteSenderMessages(Team team, Player player) {
-        messageController.sendMessage(player, messageBuilder.buildAcceptInviteSenderMessage(team));
-        messageController.sendMessage(team.getLeader(), messageBuilder.buildAcceptInviteReceiverMessage(team, player));
+        messageController.commandResponse(player, messageBuilder.buildAcceptInviteSenderMessage(team), true);
+        messageController.commandResponse(team.getLeader(), messageBuilder.buildAcceptInviteReceiverMessage(team, player), true);
     }
 }

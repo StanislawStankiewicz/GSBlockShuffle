@@ -18,8 +18,8 @@ public class BlockSelector {
     public List<BlockPack> getBlocks(int difficulty) {
         List<BlockPack> blocks = new ArrayList<>();
         for (Category category : categoryTree.getCategories()) {
-            if (isCategoryIncluded(category, difficulty)) {
-                 blocks.addAll(getBlocksRecursive(category, difficulty));
+            if (category.getDifficulty() <= difficulty) {
+                blocks.addAll(getBlocksRecursive(category, difficulty));
             }
         }
         return blocks;
@@ -27,14 +27,24 @@ public class BlockSelector {
 
     private List<BlockPack> getBlocksRecursive(Category category, int difficulty) {
         List<BlockPack> blocks = new ArrayList<>();
-        if (category.getBlocks() != null) {
-            blocks.addAll(category.getBlocks().stream()
-                    .map(block -> new BlockPack(List.of(block)))
-                    .toList());
+        if (category.getBlocks() != null && isCategoryIncluded(category, difficulty)) {
+            if (config.isTreatAllAsIndividualBlocks()) {
+                blocks.addAll(category.getBlocks().stream()
+                        .map(block -> new BlockPack(List.of(block)))
+                        .toList());
+            } else {
+                if (category.getName().equals("variant")) {
+                    blocks.add(new BlockPack(category.getBlocks()));
+                } else {
+                    blocks.addAll(category.getBlocks().stream()
+                            .map(block -> new BlockPack(List.of(block)))
+                            .toList());
+                }
+            }
         }
         if (category.getSubcategories() != null) {
             for (Category subcategory : category.getSubcategories()) {
-                if (isCategoryIncluded(subcategory, difficulty)) {
+                if (subcategory.getDifficulty() <= difficulty) {
                     blocks.addAll(getBlocksRecursive(subcategory, difficulty));
                 }
             }

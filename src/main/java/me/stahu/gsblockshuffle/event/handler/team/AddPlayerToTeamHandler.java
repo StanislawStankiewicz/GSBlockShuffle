@@ -11,7 +11,7 @@ public class AddPlayerToTeamHandler {
     final MessageBuilder messageBuilder;
 
     public void sendAddPlayerToTeamMessages(Player leader, Player player) {
-        messageController.sendMessage(player, messageBuilder.buildAddPlayerToTeamSenderMessage(leader.getTeam(), leader));
-        messageController.sendMessage(leader, messageBuilder.buildAddPlayerToTeamReceiverMessage(leader.getTeam(), player));
+        messageController.commandResponse(player, messageBuilder.buildAddPlayerToTeamSenderMessage(leader.getTeam(), leader), true);
+        messageController.commandResponse(leader, messageBuilder.buildAddPlayerToTeamReceiverMessage(leader.getTeam(), player), true);
     }
 }

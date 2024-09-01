@@ -16,7 +16,7 @@ import java.util.Set;
 public abstract class BlockAssigner {
 
     protected final BlockShuffleEventDispatcher dispatcher;
-    protected Random random = new Random();
+    protected final Random random = new Random();
 
     public abstract void assignBlocks(Set<Team> teams, List<BlockPack> blocks);
 

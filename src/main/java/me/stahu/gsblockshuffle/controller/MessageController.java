@@ -14,21 +14,22 @@ public class MessageController {
     final TextComponent prefix = new TextComponent("[" + ChatColor.BLUE + "GSBlockShuffle" + ChatColor.RESET + "] ");
 
     public void sendMessage(Player player, TextComponent message) {
-        player.getServerPlayer().spigot().sendMessage(addPrefix(message));
+        player.sendMessage(addPrefix(prefix, message));
     }
 
     public void sendMessageToAll(TextComponent message) {
         for (Player player : players) {
-            player.getServerPlayer().spigot().sendMessage(addPrefix(message));
+            player.sendMessage(addPrefix(prefix, message));
         }
     }
 
     public void commandResponse(Player player, TextComponent message, boolean success) {
         ChatColor color = success ? ChatColor.GREEN : ChatColor.RED;
-        player.getServerPlayer().sendMessage(color + message.getText());
+        message.setColor(color.asBungee());
+        player.sendMessage(message);
     }
 
-    private TextComponent addPrefix(TextComponent message) {
+    private TextComponent addPrefix(TextComponent prefix, TextComponent message) {
         TextComponent finalMessage = prefix.duplicate();
         finalMessage.addExtra(message);
         return finalMessage;

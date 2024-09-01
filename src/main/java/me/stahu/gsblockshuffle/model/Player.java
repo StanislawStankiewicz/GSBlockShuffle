@@ -1,36 +1,49 @@
 package me.stahu.gsblockshuffle.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import me.stahu.gsblockshuffle.api.PlayerAPI;
 import me.stahu.gsblockshuffle.view.sound.Note;
+import net.md_5.bungee.api.chat.TextComponent;
+
 
 @Getter @Setter
 @RequiredArgsConstructor
-@EqualsAndHashCode
 public class Player {
-    final org.bukkit.entity.Player serverPlayer;
+    final PlayerAPI api;
     Team team;
     Block assignedBlock;
-    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
-    boolean hasFoundBlock;
-    boolean isOnline = true;
-
-    public boolean hasFoundBlock() {
-        return hasFoundBlock;
-    }
-
-    public void setFoundBlock(boolean hasFoundBlock) {
-        this.hasFoundBlock = hasFoundBlock;
-    }
+    boolean isFoundBlock;
 
     public String getName() {
-        return serverPlayer.getDisplayName();
+        return api.getDisplayName();
     }
 
     public String getDisplayName() {
-        return serverPlayer.getDisplayName();
+        return api.getDisplayName();
     }
 
     public void playSound(Note note) {
-        serverPlayer.playSound(serverPlayer.getLocation(), note.instrument(), note.volume(), note.pitch());
+        api.playSound(note);
+    }
+
+    public void sendMessage(String message) {
+        api.sendMessage(message);
+    }
+
+    public void sendMessage(TextComponent message) {
+        api.sendMessage(message);
+    }
+
+    public boolean hasPermission(String permission) {
+        return api.hasPermission(permission);
+    }
+
+    public boolean isLeader() {
+        if (team == null) {
+            return false;
+        }
+        return team.getLeader().equals(this);
     }
 }

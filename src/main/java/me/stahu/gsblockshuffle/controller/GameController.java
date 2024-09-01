@@ -45,6 +45,10 @@ public class GameController {
         executeState(GameState.INVOKE_GAME_START, gameManager::invokeGameStart);
     }
 
+    public void endGame() {
+        executeState(GameState.GAME_END, gameManager::endGame);
+    }
+
     private void nextState(GameState state) {
         switch (state) {
             case WAITING:
@@ -60,7 +64,7 @@ public class GameController {
                 break;
             case ROUND_END:
                 if (gameManager.isGameEnd()) {
-                    executeState(GameState.GAME_END, gameManager::endGame);
+                    endGame();
                 } else {
                     executeState(GameState.ROUND_BREAK, gameManager::roundBreak);
                 }
@@ -74,7 +78,7 @@ public class GameController {
         }
     }
 
-    private void executeState(GameState state, Runnable action) {
+    public void executeState(GameState state, Runnable action) {
         scheduler.cancelTask(currentTask);
         setGameState(state);
         int duration = switch (state) {
@@ -88,14 +92,10 @@ public class GameController {
     }
 
     public void handlePlayerMoveEvent(Player player) {
-        if (gameState != GameState.ROUND_NEW || player.getTeam() == null || player.hasFoundBlock()) {
+        if (gameState != GameState.ROUND_NEW || player.isFoundBlock() || player.getTeam() == null) {
             return;
         }
-        String playerBlockName = player.getServerPlayer().getLocation().getBlock().getType().name();
-        String belowPlayerBlockName = player.getServerPlayer().getLocation().subtract(0, 1, 0).getBlock().getType().name();
-        List<String> assignedBlockNames = player.getAssignedBlock().names();
-
-        if (assignedBlockNames.contains(playerBlockName) || assignedBlockNames.contains(belowPlayerBlockName)) {
+        if (isPlayerOnAssignedBlock(player)) {
             player.setFoundBlock(true);
             player.getTeam()
                     .setScore(player.getTeam().getScore() + pointsAwarder.awardPoints(player.getTeam()));
@@ -105,5 +105,12 @@ public class GameController {
             scheduler.cancelTask(currentTask);
             executeState(GameState.ROUND_END, gameManager::endRound);
         }
+    }
+
+    private boolean isPlayerOnAssignedBlock(Player player) {
+        List<String> assignedBlockNames = player.getAssignedBlock().names();
+        String playerBlockName = player.getApi().getBlockNameBelow(0);
+        String belowPlayerBlockName = player.getApi().getBlockNameBelow(1);
+        return assignedBlockNames.contains(playerBlockName) || assignedBlockNames.contains(belowPlayerBlockName);
     }
 }

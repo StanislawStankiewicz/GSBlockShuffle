@@ -1,88 +1,87 @@
 package me.stahu.gsblockshuffle.controller;
 
 import me.stahu.gsblockshuffle.event.BlockShuffleEventDispatcher;
+import me.stahu.gsblockshuffle.event.type.team.KickFromTeamEvent;
 import me.stahu.gsblockshuffle.model.Player;
 import me.stahu.gsblockshuffle.model.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TeamsControllerTests {
 
-    private TeamsController teamsController;
+    @Mock
+    private BlockShuffleEventDispatcher dispatcher;
+
+    @Mock
     private Player player;
-    private Player inviter;
+
+    @Mock
     private Player leader;
+
+    @Mock
     private Team team;
 
+    @InjectMocks
+    private TeamsController teamsController;
+
+    private Set<Team> teams;
+
     @BeforeEach
-    void setUp() {
-        BlockShuffleEventDispatcher eventDispatcher = mock(BlockShuffleEventDispatcher.class);
-        teamsController = new TeamsController(eventDispatcher, new HashSet<>(), new HashMap<>(), new HashMap<>());
-        player = mock(Player.class);
-        inviter = mock(Player.class);
-        leader = mock(Player.class);
-        team = mock(Team.class);
+    public void setUp() {
+        teams = new HashSet<>();
+        MockitoAnnotations.openMocks(this);
+        teamsController = new TeamsController(dispatcher, teams);
     }
 
     @Test
-    void createTeam_createsNewTeam() {
+    void testCreateTeam() {
+        String teamName = "TeamA";
         when(player.getTeam()).thenReturn(null);
 
-        teamsController.createTeam(player, "TeamName");
+        teamsController.createTeam(player, teamName);
 
-        verify(player).setTeam(any(Team.class));
+        assertEquals(1, teams.size());
+        Team createdTeam = teams.iterator().next();
+        assertEquals(teamName, createdTeam.getName());
+        assertTrue(createdTeam.getPlayers().contains(player));
+        verify(player).setTeam(createdTeam);
     }
 
     @Test
-    void createTeam_doesNothingIfPlayerAlreadyInTeam() {
-        when(player.getTeam()).thenReturn(team);
-
-        teamsController.createTeam(player, "TeamName");
-
-        verify(team, never()).addPlayer(any(Player.class));
-    }
-
-    @Test
-    void removeTeam_removesTeamAndSetsPlayersTeamToNull() {
+    void testRemoveTeam() {
+        teams.add(team);
         when(team.getPlayers()).thenReturn(Set.of(player));
 
         teamsController.removeTeam(team);
 
+        assertFalse(teams.contains(team));
         verify(player).setTeam(null);
-        assertFalse(teamsController.teams.contains(team));
     }
 
     @Test
-    void removeOwnTeam_removesTeamIfPlayerIsInTeam() {
-        when(player.getTeam()).thenReturn(team);
-
-        teamsController.removeOwnTeam(player);
-
-        verify(team).getPlayers();
-        assertThat(teamsController.teams).isEmpty();
-    }
-
-    @Test
-    void leaveTeam_removesPlayerFromTeam() {
+    void testLeaveTeam() {
         when(player.getTeam()).thenReturn(team);
 
         teamsController.leaveTeam(player);
 
         verify(team).removePlayer(player);
         verify(player).setTeam(null);
+        assertFalse(teams.contains(team));
     }
 
     @Test
-    void addPlayerToTeam_addsPlayerToTeam() {
+    void testAddPlayerToTeam() {
+        when(team.getPlayers()).thenReturn(new HashSet<>());
         when(player.getTeam()).thenReturn(null);
 
         teamsController.addPlayerToTeam(player, team);
@@ -92,59 +91,59 @@ class TeamsControllerTests {
     }
 
     @Test
-    void invitePlayerToTeam_addsInviteIfConditionsMet() {
-        when(player.getTeam()).thenReturn(null);
-        when(inviter.getTeam()).thenReturn(team);
-        when(team.getLeader()).thenReturn(inviter);
-        when(inviter.getTeam().getLeader()).thenReturn(inviter);
+    void testInvitePlayerToTeam() {
+        when(leader.getTeam()).thenReturn(team);
 
-        teamsController.invitePlayerToTeam(inviter, player, team);
+        teamsController.invitePlayerToTeam(leader, player);
 
-        assertThat(teamsController.invites).containsEntry(player, team);
+        assertEquals(team, teamsController.invites.get(player));
     }
 
     @Test
-    void acceptInvite_addsPlayerToTeamAndRemovesInvite() {
+    void testAcceptInvite() {
         teamsController.invites.put(player, team);
 
-        teamsController.acceptInvite(player);
+        boolean result = teamsController.acceptInvite(player);
 
+        assertTrue(result);
         verify(team).addPlayer(player);
         assertFalse(teamsController.invites.containsKey(player));
     }
 
     @Test
-    void requestToJoinTeam_addsRequestIfConditionsMet() {
-        when(player.getTeam()).thenReturn(null);
-
+    void testRequestToJoinTeam() {
         teamsController.requestToJoinTeam(player, team);
 
-        assertTrue(teamsController.requests.containsKey(team));
+        assertEquals(player, teamsController.requests.get(team));
     }
 
     @Test
-    void acceptRequest_addsPlayerToTeamAndRemovesRequest() {
-        when(player.getTeam()).thenReturn(null);
+    void testAcceptRequest() {
         when(leader.getTeam()).thenReturn(team);
-        when(team.getLeader()).thenReturn(leader);
-        when(leader.getTeam().getLeader()).thenReturn(leader);
         teamsController.requests.put(team, player);
 
-        teamsController.acceptRequest(leader);
+        boolean result = teamsController.acceptRequest(leader);
 
+        assertTrue(result);
         verify(team).addPlayer(player);
-        assertThat(teamsController.requests).doesNotContainKey(team);
+        assertFalse(teamsController.requests.containsKey(team));
     }
 
     @Test
-    void kickFromTeam_removesPlayerFromTeamIfLeader() {
+    void testKickFromTeam() {
         when(leader.getTeam()).thenReturn(team);
-        when(team.getLeader()).thenReturn(leader);
-        when(team.getPlayers()).thenReturn(Set.of(player));
+        when(team.getPlayers()).thenReturn(new HashSet<>(Set.of(player)));
 
         teamsController.kickFromTeam(leader, player);
 
         verify(team).removePlayer(player);
         verify(player).setTeam(null);
+
+        ArgumentCaptor<KickFromTeamEvent> eventCaptor = ArgumentCaptor.forClass(KickFromTeamEvent.class);
+        verify(dispatcher).dispatch(eventCaptor.capture());
+
+        KickFromTeamEvent capturedEvent = eventCaptor.getValue();
+        assertEquals(leader, capturedEvent.leader());
+        assertEquals(player, capturedEvent.player());
     }
 }

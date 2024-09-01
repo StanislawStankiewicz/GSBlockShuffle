@@ -71,26 +71,6 @@ public class TeamMessageBuilder {
         return templateTeamMessage(team, "kick_from_team_receiver");
     }
 
-    public TextComponent buildNoTeamMessage(Player player) {
-        return templatePlayerMessage(player, "no_team");
-    }
-
-    public TextComponent buildAlreadyInTeamMessage(Player player) {
-        return templatePlayerMessage(player, "already_in_team");
-    }
-
-    public TextComponent buildIsNotLeaderMessage(Player player) {
-        return templatePlayerMessage(player, "is_not_leader");
-    }
-
-    public TextComponent buildNoSuchRequestMessage(Player player) {
-        return templatePlayerMessage(player, "no_such_request");
-    }
-
-    public TextComponent buildNoSuchPlayerMessage(Player player) {
-        return templatePlayerMessage(player, "no_such_player");
-    }
-
     private TextComponent templateTeamMessage(Team team, String templateId) {
         String template = localizationManager.getMessage(templateId);
         String message = String.format(template, team.getName());
@@ -106,12 +86,6 @@ public class TeamMessageBuilder {
     private TextComponent templatePlayerTeamMessage(Team team, Player player, String templateId) {
         String template = localizationManager.getMessage(templateId);
         String message = String.format(template, team.getName(), player.getName());
-        return new TextComponent(message);
-    }
-
-    private TextComponent templatePlayerMessage(Player player, String templateId) {
-        String template = localizationManager.getMessage(templateId);
-        String message = String.format(template, player.getName());
         return new TextComponent(message);
     }
 }

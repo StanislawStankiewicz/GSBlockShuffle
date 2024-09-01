@@ -12,6 +12,6 @@ public class LeaveTeamListener implements BlockShuffleEventListener<LeaveTeamEve
 
     @Override
     public void onGameEvent(LeaveTeamEvent event) {
-        leaveTeamHandler.sendLeaveTeamMessages(event.player());
+        leaveTeamHandler.sendLeaveTeamMessages(event.team(), event.player());
     }
 }

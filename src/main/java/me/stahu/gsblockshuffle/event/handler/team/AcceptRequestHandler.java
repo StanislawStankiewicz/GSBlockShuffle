@@ -11,7 +11,7 @@ public class AcceptRequestHandler {
     final MessageBuilder messageBuilder;
 
     public void sendAcceptRequestMessages(Player leader, Player player) {
-        messageController.sendMessage(player, messageBuilder.buildAcceptRequestSenderMessage(leader.getTeam(), leader));
-        messageController.sendMessage(leader, messageBuilder.buildAcceptRequestReceiverMessage(leader.getTeam(), player));
+        messageController.commandResponse(player, messageBuilder.buildAcceptRequestSenderMessage(leader.getTeam(), leader), true);
+        messageController.commandResponse(leader, messageBuilder.buildAcceptRequestReceiverMessage(leader.getTeam(), player), true);
     }
 }
