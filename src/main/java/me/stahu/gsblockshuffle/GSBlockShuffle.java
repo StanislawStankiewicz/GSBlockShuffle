@@ -135,7 +135,7 @@ public final class GSBlockShuffle extends JavaPlugin {
 
     private void initializeManagers() {
         players = serverAPI.getPlayers();
-        playerManager = new PlayerManagerImpl(teams, players);
+        playerManager = new PlayerManager(teams, players);
         messageController = new MessageController(players);
     }
 
@@ -176,7 +176,7 @@ public final class GSBlockShuffle extends JavaPlugin {
             throw new RuntimeException(e);
         }
 
-        GameManager gameManager = GameManagerImpl.builder()
+        GameManager gameManager = GameManager.builder()
                 .dispatcher(eventDispatcher)
                 .playerManager(playerManager)
                 .blockAssigner(BlockAssignerFactory.getBlockAssigner(config, eventDispatcher))

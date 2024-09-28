@@ -7,15 +7,44 @@ import me.stahu.gsblockshuffle.model.Team;
 import java.util.Optional;
 import java.util.Set;
 
-public interface PlayerManager {
+public class PlayerManager {
 
-    Set<Player> getPlayers();
+    final Set<Team> teams;
+    final Set<Player> players;
 
-    Set<Team> getTeams();
+    public PlayerManager(Set<Team> teams, Set<Player> players) {
+        this.teams = teams;
+        this.players = players;
+    }
 
-    void assignDefaultTeams();
+    public Set<Player> getPlayers() {
+        return players;
+    }
 
-    Optional<Player> getPlayer(PlayerAPI playerAPI);
+    public Set<Team> getTeams() {
+        return teams;
+    }
 
-    void resetBlocks();
+    public void assignDefaultTeams() {
+        Team team;
+        for (Player player : players) {
+            if (player.getTeam() == null) {
+                team = new Team(player);
+                teams.add(team);
+                player.setTeam(team);
+            }
+        }
+    }
+
+    public Optional<Player> getPlayer(PlayerAPI playerAPI) {
+        return players.stream()
+                .filter(player -> player.getPlayerAPI().equals(playerAPI))
+                .findFirst();
+    }
+
+    public void resetBlocks() {
+        for (Player player : players) {
+            player.setFoundBlock(false);
+        }
+    }
 }

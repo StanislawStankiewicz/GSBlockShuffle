@@ -1,22 +1,89 @@
 package me.stahu.gsblockshuffle.manager;
 
-public interface GameManager {
+import lombok.Builder;
+import me.stahu.gsblockshuffle.config.Config;
+import me.stahu.gsblockshuffle.event.BlockShuffleEventDispatcher;
+import me.stahu.gsblockshuffle.event.type.game.*;
+import me.stahu.gsblockshuffle.game.assigner.BlockAssigner;
+import me.stahu.gsblockshuffle.game.blocks.BlockSelector;
+import me.stahu.gsblockshuffle.game.difficulty.DifficultyIncrementer;
+import me.stahu.gsblockshuffle.game.eliminator.TeamEliminator;
+import me.stahu.gsblockshuffle.game.round.GameEndConditionChecker;
+import me.stahu.gsblockshuffle.game.round.RoundEndConditionChecker;
+import me.stahu.gsblockshuffle.model.BlockPack;
+import me.stahu.gsblockshuffle.model.Team;
 
-    void invokeGameStart();
+import java.util.List;
+import java.util.Set;
 
-    void startGame();
+@Builder
+public class GameManager {
 
-    void newRound();
+    final BlockShuffleEventDispatcher dispatcher;
+    final PlayerManager playerManager;
+    final Config config;
+    DifficultyIncrementer difficultyIncrementer;
+    BlockSelector blockSelector;
+    BlockAssigner blockAssigner;
+    TeamEliminator teamEliminator;
 
-    void endRound();
+    final Set<Team> teams;
+    List<BlockPack> blocks;
+    int round;
+    int difficulty;
 
-    void roundBreak();
+    public void invokeGameStart() {
+        dispatcher.dispatch(new InvokeGameStartEvent(config.getGameStartDelaySeconds()));
+    }
 
-    void endBreak();
+    public void startGame() {
+        round = 0;
+        difficulty = config.getStartDifficulty();
 
-    void endGame();
+        playerManager.assignDefaultTeams();
+        teams.forEach(team -> team.setScore(0));
 
-    boolean isRoundEnd();
+        dispatcher.dispatch(new GameStartEvent());
+    }
 
-    boolean isGameEnd();
+    public void newRound() {
+        round++;
+        blocks = blockSelector.getBlocks(difficulty);
+
+        teams.forEach(team -> team.getPlayers()
+                .forEach(player -> {
+                    player.setAssignedBlock(null);
+                    player.setFoundBlock(false);
+                }));
+        blockAssigner.assignBlocks(teams, blocks);
+
+        dispatcher.dispatch(new RoundNewEvent());
+    }
+
+    public void endRound() {
+        teamEliminator.eliminateTeams(teams);
+        difficulty = difficultyIncrementer.increaseDifficulty(difficulty, round);
+
+        dispatcher.dispatch(new RoundEndEvent());
+    }
+
+    public void roundBreak() {
+        dispatcher.dispatch(new BreakStartEvent(config.getBreakDurationSeconds()));
+    }
+
+    public void endBreak() {
+        dispatcher.dispatch(new BreakEndEvent());
+    }
+
+    public void endGame() {
+        dispatcher.dispatch(new GameEndEvent(teams));
+    }
+
+    public boolean isRoundEnd() {
+        return RoundEndConditionChecker.isRoundEndConditionMet(config, teams);
+    }
+
+    public boolean isGameEnd() {
+        return GameEndConditionChecker.isGameEnd(config, teams, round);
+    }
 }
