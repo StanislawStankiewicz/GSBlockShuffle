@@ -109,8 +109,6 @@ public class GameController {
 
     private boolean isPlayerOnAssignedBlock(Player player) {
         List<String> assignedBlockNames = player.getAssignedBlock().names();
-        String playerBlockName = player.getApi().getBlockNameBelow(0);
-        String belowPlayerBlockName = player.getApi().getBlockNameBelow(1);
-        return assignedBlockNames.contains(playerBlockName) || assignedBlockNames.contains(belowPlayerBlockName);
+        return assignedBlockNames.stream().anyMatch(player.getBlockNamesUnderneath()::contains);
     }
 }

@@ -7,37 +7,39 @@ import me.stahu.gsblockshuffle.api.PlayerAPI;
 import me.stahu.gsblockshuffle.view.sound.Note;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.util.List;
+
 
 @Getter @Setter
 @RequiredArgsConstructor
 public class Player {
-    final PlayerAPI api;
+    final PlayerAPI playerAPI;
     Team team;
     Block assignedBlock;
     boolean isFoundBlock;
 
     public String getName() {
-        return api.getDisplayName();
+        return playerAPI.getDisplayName();
     }
 
     public String getDisplayName() {
-        return api.getDisplayName();
+        return playerAPI.getDisplayName();
     }
 
     public void playSound(Note note) {
-        api.playSound(note);
+        playerAPI.playSound(note);
     }
 
     public void sendMessage(String message) {
-        api.sendMessage(message);
+        playerAPI.sendMessage(message);
     }
 
     public void sendMessage(TextComponent message) {
-        api.sendMessage(message);
+        playerAPI.sendMessage(message);
     }
 
     public boolean hasPermission(String permission) {
-        return api.hasPermission(permission);
+        return playerAPI.hasPermission(permission);
     }
 
     public boolean isLeader() {
@@ -45,5 +47,13 @@ public class Player {
             return false;
         }
         return team.getLeader().equals(this);
+    }
+
+    public List<String> getBlockNamesUnderneath() {
+        // 0 is the block at the leg level, not under them so we check both
+        // the block that the player is in (like grass) and the block the player is standing on
+        return List.of(
+                playerAPI.getBlockAtPlayerLocation(0),
+                playerAPI.getBlockAtPlayerLocation(-1));
     }
 }
